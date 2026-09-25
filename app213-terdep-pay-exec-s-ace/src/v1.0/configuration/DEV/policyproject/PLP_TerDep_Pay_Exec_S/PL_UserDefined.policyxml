@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<policies>
-  <policy policyType="UserDefined" policyName="PL_UserDefined" policyTemplate="UserDefined">
-    <Properties>{&quot;service&quot;:{&quot;code&quot;: &quot;DEP004&quot;}}</Properties>
-  </policy>
-</policies>
