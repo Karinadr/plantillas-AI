@@ -1,0 +1,213 @@
+BROKER SCHEMA ace.esb.terdep.pay.exec.s
+PATH ace.esb.core.common; 
+
+
+CREATE PROCEDURE armaMensajeTo_AS400_From_ExecuteTermDepositPayments(IN refEnv REFERENCE, IN refIn REFERENCE,IN refLocalEnv REFERENCE, IN refOutput REFERENCE, IN refOutLocal REFERENCE)
+BEGIN
+
+	SET refEnv.Srv.Destino = C_DESTINO_1;
+	SET refEnv.TramaIn.JSON = refIn.JSON;
+	SET refEnv.Temp.Variable.IsErrorValidCampo = FALSE;
+	SET refEnv.Variables.Backend.TargetId = getCODE_APP_IBS();
+	SET refEnv.Variables.TypeLibrary = getTYPE_LIBRARY_NOT_ATM();
+
+	CALL armaCuerpo_AS400(refEnv, refIn, refLocalEnv, refOutput, refOutLocal);
+
+END;
+
+
+CREATE PROCEDURE validarMensaje(
+    IN refEnv REFERENCE, 
+    IN refService REFERENCE, 
+    IN refData REFERENCE
+) 
+BEGIN
+    -- Validar ServiceType
+    IF refService.code <> refData.ServiceType THEN
+        CALL setErrorCampo(C_ERROR_MSG_BDY_SERVICE_CODE, refEnv);
+    END IF;
+    
+    DECLARE depositAmount DECIMAL refData.DepositAmount;
+    IF ValidateDecimalFormat(depositAmount , 13, 2) IS FALSE 
+       OR SUBSTRING(CAST(depositAmount AS CHARACTER) FROM 1 FOR 1) = '-' THEN 
+        CALL setErrorCampo(C_ERROR_MSG_DECIMALES_INVALIDOS_DEPOSITAMOUNT, refEnv);
+    END IF;
+    
+    IF refEnv.InputT1.Branchcode IS NOT NULL AND TRIM(refEnv.InputT1.Branchcode) <> '' THEN
+        DECLARE branchLen INT LENGTH(TRIM(refEnv.InputT1.Branchcode));
+        IF branchLen < 5 OR branchLen > 30 THEN
+            CALL setErrorCampo(C_ERROR_MSG_LONGITUD_INVALIDA_BRANCHCODE, refEnv);
+        END IF;
+    END IF;
+    
+    IF refEnv.InputT1.Countrycode IS NOT NULL AND TRIM(refEnv.InputT1.Countrycode) <> '' THEN
+        DECLARE countryLen INT LENGTH(TRIM(refEnv.InputT1.Countrycode));
+        IF countryLen < 5 OR countryLen > 30 THEN
+            CALL setErrorCampo(C_ERROR_MSG_LONGITUD_INVALIDA_COUNTRYCODE, refEnv);
+        END IF;
+    END IF;
+    
+    IF refEnv.InputT1.Userid IS NOT NULL AND TRIM(refEnv.InputT1.Userid) <> '' THEN
+        DECLARE userLen INT LENGTH(TRIM(refEnv.InputT1.Userid));
+        IF userLen < 0 OR userLen > 10 THEN
+            CALL setErrorCampo(C_ERROR_MSG_LONGITUD_INVALIDA_USERID, refEnv);
+        END IF;
+    END IF;
+    
+    IF refEnv.InputT1.Deviceid IS NOT NULL AND TRIM(refEnv.InputT1.Deviceid) <> '' THEN
+        DECLARE deviceLen INT LENGTH(TRIM(refEnv.InputT1.Deviceid));
+        IF deviceLen < 5 OR deviceLen > 30 THEN
+            CALL setErrorCampo(C_ERROR_MSG_LONGITUD_INVALIDA_DEVICEID, refEnv);
+        END IF;
+    END IF;
+END;
+
+
+
+CREATE PROCEDURE prepareDataRequestDFDL(IN refIn REFERENCE, IN refEnv REFERENCE)
+BEGIN
+
+	DECLARE refBodyIn REFERENCE TO refIn.JSON.Data.[<];
+	CREATE LASTCHILD OF refEnv DOMAIN getDOMINIO_DFDL();
+	CREATE FIELD refEnv.DFDL.DL0744RI.DL0744RIIN AS refEnv;
+	DECLARE refBodyOut REFERENCE TO refEnv;
+
+	SET refBodyOut.VTRX      = TRIM(refIn.HTTPInputHeader."X-Correlation-Id");
+    SET refBodyOut.VCANAL    = TRIM(refIn.HTTPInputHeader."X-Origin-Id");
+    SET refBodyOut.VSERVICIO = TRIM(refBodyIn.ServiceType);
+    SET refBodyOut.II02TPTR = refBodyIn.PaymentType;
+    SET refBodyOut.WI02NDEP = refBodyIn.TermDepositNumber;
+    SET refBodyOut.WI02NCTA = refBodyIn.AccountNumber;
+    SET refBodyOut.WI02AMT  = REPLACE(CAST(refBodyIn.DepositAmount AS CHARACTER FORMAT '##0.00'), '.', '');
+    SET refBodyOut.I02CCYD = refBodyIn.CurrencyCode;
+    SET refBodyOut.II02USER = refBodyIn.MemberIdentification;
+
+END;
+
+
+CREATE PROCEDURE armaCuerpo_AS400(IN refEnv REFERENCE, IN refIn REFERENCE, IN refLocalEnv REFERENCE, IN refOutput REFERENCE, IN refOutLocal REFERENCE)
+BEGIN
+
+	CALL getPropPolicyUserDefined(refEnv, C_POLICY_ID, C_PROPERTIES);
+	DECLARE refService REFERENCE TO refEnv.UD.{C_PL_USER_DEF}.{C_PROPERTIES}.JSON.Data.service;
+	DECLARE refBodyIn REFERENCE TO refIn.JSON.Data.[<];
+
+	CALL validarMensaje(refEnv, refService, refBodyIn);
+
+	CALL prepareDataRequestDFDL(refIn, refEnv);
+
+	CREATE LASTCHILD OF refOutput DOMAIN getDOMINIO_JSON();
+	CREATE LASTCHILD OF refOutput.JSON NAME getDATA();
+	DECLARE refJsonOut REFERENCE TO refOutput.JSON.Data;
+
+	SET refJsonOut.tramaIn = convertDfdlToChar(refIn, refOutput, refEnv, C_NOMBRE_PCML);
+	SET refJsonOut.tramaOut = '66';	-- EL valor '82' es un ejemplo
+	SET refJsonOut.tramaErr = getLENGTH_TRAMA_ERR(); 
+
+	SET refEnv.InputT1.Audit.Uri = getPathBackendAudit(refEnv, refOutput, refOutLocal, getCONST_IBS());
+
+END;
+
+
+CREATE PROCEDURE armaRptaExecuteTermDepositPayments_OK(IN refEnv REFERENCE, IN refIn REFERENCE, IN refOut REFERENCE)
+BEGIN
+
+	DELETE FIELD refOut;
+
+	SET refOut.Properties = refIn.Properties;
+	SET refEnv.Variables.HTTPStatusCode = 200;
+	SET refEnv.Variables.HTTPMessage = 'OK';
+	SET refOut.HTTPReplyHeader."X-Original-HTTP-Status-Code" = refEnv.Variables.HTTPStatusCode;
+
+	CREATE LASTCHILD OF refOut DOMAIN getHTTP_RES_H();
+	CREATE LASTCHILD OF refOut DOMAIN getDOMINIO_JSON();
+	CREATE LASTCHILD OF refOut.JSON NAME getDATA();
+	CREATE LASTCHILD OF refOut.JSON.Data NAME C_OPERATION_RS;
+
+	DECLARE refJsonOut REFERENCE TO refOut.JSON.Data.[<];
+	DECLARE refHttpResOut REFERENCE TO refOut.HTTPResponseHeader;
+
+	DECLARE refDfdlOut REFERENCE TO refEnv.DFDLOut.DFDL.{C_NOMBRE_PCML}.DL0744RIOUT;
+
+	SET refJsonOut.TermDepositNumber = refDfdlOut.ODEPOS;
+	
+	CALL prepararHeaderRespuestaBus_(refHttpResOut, refEnv);
+
+END;
+
+
+CREATE PROCEDURE armaRptaExecuteTermDepositPayments_ERROR(IN refEnv REFERENCE, IN refIn REFERENCE, IN refOut REFERENCE, IN statusCode INTEGER)
+BEGIN
+
+	--Auditoria
+	IF refEnv.Temp.Variable.IsErrorValidCampo IS TRUE THEN 
+	ELSE 		
+		CREATE LASTCHILD OF refOut DOMAIN getDOMINIO_JSON();
+		CREATE LASTCHILD OF refOut.JSON NAME getDATA();
+		DECLARE refJsonOutAudit REFERENCE TO refOut.JSON.Data;
+		IF EXISTS(refEnv.DFDLOut.DFDL.{C_NOMBRE_PCML}.[]) OR EXISTS(refIn.JSON.Data.[]) THEN
+			SET refJsonOutAudit = refIn.JSON.Data;
+		ELSEIF EXISTS(refEnv.StatusRes.JSON.[]) THEN
+			SET refJsonOutAudit = refEnv.StatusRes.JSON.Data;
+		ELSE
+			SET refJsonOutAudit = refEnv.StatusRes.status;
+		END IF;
+
+		IF refEnv.StatusResp.exception IS FALSE THEN
+        	CALL prepararMensajeAuditoria(refEnv, getCONST_BACKEND(), getCONST_RESPONSE());        
+    	ELSE
+        	CALL prepararMensajeAuditoria(refEnv, getCONST_BACKEND(), getCONST_ERROR());
+    	END IF;
+
+		PROPAGATE TO LABEL getLBL_AUDIT() DELETE NONE;
+		DELETE FIELD refOut.JSON;
+	END IF;
+	
+	CALL prepararBodyRespuestaBus_IBS_(refEnv, refIn, C_NOMBRE_PCML, refOut, C_OPERATION_RS);
+
+END;
+
+
+CREATE PROCEDURE armaCuerpo_Encrypt(IN refIn REFERENCE, IN refEnv REFERENCE)
+BEGIN
+
+	DELETE FIELD refEnv.RequestGenericEncrypt;
+	DELETE FIELD refEnv.ResponseGenericEncrypt;
+	DECLARE refValueListOut REFERENCE TO refEnv;
+	DECLARE idx INTEGER 1;
+
+	CREATE FIELD refEnv.RequestGenericEncrypt.ValueList AS refValueListOut;
+	DECLARE refRpta REFERENCE TO refEnv.DFDLOut.DFDL.{C_NOMBRE_PCML};
+
+	SET refEnv.Variables.TypeCipher = getOPE_ENCRYPT();
+
+	IF isNotEmptyEsp(refRpta.CL1004RIRSP.INTIDN) THEN
+		SET refValueListOut.ValueItem[idx].ValueDesc = C_PERSONIDENTIFICATION;
+		SET refValueListOut.ValueItem[idx].Value VALUE = refRpta.CL1004RIRSP.INTIDN;
+		SET idx = idx + 1;
+	END IF;
+
+END;
+
+
+CREATE PROCEDURE armaCuerpo_Decrypt(IN refIn REFERENCE, IN refEnv REFERENCE)
+BEGIN
+
+	DELETE FIELD refEnv.RequestGenericDecrypt;
+	DELETE FIELD refEnv.ResponseGenericDecrypt;
+	DECLARE refValueListOut REFERENCE TO refEnv;
+	DECLARE idx INTEGER 1;
+
+	CREATE FIELD refEnv.RequestGenericDecrypt.ValueList AS refValueListOut;
+	DECLARE refBodyIn REFERENCE TO refIn.JSON.Data.[<];
+
+	SET refEnv.Variables.TypeCipher = getOPE_DECRYPT();
+
+	IF isNotEmptyEsp(refBodyIn.PersonIdentification) THEN
+		SET refValueListOut.ValueItem[idx].ValueDesc = C_PERSONIDENTIFICATION;
+		SET refValueListOut.ValueItem[idx].Value VALUE = refBodyIn.PersonIdentification;
+		SET idx = idx + 1;
+	END IF;
+
+END;
+

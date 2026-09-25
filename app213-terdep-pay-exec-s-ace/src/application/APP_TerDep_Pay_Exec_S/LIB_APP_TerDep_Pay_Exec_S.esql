@@ -1,0 +1,17 @@
+PATH ace.esb.core.common;
+
+DECLARE UDP_URL_APIREST EXTERNAL CHARACTER getCARACTER_VACIO();
+   
+CREATE COMPUTE MODULE SMF_Params
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		     
+	DECLARE refInp REFERENCE TO InputRoot;
+	DECLARE refOutp REFERENCE TO OutputRoot;
+	DECLARE refOutpLocal REFERENCE TO OutputLocalEnvironment;
+	
+	CALL preparaMensageAPIREST(refInp,refOutp,refOutpLocal,UDP_URL_APIREST);
+	
+	END;
+END MODULE;
+

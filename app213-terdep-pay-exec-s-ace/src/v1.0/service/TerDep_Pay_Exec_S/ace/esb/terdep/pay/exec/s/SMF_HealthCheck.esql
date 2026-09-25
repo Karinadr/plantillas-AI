@@ -1,0 +1,19 @@
+BROKER SCHEMA ace.esb.terdep.pay.exec.s
+PATH ace.esb.core.common;
+
+
+CREATE COMPUTE MODULE HealthCheck_Tx
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		DECLARE refOutput REFERENCE TO OutputRoot;
+		CREATE LASTCHILD OF refOutput DOMAIN getDOMINIO_JSON();
+		CREATE LASTCHILD OF refOutput.JSON NAME C_DATA;
+		DECLARE refJsonOut REFERENCE TO refOutput.JSON.Data;
+		
+		SET refJsonOut."Time-Stamp"	= getFechaHora1();
+		SET refJsonOut.SystemName	= 'APP213';
+		SET refJsonOut.Check		= true;
+		
+	END;
+END MODULE;

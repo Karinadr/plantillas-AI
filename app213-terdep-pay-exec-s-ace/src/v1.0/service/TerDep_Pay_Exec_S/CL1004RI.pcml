@@ -1,0 +1,53 @@
+<pcml version="4.0">
+<!-- Fuente PCML para llamar a la API --> 
+<!-- Consulta de Cliente Persona Natural con codigoIBS -->
+ <struct name="CL1004RI">
+  	<data name="VTRX"      	        type="char"    	 length="36" 	 				usage="inherit" init=""	/>
+  	<data name="VCANAL"      	    type="char"    	 length="6" 	 				usage="inherit" init=""	/>
+  	<data name="VSERVICIO"      	type="char"    	 length="6" 	 				usage="inherit" init=""	/>
+  	<data name="TIPDOC"      	    type="char"    	 length="4" 	 				usage="inherit" init=""	/>
+	<data name="NUMDOC"      	    type="char"    	 length="15" 	 				usage="inherit" init=""	/>
+  </struct> 	
+
+ <struct name="CL1004RIRSP">
+    <data name="VTRX"      	    	type="char"    	 length="36" 	 				usage="inherit" init=""/>
+	<data name="TIMEST"      		type="char"    	 length="18" 	 				usage="inherit" init=""	/>
+	<data name="IHCLIE"      		type="zoned"     length="9"   precision="0"		usage="inherit" init="0"/>
+  	<data name="INTTID"        	    type="char"    	 length="4" 	 				usage="inherit" init=""	/>
+  	<data name="INTIDN"     	    type="char"    	 length="15" 	 				usage="inherit" init=""	/>
+
+  </struct>  
+
+   <struct name="ELEERR">
+	<data name="ERRNUM" 			type="zoned" 	length="2"   	precision="0"  	usage="inherit" init="0"/> 
+	<data name="ERNU01" 			type="char"  	length="4"   	    			usage="inherit" init=""/>
+	<data name="ERNU02" 			type="char"  	length="4"   	    			usage="inherit" init=""/>
+	<data name="ERNU03" 			type="char"  	length="4"   	    			usage="inherit" init=""/>
+	<data name="ERNU04" 			type="char"  	length="4"   	    			usage="inherit" init=""/>
+	<data name="ERNU05" 			type="char"  	length="4"   	    			usage="inherit" init=""/>
+	<data name="ERNU06" 			type="char"  	length="4"   	    			usage="inherit" init=""/>
+	<data name="ERNU07" 			type="char"  	length="4"   	    			usage="inherit" init=""/>
+	<data name="ERNU08" 			type="char"  	length="4"   	    			usage="inherit" init=""/>
+	<data name="ERNU09" 			type="char"  	length="4"   	    			usage="inherit" init=""/>
+	<data name="ERNU10" 			type="char"  	length="4"   	    			usage="inherit" init=""/>
+	<data name="ERDS01" 			type="char"  	length="70"   	    			usage="inherit" init=""/>
+	<data name="ERDS02" 			type="char"  	length="70"   	    			usage="inherit" init=""/>
+	<data name="ERDS03" 			type="char"  	length="70"   	    			usage="inherit" init=""/>
+	<data name="ERDS04" 			type="char"  	length="70"   	    			usage="inherit" init=""/>
+	<data name="ERDS05" 			type="char"  	length="70"   	    			usage="inherit" init=""/>
+	<data name="ERDS06" 			type="char"  	length="70"   	    			usage="inherit" init=""/>
+	<data name="ERDS07" 			type="char"  	length="70"   	    			usage="inherit" init=""/>
+	<data name="ERDS08" 			type="char"  	length="70"   	    			usage="inherit" init=""/>
+	<data name="ERDS09" 			type="char"  	length="70"   	    			usage="inherit" init=""/>
+	<data name="ERDS10" 			type="char"  	length="70"   	    			usage="inherit" init=""/>
+  </struct> 
+  
+  
+  <!-- Programa IN2100RI y la lista de parametros para recuperar el formato CL1003RI  -->
+  <!-- path="" -->
+  <program name="IN2100RI">
+    <data name="INPUT"         		    type="struct"   struct="CL1004RI"			usage="inputoutput"/>
+    <data name="OUTPUT1"         	    type="struct"   struct="CL1004RIRSP"	    usage="output" 	count="200"/>
+    <data name="ERROR"           	    type="struct"   struct="ELEERR"   		   	usage="output"/>
+  </program>
+</pcml>

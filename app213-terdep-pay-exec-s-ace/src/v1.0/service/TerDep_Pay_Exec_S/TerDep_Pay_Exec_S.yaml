@@ -1,0 +1,202 @@
+openapi: 3.0.0
+info:
+  title: Term Deposit PaymentsReverse Update
+  version: 1.0.0
+  description: Servicio que permite realizar transferencias de fondos a Deposito plazo
+servers:
+  - url: /v1.0/s/termdeposit/payments/execute
+paths:
+  /:
+    post:
+      summary: Term Deposit PaymentsReverse Update
+      description: Realizar transferencia de fondos deposito plazo
+      operationId: ExecuteTermDepositPayments
+      parameters:
+        - $ref: '#/components/parameters/X-Origin-Id'
+        - $ref: '#/components/parameters/X-Target-Id'
+        - $ref: '#/components/parameters/X-Correlation-Id'
+        - $ref: '#/components/parameters/Time-Stamp'
+        - $ref: '#/components/parameters/Host-Id'
+        - $ref: '#/components/parameters/Branch-Code'
+        - $ref: '#/components/parameters/Country-Code'
+        - $ref: '#/components/parameters/User-Id'
+        - $ref: '#/components/parameters/Device-Id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExecuteTermDepositPaymentsRequest'
+      responses:
+        '200':
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecuteTermDepositPaymentsSuccessResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /health:
+    summary: Valida que el estado del servicio este operativo
+    get:
+      operationId: HealthCheck
+      responses:
+        '200':
+          description: success
+components:
+  parameters:
+    Time-Stamp:
+      name: Time-Stamp
+      in: header
+      schema:
+        type: string
+        maxLength: 18
+      description: |
+        Fecha y hora de la peticion que envia el canal consumidor.
+        Formato: yyyyMMdd'T'HHmmssSSS
+      example: 20240112 093902977
+    X-Correlation-Id:
+      name: X-Correlation-Id
+      in: header
+      schema:
+        type: string
+        maxLength: 36
+      description: |
+        Identificador unico de la transaccion desde donde se invoca el servicio.
+      example: 31a738b2-2e0f-49b9-9f1f-a6cfea8c506a
+    X-Origin-Id:
+      name: X-Origin-Id
+      in: header
+      schema:
+        type: string
+        maxLength: 6
+      description: |
+        Encabezado que indica el origen de la solicitud de acceso.
+      example: APP213
+    X-Target-Id:
+      name: X-Target-Id
+      in: header
+      schema:
+        type: string
+        maxLength: 6
+      description: |
+        Encabezado que indica el target de la solicitud de acceso.
+      example: APP202
+    Host-Id:
+      name: Host-Id
+      in: header
+      schema:
+        type: string
+        maxLength: 6
+      description: |
+        Nombre del host al que se le envia la solicitud.
+      example: 15.12.10.10
+    Branch-Code:
+      name: Branch-Id
+      in: header
+      schema:
+        type: string
+        minLength: 5
+        maxLength: 30
+      description: |
+        Codigo de la sucursal de donde se realizo la transaccion.
+      example: SISIDRO129
+    Country-Code:
+      name: Country-Id
+      in: header
+      schema:
+        type: string
+        minLength: 5
+        maxLength: 30
+      description: |
+        Codigo del pais.
+      example: PERU1 
+    User-Id:
+      name: User-Id
+      in: header
+      schema:
+        type: string
+        minLength: 0
+        maxLength: 10
+      description: |
+        Identificador del usuario que realizo la transaccion.
+      example: USRDEV
+    Device-Id:
+      name: Device-Id
+      in: header
+      schema:
+        type: string
+        minLength: 5
+        maxLength: 30
+      description: |
+        Identificador del dispositivo de donde se realizo la transaccion.
+      example: '14572'    
+  schemas:
+    ExecuteTermDepositPaymentsRequest:
+      type: object
+      properties:
+        ExecuteTermDepositPayments:
+          type: object
+          properties:
+            ServiceType:
+              type: string
+              description: Codigo unico de catalogo para invocar al servicio
+              example: S00013
+            PaymentType:
+              type: string
+              description: Tipo Transferencia  A=Alta
+              example: A
+            TermDepositNumber:
+              type: string
+              minLength: 12
+              maxLength: 12
+              description: Nro. De Deposito
+              example: '141102252062'
+            AccountNumber:
+              type: string
+              description: Nro. De Cuenta
+              example: '8028979475'
+            DepositAmount:
+              type: number
+              description: Monto del deposito
+              example: '100.5'
+            CurrencyCode:
+              type: string
+              description: Moneda Deposito
+              example: USD
+            MemberIdentification:
+              type: string
+              description: IdUsuario Canal
+              example: BIFVHIGA1
+    ExecuteTermDepositPaymentsSuccessResponse:
+      type: object
+      properties:
+        ExecuteTermDepositPaymentsResponse:
+          type: object
+          properties:
+            TermDepositNumber:
+              type: string
+              description: Nro. de Deposito.
+              example: '8028979475'
+    ErrorResponse:
+      type: object
+      properties:
+        ExecuteTermDepositPaymentsResponse:
+          type: object
+          properties:
+            StatusCode:
+              type: integer
+              description: Codigo de error.
+              example: -1
+            Message:
+              type: string
+              description: Mensaje del error.
+              example: El campo X-Consumer-Id es requerido.
+            Status:
+              type: string
+              description: Codigo de estado HTTP del error.
+              example: ERROR

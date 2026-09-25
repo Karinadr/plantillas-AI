@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ComIbmLabel.msgnode="ComIbmLabel.msgnode" xmlns:ComIbmRouteToLabel.msgnode="ComIbmRouteToLabel.msgnode" xmlns:ComIbmWSInput.msgnode="ComIbmWSInput.msgnode" xmlns:ComIbmWSReply.msgnode="ComIbmWSReply.msgnode" xmlns:ExecuteTermDepositPayments.subflow="ExecuteTermDepositPayments.subflow" xmlns:HealthCheck.subflow="HealthCheck.subflow" xmlns:TerDep_Pay_Exec_SInputCatchHandler.subflow="TerDep_Pay_Exec_SInputCatchHandler.subflow"
+    xmlns:TerDep_Pay_Exec_SInputFailureHandler.subflow="TerDep_Pay_Exec_SInputFailureHandler.subflow" xmlns:TerDep_Pay_Exec_SInputTimeoutHandler.subflow="TerDep_Pay_Exec_SInputTimeoutHandler.subflow" xmlns:ace_esb_core_ope_SMF_BUS_CORE_SRV_CTRLAUDIT.subflow="ace/esb/core/ope/SMF_BUS_CORE_SRV_CTRLAUDIT.subflow" xmlns:ace_esb_core_ope_SMF_BUS_CORE_SRV_CTRLERROR.subflow="ace/esb/core/ope/SMF_BUS_CORE_SRV_CTRLERROR.subflow" xmlns:ace_esb_core_ope_SMF_BUS_CORE_SRV_CTRLINICIAL.subflow="ace/esb/core/ope/SMF_BUS_CORE_SRV_CTRLINICIAL.subflow"
+    xmlns:ace_esb_smf_util_SMF_ESB_UTIL_CIPHER_DECRYPTSRV.subflow="ace/esb/smf/util/SMF_ESB_UTIL_CIPHER_DECRYPTSRV.subflow" xmlns:ace_esb_smf_util_SMF_ESB_UTIL_CIPHER_ENCRYPTSRV.subflow="ace/esb/smf/util/SMF_ESB_UTIL_CIPHER_ENCRYPTSRV.subflow" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:eflow="http://www.ibm.com/wbi/2005/eflow" xmlns:utility="http://www.ibm.com/wbi/2005/eflow_utility" nsURI="gen/TerDep_Pay_Exec_S.msgflow" nsPrefix="gen_TerDep_Pay_Exec_S.msgflow">
+  <eClassifiers xmi:type="eflow:FCMComposite" name="FCMComposite_1" nodeLayoutStyle="RECTANGLE">
+    <eSuperTypes href="http://www.ibm.com/wbi/2005/eflow#//FCMBlock"/>
+    <translation xmi:type="utility:TranslatableString" key="TerDep_Pay_Exec_S" bundleName="gen/TerDep_Pay_Exec_S" pluginId="TerDep_Pay_Exec_S"/>
+    <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/TerDep_Pay_Exec_S/icons/full/obj16/TerDep_Pay_Exec_S.gif"/>
+    <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/TerDep_Pay_Exec_S/icons/full/obj30/TerDep_Pay_Exec_S.gif"/>
+    <composition>
+      <nodes xmi:type="ComIbmWSInput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="25,150" URLSpecifier="/v1.0/s/termdeposit/payments/execute*" useHTTPS="true" parseQueryString="true" messageDomainProperty="JSON" faultFormat="JSON">
+        <translation xmi:type="utility:ConstantString" string="HTTP Input"/>
+      </nodes>
+      <nodes xmi:type="ComIbmRouteToLabel.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_2" location="429,147">
+        <translation xmi:type="utility:ConstantString" string="Route To Label"/>
+      </nodes>
+      <nodes xmi:type="ComIbmWSReply.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_3" location="699,324">
+        <translation xmi:type="utility:ConstantString" string="HTTP Reply"/>
+      </nodes>
+      <nodes xmi:type="TerDep_Pay_Exec_SInputCatchHandler.subflow:FCMComposite_1" xmi:id="FCMComposite_1_4" location="313,325">
+        <translation xmi:type="utility:ConstantString" string="TerDep_Pay_Exec_SInputCatchHandler"/>
+      </nodes>
+      <nodes xmi:type="TerDep_Pay_Exec_SInputFailureHandler.subflow:FCMComposite_1" xmi:id="FCMComposite_1_5" location="313,220">
+        <translation xmi:type="utility:ConstantString" string="TerDep_Pay_Exec_SInputFailureHandler"/>
+      </nodes>
+      <nodes xmi:type="TerDep_Pay_Exec_SInputTimeoutHandler.subflow:FCMComposite_1" xmi:id="FCMComposite_1_6" location="313,273">
+        <translation xmi:type="utility:ConstantString" string="TerDep_Pay_Exec_SInputTimeoutHandler"/>
+      </nodes>
+      <nodes xmi:type="ComIbmLabel.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_7" location="110,377" labelName="HealthCheck">
+        <translation xmi:type="utility:ConstantString" string="HealthCheck (Label)"/>
+      </nodes>
+      <nodes xmi:type="HealthCheck.subflow:FCMComposite_1" xmi:id="FCMComposite_1_8" location="313,377">
+        <translation xmi:type="utility:ConstantString" string="HealthCheck (Implementation)"/>
+      </nodes>
+      <nodes xmi:type="ComIbmLabel.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_9" location="110,427" labelName="ExecuteTermDepositPayments">
+        <translation xmi:type="utility:ConstantString" string="ExecuteTermDepositPayments (Label)"/>
+      </nodes>
+      <nodes xmi:type="ExecuteTermDepositPayments.subflow:FCMComposite_1" xmi:id="FCMComposite_1_10" location="313,427">
+        <translation xmi:type="utility:ConstantString" string="ExecuteTermDepositPayments (Implementation)"/>
+      </nodes>
+      <nodes xmi:type="ComIbmLabel.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_12" location="110,480" labelName="lblEncrypt">
+        <translation xmi:type="utility:ConstantString" string="lblEncrypt"/>
+      </nodes>
+      <nodes xmi:type="ComIbmLabel.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_13" location="110,532" labelName="lblDecrypt">
+        <translation xmi:type="utility:ConstantString" string="lblDecrypt"/>
+      </nodes>
+      <nodes xmi:type="ComIbmLabel.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_14" location="110,583" labelName="lblAudit">
+        <translation xmi:type="utility:ConstantString" string="lblAudit"/>
+      </nodes>
+      <nodes xmi:type="ace_esb_core_ope_SMF_BUS_CORE_SRV_CTRLAUDIT.subflow:FCMComposite_1" xmi:id="FCMComposite_1_17" location="313,582">
+        <translation xmi:type="utility:ConstantString" string="CTRLAUDIT"/>
+      </nodes>
+      <nodes xmi:type="ace_esb_core_ope_SMF_BUS_CORE_SRV_CTRLINICIAL.subflow:FCMComposite_1" xmi:id="FCMComposite_1_18" location="232,147">
+        <translation xmi:type="utility:ConstantString" string="CTRLINICIAL"/>
+      </nodes>
+      <nodes xmi:type="ace_esb_smf_util_SMF_ESB_UTIL_CIPHER_DECRYPTSRV.subflow:FCMComposite_1" xmi:id="FCMComposite_1_11" location="313,532">
+        <translation xmi:type="utility:ConstantString" string="DECRYPTSRV"/>
+      </nodes>
+      <nodes xmi:type="ace_esb_smf_util_SMF_ESB_UTIL_CIPHER_ENCRYPTSRV.subflow:FCMComposite_1" xmi:id="FCMComposite_1_15" location="313,479">
+        <translation xmi:type="utility:ConstantString" string="ENCRYPTSRV"/>
+      </nodes>
+      <nodes xmi:type="ace_esb_core_ope_SMF_BUS_CORE_SRV_CTRLERROR.subflow:FCMComposite_1" xmi:id="FCMComposite_1_16" location="530,511" UDP_CODSERVICIO="TerDep_Pay_Exec_S" UDP_OPERACION_GET="ExecuteTermDepositPayments">
+        <translation xmi:type="utility:ConstantString" string="CTRLERROR"/>
+      </nodes>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_8" targetNode="FCMComposite_1_8" sourceNode="FCMComposite_1_7" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input_1"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_9" targetNode="FCMComposite_1_3" sourceNode="FCMComposite_1_8" sourceTerminalName="OutTerminal.Output_1" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_10" targetNode="FCMComposite_1_10" sourceNode="FCMComposite_1_9" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input_1"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_11" targetNode="FCMComposite_1_3" sourceNode="FCMComposite_1_10" sourceTerminalName="OutTerminal.Output_1" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_15" targetNode="FCMComposite_1_17" sourceNode="FCMComposite_1_14" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_1" targetNode="FCMComposite_1_18" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_12" targetNode="FCMComposite_1_2" sourceNode="FCMComposite_1_18" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_13" targetNode="FCMComposite_1_11" sourceNode="FCMComposite_1_13" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_14" targetNode="FCMComposite_1_15" sourceNode="FCMComposite_1_12" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_16" targetNode="FCMComposite_1_16" sourceNode="FCMComposite_1_15" sourceTerminalName="OutTerminal.Output1" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_17" targetNode="FCMComposite_1_16" sourceNode="FCMComposite_1_11" sourceTerminalName="OutTerminal.Output1" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_18" targetNode="FCMComposite_1_3" sourceNode="FCMComposite_1_16" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_4" targetNode="FCMComposite_1_5" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.failure" targetTerminalName="Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_6" targetNode="FCMComposite_1_6" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.timeout" targetTerminalName="Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_19" targetNode="FCMComposite_1_4" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.catch" targetTerminalName="Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_20" targetNode="FCMComposite_1_3" sourceNode="FCMComposite_1_4" sourceTerminalName="Output" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_21" targetNode="FCMComposite_1_3" sourceNode="FCMComposite_1_6" sourceTerminalName="Output" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_22" targetNode="FCMComposite_1_3" sourceNode="FCMComposite_1_5" sourceTerminalName="Output" targetTerminalName="InTerminal.in"/>
+    </composition>
+    <propertyOrganizer/>
+    <stickyBoard>
+      <stickyNote location="25,25">
+        <body xmi:type="utility:ConstantString" string="This message flow is automatically generated.&#xA;Do not edit this message flow.&#xA;If you edit the message flow, your changes will be overwritten without a warning.&#xA;"/>
+      </stickyNote>
+    </stickyBoard>
+  </eClassifiers>
+</ecore:EPackage>
