@@ -1,0 +1,46 @@
+# ========================= Bus Inputs ==========================
+
+# ============ Mandatory ================
+service: "PayExe_ProRev_Hub_Upda_S"
+version: "v1.0"
+
+# Pl_ActiveDirectory => ldap group
+ldap:
+  DEV: "PAYEXE_PRO_HUB_INIT_GD"
+  QAS: "PAYEXE_PRO_HUB_INIT_GQ"
+  PRD: "PAYEXE_PRO_HUB_INIT_GP"
+
+# workdiroverride
+wdo:
+  default:
+    app:
+      additionalInstances: "10"
+      "mTLS.useHTTPS": "yes"
+      "Onprem.useHTTPS": "no"
+      "HTTP Request.timeoutForServer": "16"
+      "mTLS.timeoutForClient": "17"
+      "Onprem.timeoutForClient": "17"
+      "CTRLAUTHAPP.UDP_USE_CCAS400": "N"
+      "mTLS.URLSpecifier" : "/v1.0/mtls/s/paymentexecution/procedurereverse/hub/update*"
+      "Onprem.URLSpecifier" : "/v1.0/onprem/s/paymentexecution/procedurereverse/hub/update*"
+      UDP_URL_APIREST: "https://localhost:7843/v1.0"
+      UDP_OPERACION_GET: "UpdatePaymentExecutionProcedureReverseHub"
+    rest:
+      additionalInstances: "10"
+      "HTTP Input.useHTTPS": "yes"
+      "HTTP Input.timeoutForClient": "15"
+      "CTRLINICIAL.UDP_USE_CCAS400": "N"
+      UDP_OPERACION_GET: "UpdatePaymentExecutionProcedureReverseHub"
+
+# ================ Optionals ======================= 
+# Pl_UserDefined => destination + decorator dest info 
+destinations:
+  - destination:
+      name: "main"
+      URLDEST: "https://jbosstransaccionaluat.dombif.peru:8443/WSReversaNotificacionPago/ReversaNotificacionPagoService"
+      TIMEOUT: "16"
+      PROTOCOLO: "TLSv1.3"
+      METODO: "POST"
+    srv_info:
+      TECHNICAL_SRV_NAME: "BUS_PayExe_ProRev_Hub_Upda_S"
+      TIMEOUT: "16"

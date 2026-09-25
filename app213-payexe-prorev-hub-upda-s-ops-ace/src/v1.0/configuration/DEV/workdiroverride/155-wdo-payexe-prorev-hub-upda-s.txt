@@ -1,0 +1,67 @@
+#APLICACION
+#------------------------------------------------
+#Sobreescritura del Flujo principal
+MF_PayExe_ProRev_Hub_Upda_S#additionalInstances = 10
+MF_PayExe_ProRev_Hub_Upda_S#UDP_URL_APIREST = https://localhost:7843/v1.0
+MF_PayExe_ProRev_Hub_Upda_S#CTRLAUTHAPP.securityProfileName = {PLP_PayExe_ProRev_Hub_Upda_S}:PL_ActiveDirectory
+#Codigo de Servicio
+MF_PayExe_ProRev_Hub_Upda_S#CTRLAUTHAPP.UDP_CODSERVICIO	= PayExe_ProRev_Hub_Upda_S
+MF_PayExe_ProRev_Hub_Upda_S#CTRLERROR.UDP_CODSERVICIO		= PayExe_ProRev_Hub_Upda_S
+#Operacion del Servicio
+MF_PayExe_ProRev_Hub_Upda_S#CTRLERROR.UDP_OPERACION_GET	= UpdatePaymentExecutionProcedureReverseHub
+#Opciones generales
+MF_PayExe_ProRev_Hub_Upda_S#CTRLAUTHAPP.UDP_VERSION		= 1.0
+MF_PayExe_ProRev_Hub_Upda_S#CTRLAUTHAPP.UDP_NOMSERVICIO	= 155-Reversar-Pago-Recaudacion-HUB
+MF_PayExe_ProRev_Hub_Upda_S#CTRLAUTHAPP.UDP_USE_CCAS400	= N
+MF_PayExe_ProRev_Hub_Upda_S#CTRLERRORAPP.UDP_NOMSERVICIO	= 155-Reversar-Pago-Recaudacion-HUB
+#Sobreescritura del path o URI del backend
+MF_PayExe_ProRev_Hub_Upda_S#HTTP Request.httpVersion = 1.1
+MF_PayExe_ProRev_Hub_Upda_S#HTTP Request.protocol = TLSv1.3
+MF_PayExe_ProRev_Hub_Upda_S#HTTP Request.keyAlias = bm
+MF_PayExe_ProRev_Hub_Upda_S#HTTP Request.timeoutForServer = 16
+MF_PayExe_ProRev_Hub_Upda_S#HTTP Request.hostnameChecking = false
+MF_PayExe_ProRev_Hub_Upda_S#HTTP Request.acceptCompressedResponses = true
+#Sobreescritura del path o URI de entrada por MTLS
+MF_PayExe_ProRev_Hub_Upda_S#mTLS.URLSpecifier = /v1.0/mtls/s/paymentexecution/procedurereverse/hub/update*
+MF_PayExe_ProRev_Hub_Upda_S#mTLS.useHTTPS = yes
+MF_PayExe_ProRev_Hub_Upda_S#mTLS.faultFormat = JSON
+MF_PayExe_ProRev_Hub_Upda_S#mTLS.timeoutForClient = 17
+#Sobreescritura del path o URI de entrada por OnPrem
+MF_PayExe_ProRev_Hub_Upda_S#Onprem.URLSpecifier = /v1.0/onprem/s/paymentexecution/procedurereverse/hub/update*
+MF_PayExe_ProRev_Hub_Upda_S#Onprem.faultFormat = JSON
+MF_PayExe_ProRev_Hub_Upda_S#Onprem.useHTTPS = no
+MF_PayExe_ProRev_Hub_Upda_S#Onprem.timeoutForClient = 17
+
+
+#API REST
+#------------------------------------------------
+#Sobreescritura de instancias del Flujo principal
+gen.PayExe_ProRev_Hub_Upda_S#additionalInstances = 10
+gen.PayExe_ProRev_Hub_Upda_S#HTTP Input.useHTTPS = yes
+gen.PayExe_ProRev_Hub_Upda_S#HTTP Input.timeoutForClient = 16
+gen.PayExe_ProRev_Hub_Upda_S#HTTP Input.faultFormat = JSON
+#Codigo de Servicio
+PayExe_ProRev_Hub_Upda_SInputCatchHandler#CTRLERROR.UDP_CODSERVICIO     = PayExe_ProRev_Hub_Upda_S
+PayExe_ProRev_Hub_Upda_SInputFailureHandler#CTRLERROR.UDP_CODSERVICIO   = PayExe_ProRev_Hub_Upda_S
+PayExe_ProRev_Hub_Upda_SInputTimeoutHandler#CTRLERROR.UDP_CODSERVICIO   = PayExe_ProRev_Hub_Upda_S
+gen.PayExe_ProRev_Hub_Upda_S#CTRLERROR.UDP_CODSERVICIO                  = PayExe_ProRev_Hub_Upda_S
+#Operacion del Servicio
+HealthCheck#HEALTH_CHECK_NO_IBS_HUB_REVERSA.UDP_OPERACION_GET		= UpdatePaymentExecutionProcedureReverseHub
+PayExe_ProRev_Hub_Upda_SInputCatchHandler#CTRLERROR.UDP_OPERACION_GET		= UpdatePaymentExecutionProcedureReverseHub
+PayExe_ProRev_Hub_Upda_SInputFailureHandler#CTRLERROR.UDP_OPERACION_GET	= UpdatePaymentExecutionProcedureReverseHub
+PayExe_ProRev_Hub_Upda_SInputTimeoutHandler#CTRLERROR.UDP_OPERACION_GET	= UpdatePaymentExecutionProcedureReverseHub
+gen.PayExe_ProRev_Hub_Upda_S#CTRLERROR.UDP_OPERACION_GET					= UpdatePaymentExecutionProcedureReverseHub
+gen.PayExe_ProRev_Hub_Upda_S#CTRLINICIAL.UDP_OPERACION_GET				= UpdatePaymentExecutionProcedureReverseHub
+#Nombre del Servicio
+PayExe_ProRev_Hub_Upda_SInputCatchHandler#CTRLERROR.UDP_NOMSERVICIO		= 155-Reversar-Pago-Recaudacion-HUB
+PayExe_ProRev_Hub_Upda_SInputFailureHandler#CTRLERROR.UDP_NOMSERVICIO	    = 155-Reversar-Pago-Recaudacion-HUB
+PayExe_ProRev_Hub_Upda_SInputTimeoutHandler#CTRLERROR.UDP_NOMSERVICIO	    = 155-Reversar-Pago-Recaudacion-HUB
+gen.PayExe_ProRev_Hub_Upda_S#CTRLERROR.UDP_NOMSERVICIO					= 155-Reversar-Pago-Recaudacion-HUB
+gen.PayExe_ProRev_Hub_Upda_S#CTRLINICIAL.UDP_NOMSERVICIO					= 155-Reversar-Pago-Recaudacion-HUB
+#Opciones generales
+gen.PayExe_ProRev_Hub_Upda_S#CTRLINICIAL.UDP_USE_CCAS400	= N
+gen.PayExe_ProRev_Hub_Upda_S#CTRLINICIAL.UDP_VERSION		= 1.0
+Validate#Validate.validateMaster	= contentAndValue
+#Monitoring
+gen.PayExe_ProRev_Hub_Upda_S#monitoringProfile = {PLP_PayExe_ProRev_Hub_Upda_S}:Monitoring
+MF_PayExe_ProRev_Hub_Upda_S#monitoringProfile = {PLP_PayExe_ProRev_Hub_Upda_S}:Monitoring

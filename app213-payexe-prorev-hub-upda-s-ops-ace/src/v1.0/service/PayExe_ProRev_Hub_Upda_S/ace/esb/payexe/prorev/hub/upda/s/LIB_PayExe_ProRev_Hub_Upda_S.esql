@@ -1,0 +1,433 @@
+BROKER SCHEMA ace.esb.payexe.prorev.hub.upda.s
+PATH ace.esb.core.common;
+
+
+CREATE PROCEDURE armaMensajeTo_HTTP_From_UpdatePaymentExecutionProcedureReverseHub(IN refEnv REFERENCE, IN refIn REFERENCE,IN refLocalEnv REFERENCE, IN refOutput REFERENCE, IN refOutLocal REFERENCE)
+BEGIN
+		SET refEnv.Srv.Destino = C_DESTINO_BK_1;
+		SET refEnv.TramaIn.JSON = refIn.JSON;
+		
+		CREATE FIELD refEnv.Temp.SrvErrors IDENTITY(JSON.Array)SrvErrors;
+
+		SET refEnv.Temp.Variable.IsErrorValidCampo = FALSE;
+		SET refEnv.Variables.TypeLibrary      = getTYPE_LIBRARY_NOT_ATM();
+		SET refEnv.Variables.Backend.TargetId = getCODE_APP_BUS();
+		SET refEnv.Variables.Backend.OriginId = getCODE_APP_BUS();
+
+		CALL armaCuerpo_Bkd(refEnv, refIn, refOutput, refOutLocal);
+END;
+
+CREATE PROCEDURE validarMensaje(IN refEnv REFERENCE, IN refIn REFERENCE, IN refService REFERENCE)
+BEGIN
+	DECLARE refBodyIn REFERENCE TO refIn.JSON.Data.[<];
+
+	IF refBodyIn.TransactionReference IS NULL OR refBodyIn.TransactionReference = '' THEN
+		CALL setErrorCampo(C_ERROR_MSG_TRANS_REF_REQ, refEnv);
+	END IF;
+	IF refBodyIn.TransactionDate IS NULL OR refBodyIn.TransactionDate = '' THEN
+		CALL setErrorCampo(C_ERROR_MSG_TRANS_DATE_REQ, refEnv);
+	END IF;
+	IF refBodyIn.ChannelIdentification IS NULL OR refBodyIn.ChannelIdentification = '' THEN
+		CALL setErrorCampo(C_ERROR_MSG_CHANNEL_REQ, refEnv);
+	END IF;
+	IF refBodyIn.PartyRoleReference IS NULL OR refBodyIn.PartyRoleReference = '' THEN
+		CALL setErrorCampo(C_ERROR_MSG_PARTY_ROLE_REQ, refEnv);
+	END IF;
+	IF refBodyIn.AgreementIdentification IS NULL OR refBodyIn.AgreementIdentification = '' THEN
+		CALL setErrorCampo(C_ERROR_MSG_AGREEMENT_REQ, refEnv);
+	END IF;
+	IF refBodyIn.CurrencyCode IS NULL OR refBodyIn.CurrencyCode = '' THEN
+		CALL setErrorCampo(C_ERROR_MSG_CURRENCY_REQ, refEnv);
+	END IF;
+	IF refBodyIn.NumberOfPayments IS NULL OR refBodyIn.NumberOfPayments = '' THEN
+		CALL setErrorCampo(C_ERROR_MSG_PAYMENTS_REQ, refEnv);
+	END IF;
+	IF refBodyIn.IndustryClassification IS NULL OR refBodyIn.IndustryClassification = '' THEN
+		CALL setErrorCampo(C_ERROR_MSG_INDUSTRY_REQ, refEnv);
+	END IF;
+	IF refBodyIn.LoanAmount IS NULL THEN
+		CALL setErrorCampo(C_ERROR_MSG_LOAN_AMT_REQ, refEnv);
+	ELSEIF refBodyIn.LoanAmount > 0 THEN
+		DECLARE vLoanAmount DECIMAL CAST(refBodyIn.LoanAmount AS DECIMAL);
+		IF ValidateDecimalFormat(vLoanAmount,13,2) IS FALSE THEN
+			CALL setErrorCampo(REPLACE(C_ERROR_MSG_LONGITUD_DECIMAL,C_COD_REPLACE,FIELDNAME(refBodyIn.LoanAmount)), refEnv);
+		END IF;
+	END IF;
+	IF refBodyIn.Amount IS NULL THEN
+		CALL setErrorCampo(C_ERROR_MSG_AMOUNT_REQ, refEnv);
+	ELSEIF refBodyIn.Amount > 0 THEN
+		DECLARE vAmount DECIMAL CAST(refBodyIn.Amount AS DECIMAL);
+		IF ValidateDecimalFormat(vAmount,13,2) IS FALSE THEN
+			CALL setErrorCampo(REPLACE(C_ERROR_MSG_LONGITUD_DECIMAL,C_COD_REPLACE,FIELDNAME(refBodyIn.Amount)), refEnv);
+		END IF;
+	END IF;
+	IF refBodyIn.LimitAmount IS NOT NULL AND refBodyIn.LimitAmount > 0 THEN
+		DECLARE vLimitAmount DECIMAL CAST(refBodyIn.LimitAmount AS DECIMAL);
+		IF ValidateDecimalFormat(vLimitAmount,13,2) IS FALSE THEN
+			CALL setErrorCampo(REPLACE(C_ERROR_MSG_LONGITUD_DECIMAL,C_COD_REPLACE,FIELDNAME(refBodyIn.LimitAmount)), refEnv);
+		END IF;
+	END IF;
+
+	DECLARE refDebtsList REFERENCE TO refBodyIn.DebtsList.Item[1];
+	WHILE LASTMOVE(refDebtsList) DO
+		IF refDebtsList.BalanceAmount IS NOT NULL AND refDebtsList.BalanceAmount > 0 THEN
+			DECLARE vBalanceAmount DECIMAL CAST(refDebtsList.BalanceAmount AS DECIMAL);
+			IF ValidateDecimalFormat(vBalanceAmount,13,2) IS FALSE THEN
+				CALL setErrorCampo(REPLACE(C_ERROR_MSG_LONGITUD_DECIMAL,C_COD_REPLACE,FIELDNAME(refDebtsList.BalanceAmount)), refEnv);
+			END IF;
+		END IF;
+		IF refDebtsList.DiscountAmount IS NOT NULL AND refDebtsList.DiscountAmount > 0 THEN
+			DECLARE vDiscountAmount DECIMAL CAST(refDebtsList.DiscountAmount AS DECIMAL);
+			IF ValidateDecimalFormat(vDiscountAmount,13,2) IS FALSE THEN
+				CALL setErrorCampo(REPLACE(C_ERROR_MSG_LONGITUD_DECIMAL,C_COD_REPLACE,FIELDNAME(refDebtsList.DiscountAmount)), refEnv);
+			END IF;
+		END IF;
+		IF refDebtsList.FineAmount IS NOT NULL AND refDebtsList.FineAmount > 0 THEN
+			DECLARE vFineAmount DECIMAL CAST(refDebtsList.FineAmount AS DECIMAL);
+			IF ValidateDecimalFormat(vFineAmount,13,2) IS FALSE THEN
+				CALL setErrorCampo(REPLACE(C_ERROR_MSG_LONGITUD_DECIMAL,C_COD_REPLACE,FIELDNAME(refDebtsList.FineAmount)), refEnv);
+			END IF;
+		END IF;
+		IF refDebtsList.DueAmount IS NOT NULL AND refDebtsList.DueAmount > 0 THEN
+			DECLARE vDueAmount DECIMAL CAST(refDebtsList.DueAmount AS DECIMAL);
+			IF ValidateDecimalFormat(vDueAmount,13,2) IS FALSE THEN
+				CALL setErrorCampo(REPLACE(C_ERROR_MSG_LONGITUD_DECIMAL,C_COD_REPLACE,FIELDNAME(refDebtsList.DueAmount)), refEnv);
+			END IF;
+		END IF;
+		IF refDebtsList.InterestAmount IS NOT NULL AND refDebtsList.InterestAmount > 0 THEN
+			DECLARE vInterestAmount DECIMAL CAST(refDebtsList.InterestAmount AS DECIMAL);
+			IF ValidateDecimalFormat(vInterestAmount,13,2) IS FALSE THEN
+				CALL setErrorCampo(REPLACE(C_ERROR_MSG_LONGITUD_DECIMAL,C_COD_REPLACE,FIELDNAME(refDebtsList.InterestAmount)), refEnv);
+			END IF;
+		END IF;
+		IF refDebtsList.AdjustmentAmount IS NOT NULL AND refDebtsList.AdjustmentAmount > 0 THEN
+			DECLARE vAdjustmentAmount DECIMAL CAST(refDebtsList.AdjustmentAmount AS DECIMAL);
+			IF ValidateDecimalFormat(vAdjustmentAmount,13,2) IS FALSE THEN
+				CALL setErrorCampo(REPLACE(C_ERROR_MSG_LONGITUD_DECIMAL,C_COD_REPLACE,FIELDNAME(refDebtsList.AdjustmentAmount)), refEnv);
+			END IF;
+		END IF;
+		IF refDebtsList.Amount IS NOT NULL AND refDebtsList.Amount > 0 THEN
+			DECLARE vDebtAmount DECIMAL CAST(refDebtsList.Amount AS DECIMAL);
+			IF ValidateDecimalFormat(vDebtAmount,13,2) IS FALSE THEN
+				CALL setErrorCampo(REPLACE(C_ERROR_MSG_LONGITUD_DECIMAL,C_COD_REPLACE,FIELDNAME(refDebtsList.Amount)), refEnv);
+			END IF;
+		END IF;
+
+		MOVE refDebtsList NEXTSIBLING REPEAT TYPE NAME;
+	END WHILE;
+  END;
+
+-- Convierte Double/Integer/Decimal a CHARACTER sin notacion cientifica
+CREATE FUNCTION formatMonto(IN pValue DECIMAL) RETURNS CHARACTER
+BEGIN
+	DECLARE vDec DECIMAL;
+	IF pValue IS NULL THEN
+		SET vDec = 0;
+	ELSE
+		SET vDec = pValue;
+	END IF;
+	RETURN TRIM(CAST(vDec AS CHARACTER));
+END;
+
+CREATE PROCEDURE armaCuerpo_Bkd(IN refEnv REFERENCE, IN refIn REFERENCE, IN refOutput REFERENCE, IN refOutLocal REFERENCE)
+BEGIN		
+	DECLARE refService REFERENCE TO refEnv.Policy.service;
+	
+	CALL validarMensaje(refEnv, refIn, refService);
+	CALL prepareCallToRestBackend(refEnv, refIn, refOutput, refOutLocal, refService, refEnv.Srv.Destino);
+	CALL cuerpo_Backend1(refEnv, refIn, refOutput, refService);
+	CALL setConfAuditBackend(refEnv, refOutput, refOutLocal, getCONST_REST());
+END;
+
+CREATE PROCEDURE cuerpo_Backend1(IN refEnv REFERENCE, IN refIn REFERENCE, IN refOutput REFERENCE, IN refService REFERENCE)
+BEGIN
+	DELETE FIELD refOutput.JSON;
+
+	-- Limpiar headers heredados del request REST de entrada antes de construir el body SOAP
+	-- (debe ejecutarse ANTES del CREATE...PARSE del XMLNSC para no invalidar su bitstream ya ensamblado)
+	DELETE FIELD refOutput.HTTPRequestHeader;
+	CREATE LASTCHILD OF refOutput DOMAIN getHTTP_REQ_H();
+	SET refOutput.HTTPRequestHeader."Content-Type" = 'text/xml; charset=utf-8';
+
+	DECLARE refBodyIn REFERENCE TO refIn.JSON.Data.UpdatePaymentExecutionProcedureReverseHub;
+	DECLARE vTipoPago CHARACTER '';
+	DECLARE vMedioPago CHARACTER '';
+	DECLARE vXmlBody CHARACTER '';
+
+	-- Transformar OperationType: C -> EXACTO, P -> PARCIAL, R -> R, PAGO_TOTAL_CUOTA -> EXACTO
+	IF refBodyIn.OperationType = 'C' THEN
+		SET vTipoPago = 'EXACTO';
+	ELSEIF refBodyIn.OperationType = 'P' THEN
+		SET vTipoPago = 'PARCIAL';
+	ELSEIF refBodyIn.OperationType = 'R' THEN
+		SET vTipoPago = 'R';
+	ELSEIF refBodyIn.OperationType = 'PAGO_TOTAL_CUOTA' THEN
+		SET vTipoPago = 'EXACTO';
+	ELSE
+		SET vTipoPago = refBodyIn.OperationType;
+	END IF;
+
+	-- Transformar medio de pago: EFECTIVO -> EF
+	IF refBodyIn.PaymentMethod = 'EFECTIVO' THEN
+		SET vMedioPago = 'EF';
+	ELSE
+		SET vMedioPago = COALESCE(refBodyIn.PaymentMethod, '');
+	END IF;
+
+	-- Construir SOAP XML Envelope
+	SET vXmlBody = '<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://services.reversanotificacionpago.ws.eftgroup.cl/">
+  <soapenv:Header/>
+  <soapenv:Body>
+    <ser:reversaNotificacionPago>';
+
+	SET vXmlBody = vXmlBody || '
+      <cod_recaudador>' || COALESCE(UPPER(refBodyIn.PartyRoleReference), '') || '</cod_recaudador>';
+	SET vXmlBody = vXmlBody || '
+      <cod_convenio>' || COALESCE(refBodyIn.AgreementIdentification, '') || '</cod_convenio>';
+
+	SET vXmlBody = vXmlBody || '
+      <id_servicio>' || COALESCE(refBodyIn.DebtsList.Item[1].ServiceList.Item[1].ServiceType, '') || '</id_servicio>';
+	SET vXmlBody = vXmlBody || '
+      <id_servicio2>' || COALESCE(refBodyIn.DebtsList.Item[1].ServiceList.Item[2].ServiceType, '') || '</id_servicio2>';
+	SET vXmlBody = vXmlBody || '
+      <id_servicio3>' || COALESCE(refBodyIn.DebtsList.Item[1].ServiceList.Item[3].ServiceType, '') || '</id_servicio3>';
+
+	SET vXmlBody = vXmlBody || '
+      <cod_canal>' || COALESCE(refBodyIn.ChannelIdentification, '') || '</cod_canal>';
+	SET vXmlBody = vXmlBody || '
+      <fecha_hora>' || COALESCE(refBodyIn.TransactionDate, '') || '</fecha_hora>';
+	SET vXmlBody = vXmlBody || '
+      <id_transaccion_origen>' || COALESCE(refBodyIn.TransactionReference, '') || '</id_transaccion_origen>';
+	SET vXmlBody = vXmlBody || '
+      <cod_moneda>' || COALESCE(refBodyIn.CurrencyCode, '') || '</cod_moneda>';
+	SET vXmlBody = vXmlBody || '
+      <cant_pagos>' || COALESCE(refBodyIn.NumberOfPayments, '') || '</cant_pagos>';
+	SET vXmlBody = vXmlBody || '
+      <monto_total_pago>' || COALESCE(formatMonto(CAST(refBodyIn.LoanAmount AS DECIMAL)), '') || '</monto_total_pago>';
+	SET vXmlBody = vXmlBody || '
+      <monto_saldo_pago>' ||  COALESCE(formatMonto(CAST(refBodyIn.LimitAmount AS DECIMAL)), '') || '</monto_saldo_pago>';
+	SET vXmlBody = vXmlBody || '
+      <agrupacion>' || COALESCE(refBodyIn.IndustryClassification, '0') || '</agrupacion>';
+	SET vXmlBody = vXmlBody || '
+      <glosa>' || COALESCE(refBodyIn.DebtsList.Item[1].CampaignIdentifier, 'Glosa reversa') || '</glosa>';
+	SET vXmlBody = vXmlBody || '
+      <pagos>';
+
+	DECLARE refDebt REFERENCE TO refBodyIn.DebtsList.Item;
+	WHILE LASTMOVE(refDebt) DO
+		SET vXmlBody = vXmlBody || '
+        <pago>
+          <detalle_pago>
+            <deuda_a_pagar>' || COALESCE(formatMonto(CAST(refDebt.Amount AS DECIMAL)), '') || '</deuda_a_pagar>
+            <medio_pago>' || vMedioPago || '</medio_pago>
+            <monto_pago>' || COALESCE(formatMonto(CAST(refBodyIn.Amount AS DECIMAL)), '') || '</monto_pago>
+            <numero_pago>' || COALESCE(refBodyIn.PaymentInstrumentNumber, '') || '</numero_pago>
+            <tipo_pago>' || vTipoPago || '</tipo_pago>
+          </detalle_pago>
+          <deuda>
+            <datos_adicionales>';
+
+		DECLARE refAddInfo REFERENCE TO refDebt.AdditionalInformationList.Item;
+		WHILE LASTMOVE(refAddInfo) DO
+			SET vXmlBody = vXmlBody || '
+              <dato_adicional>
+                <nombre>' || COALESCE(refAddInfo.Name, '') || '</nombre>
+                <valor>' || COALESCE(refAddInfo.Value, '') || '</valor>
+              </dato_adicional>';
+			MOVE refAddInfo NEXTSIBLING NAME 'Item';
+		END WHILE;
+
+		SET vXmlBody = vXmlBody || '
+            </datos_adicionales>';
+		SET vXmlBody = vXmlBody || '
+            <fecha_vencimiento>' || COALESCE(refDebt.ExpiryDate, '') || '</fecha_vencimiento>';
+		SET vXmlBody = vXmlBody || '
+            <id_cliente>' || COALESCE(refDebt.FullName, '') || '</id_cliente>';
+		SET vXmlBody = vXmlBody || '
+            <id_consulta>' || COALESCE(refDebt.InquiryReference, '') || '</id_consulta>';
+		SET vXmlBody = vXmlBody || '
+            <id_pago>' || COALESCE(refBodyIn.PaymentInstrumentNumber, '') || '</id_pago>';
+
+		SET vXmlBody = vXmlBody || '
+            <id_servicio>' || COALESCE(refDebt.ServiceList.Item[1].ServiceType, '') || '</id_servicio>';
+
+		SET vXmlBody = vXmlBody || '
+            <monto_descuento>' || COALESCE(formatMonto(CAST(refDebt.DiscountAmount AS DECIMAL)), '') || '</monto_descuento>';
+		SET vXmlBody = vXmlBody || '
+            <monto_interes>' || COALESCE(formatMonto(CAST(refDebt.InterestAmount AS DECIMAL)), '') || '</monto_interes>';
+		SET vXmlBody = vXmlBody || '
+            <monto_multa>' || COALESCE(formatMonto(CAST(refDebt.FineAmount AS DECIMAL)), '') || '</monto_multa>';
+		SET vXmlBody = vXmlBody || '
+            <monto_reajuste>' || COALESCE(formatMonto(CAST(refDebt.AdjustmentAmount AS DECIMAL)), '') || '</monto_reajuste>';
+		SET vXmlBody = vXmlBody || '
+            <monto_saldo>' || COALESCE(formatMonto(CAST(refDebt.BalanceAmount AS DECIMAL)), '') || '</monto_saldo>';
+		SET vXmlBody = vXmlBody || '
+            <monto_total>' || COALESCE(formatMonto(CAST(refDebt.Amount AS DECIMAL)), '') || '</monto_total>';
+		SET vXmlBody = vXmlBody || '
+            <monto_vencido>' || COALESCE(formatMonto(CAST(refDebt.DueAmount AS DECIMAL)), '') || '</monto_vencido>';
+		SET vXmlBody = vXmlBody || '
+            <numero_documento>' || COALESCE(refDebt.PersonIdentification, '') || '</numero_documento>';
+		SET vXmlBody = vXmlBody || '
+            <tipo_documento>' || COALESCE(refDebt.PersonIdentificationType, '') || '</tipo_documento>';
+		SET vXmlBody = vXmlBody || '
+          </deuda>
+        </pago>';
+
+		MOVE refDebt NEXTSIBLING NAME 'Item';
+	END WHILE;
+
+	SET vXmlBody = vXmlBody || '
+      </pagos>
+    </ser:reversaNotificacionPago>
+  </soapenv:Body>
+</soapenv:Envelope>';
+
+	-- Crear dominio XMLNSC con el SOAP XML parseado
+	CREATE LASTCHILD OF refOutput DOMAIN 'XMLNSC' PARSE(CAST(vXmlBody AS BLOB CCSID 1208) CCSID 1208);
+END;
+
+
+CREATE PROCEDURE armaRptaUpdatePaymentExecutionProcedureReverseHub_OK(IN refEnv REFERENCE, IN refIn REFERENCE, IN refOut REFERENCE)
+BEGIN
+	DECLARE vResultCode CHARACTER '';
+	DECLARE vResultMsg CHARACTER '';
+
+	IF EXISTS(refIn.XMLNSC.*:Envelope.*:Body.*:reversaNotificacionPagoResponse.return.[]) THEN
+		SET vResultCode = COALESCE(CAST(refIn.XMLNSC.*:Envelope.*:Body.*:reversaNotificacionPagoResponse.return.cod_resultado AS CHARACTER), '');
+		SET vResultMsg = COALESCE(CAST(refIn.XMLNSC.*:Envelope.*:Body.*:reversaNotificacionPagoResponse.return.msg_resultado AS CHARACTER), '');
+	ELSEIF EXISTS(refIn.XMLNS.*:Envelope.*:Body.*:reversaNotificacionPagoResponse.return.[]) THEN
+		SET vResultCode = COALESCE(CAST(refIn.XMLNS.*:Envelope.*:Body.*:reversaNotificacionPagoResponse.return.cod_resultado AS CHARACTER), '');
+		SET vResultMsg = COALESCE(CAST(refIn.XMLNS.*:Envelope.*:Body.*:reversaNotificacionPagoResponse.return.msg_resultado AS CHARACTER), '');
+	END IF;
+
+	DELETE FIELD refOut;
+
+	SET refOut.Properties = refIn.Properties;
+	SET refEnv.Variables.HTTPStatusCode = 200;
+	SET refEnv.Variables.HTTPMessage = 'OK';
+	SET refOut.HTTPReplyHeader."X-Original-HTTP-Status-Code" = refEnv.Variables.HTTPStatusCode;
+
+	CREATE LASTCHILD OF refOut DOMAIN getHTTP_RES_H();
+	CREATE LASTCHILD OF refOut DOMAIN getDOMINIO_JSON();
+	CREATE LASTCHILD OF refOut.JSON NAME getDATA();
+	CREATE LASTCHILD OF refOut.JSON.Data NAME C_OPERATION_RS;
+
+	DECLARE refJsonOut REFERENCE TO refOut.JSON.Data.[<];
+	DECLARE refHttpResOut REFERENCE TO refOut.HTTPResponseHeader;
+
+	SET refJsonOut.ResultCode    = vResultCode;
+	SET refJsonOut.ResultMessage = vResultMsg;
+
+	SET refJsonOut.TransactionReference = GenerateIdTransaccion();
+
+	IF refJsonOut.ResultCode = 'ESM00' THEN
+		SET refJsonOut.TotalNumberOfRecords = 1;
+	ELSE
+		SET refJsonOut.TotalNumberOfRecords = 0;
+	END IF;
+
+	CALL prepararHeaderRespuestaBus_V2(refHttpResOut, refEnv);
+END;
+
+CREATE PROCEDURE armaRptaUpdatePaymentExecutionProcedureReverseHub_ERROR(IN refEnv REFERENCE, IN refIn REFERENCE, IN refOut REFERENCE)
+BEGIN
+
+	IF NOT refEnv.Temp.Variable.IsErrorValidCampo THEN
+		CALL copyHttpHeadersFromInput(refIn, refOut);
+
+		CREATE LASTCHILD OF refOut DOMAIN getDOMINIO_JSON();
+		CREATE LASTCHILD OF refOut.JSON NAME getDATA();
+		DECLARE refJsonOutAudit REFERENCE TO refOut.JSON.Data;
+		IF EXISTS(refIn.XMLNSC.[]) THEN
+			SET refJsonOutAudit = refIn.XMLNSC;
+		ELSEIF EXISTS(refIn.JSON.[]) THEN
+			SET refJsonOutAudit = refIn.JSON.Data;
+		ELSEIF EXISTS(refEnv.StatusRes.JSON.[]) THEN
+			SET refJsonOutAudit = refEnv.StatusRes.JSON.Data;
+		ELSE
+			SET refJsonOutAudit = refEnv.StatusRes.status;
+		END IF;
+
+		--Auditoria
+		IF refEnv.StatusResp.exception IS FALSE THEN
+			CALL auditXmlContentAndPropagate(refEnv, refOut, getCONST_BACKEND(), getCONST_RESPONSE(), getSTATUS_INFO());
+		ELSE
+			CALL auditXmlContentAndPropagate(refEnv, refOut, getCONST_BACKEND(), getCONST_RESPONSE(), getCONST_ERROR());
+		END IF;
+
+		DELETE FIELD refOut.JSON;
+	END IF;
+
+	CALL FormatServiceErrorsForEnvironment(refEnv, refEnv.Temp.SrvErrors);
+	CALL prepararBodyRespuestaErrorBus_HTTPV2(refEnv, refIn, refOut, C_OPERATION_RQ);
+END;
+
+CREATE PROCEDURE copyHttpHeadersFromInput(IN refIn REFERENCE, IN refOut REFERENCE)
+BEGIN
+	IF EXISTS(refIn.HTTPRequestHeader.[]) THEN
+		IF NOT EXISTS(refOut.HTTPRequestHeader.[]) THEN
+			CREATE LASTCHILD OF refOut DOMAIN getHTTP_REQ_H();
+		END IF;
+		SET refOut.HTTPRequestHeader = refIn.HTTPRequestHeader;
+	END IF;
+
+	IF EXISTS(refIn.HTTPResponseHeader.[]) THEN
+		IF NOT EXISTS(refOut.HTTPResponseHeader.[]) THEN
+			CREATE LASTCHILD OF refOut DOMAIN getHTTP_RES_H();
+		END IF;
+		SET refOut.HTTPResponseHeader = refIn.HTTPResponseHeader;
+	END IF;
+END;
+
+
+-- CT-002: Genera ID de transaccion unico de 15 digitos numericos
+-- Bloque 1 (12 dig): Timestamp YYYYMMDDHHMMSS (descarta primer digito del anio)
+-- Bloque 2 (3 dig): Milisegundos extraidos del TIMESTAMP
+CREATE FUNCTION GenerateIdTransaccion() RETURNS CHARACTER
+BEGIN
+	DECLARE vTsChar CHARACTER;
+	DECLARE vFormatDate CHARACTER;
+	DECLARE vBlock1 CHARACTER;
+	DECLARE vBlock2 CHARACTER;
+	DECLARE vDotPos INTEGER;
+
+	-- Bloque 1: 12 dígitos del timestamp YYYYMMDDHHMMSS (descartando el primer dígito del año)
+	SET vFormatDate = CAST(CURRENT_TIMESTAMP AS CHARACTER FORMAT 'YYYYMMDDHHMMSS');
+	SET vBlock1 = SUBSTRING(vFormatDate FROM 2 FOR 12);
+
+	-- Bloque 2: 3 dígitos de los milisegundos obtenidos de la representación estándar del timestamp
+	SET vTsChar = CAST(CURRENT_TIMESTAMP AS CHARACTER);
+	SET vDotPos = POSITION('.' IN vTsChar);
+	
+	IF vDotPos > 0 AND LENGTH(vTsChar) >= vDotPos + 3 THEN
+		SET vBlock2 = SUBSTRING(vTsChar FROM vDotPos + 1 FOR 3);
+	ELSE
+		SET vBlock2 = '000';
+	END IF;
+
+	RETURN vBlock1 || vBlock2;
+END;
+
+CREATE PROCEDURE auditXmlContentAndPropagate(
+	IN refEnv REFERENCE,
+	INOUT refOutput REFERENCE,
+	IN stage CHARACTER,
+	IN action CHARACTER,
+	IN status CHARACTER)
+BEGIN
+	DECLARE isXMLContent BOOLEAN EXISTS(refOutput.XMLNSC.[]) OR EXISTS(refOutput.XMLNS.[]);
+
+	CALL convertXMLNSCaJSONToAudit(refOutput);
+
+	IF action = getCONST_REQUEST() THEN
+		CALL maskXmlPayloadElementValues(refOutput);
+	END IF;
+
+	CALL prepararMensajeAuditoriaV2(refEnv, stage, action, status);
+	PROPAGATE TO LABEL getLBL_AUDIT() DELETE NONE;
+
+	IF isXMLContent THEN
+		DELETE FIELD refOutput.JSON;
+	END IF;
+END;

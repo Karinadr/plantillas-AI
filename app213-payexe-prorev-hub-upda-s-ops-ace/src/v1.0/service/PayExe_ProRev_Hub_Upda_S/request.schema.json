@@ -1,0 +1,245 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "UpdatePaymentExecutionProcedureReverseHub": {
+      "type": "object",
+      "properties": {
+        "TransactionReference": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20,
+          "pattern": "^[0-9]{1,20}$",
+          "description": "Identificador unico de la transaccion origen."
+        },
+        "TransactionDate": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20,
+          "pattern": "^[0-9]{1,20}$",
+          "description": "Fecha y hora de la transaccion."
+        },
+        "ChannelIdentification": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2,
+          "pattern": "^[a-zA-Z0-9]{1,2}$",
+          "description": "Codigo del canal por el cual se ejecuta la transaccion."
+        },
+        "PartyRoleReference": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20,
+          "pattern": "^[a-zA-Z0-9]{1,20}$",
+          "description": "Codigo del recaudador."
+        },
+        "AgreementIdentification": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4,
+          "pattern": "^[a-zA-Z0-9]{1,4}$",
+          "description": "Codigo del convenio."
+        },
+        "CurrencyCode": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 3,
+          "pattern": "^[a-zA-Z]{1,3}$",
+          "description": "Codigo de moneda del convenio."
+        },
+        "NumberOfPayments": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 5,
+          "pattern": "^[a-zA-Z0-9]{1,5}$",
+          "description": "Cantidad de pagos."
+        },
+        "IndustryClassification": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1,
+          "pattern": "^[0-9]{1}$",
+          "description": "Agrupacion de pagos."
+        },
+        "LoanAmount": {
+          "type": "number",
+          "description": "Monto total de la deuda (monto redondeo)."
+        },
+        "LimitAmount": {
+          "type": "number",
+          "description": "Monto total saldo."
+        },
+        "Amount": {
+          "type": "number",
+          "description": "Monto."
+        },
+        "PaymentInstrumentNumber": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20,
+          "pattern": "^[a-zA-Z0-9]{1,20}$",
+          "description": "Numero de pago."
+        },
+        "PaymentMethod": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20,
+          "pattern": "^[a-zA-Z0-9]{1,20}$",
+          "description": "Medio de pago."
+        },
+        "OperationType": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 30,
+          "pattern": "^[a-zA-Z0-9_-]{1,30}$",
+          "description": "Tipo de operacion. C=EXACTO, P=PARCIAL, R=R"
+        },
+        "DebtsList": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "AdditionalInformationList": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "Name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 20,
+                      "pattern": "^[a-zA-Z0-9]{1,20}$",
+                      "description": "Nombre del dato adicional."
+                    },
+                    "Value": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 20,
+                      "pattern": "^[a-zA-Z0-9]{1,20}$",
+                      "description": "Valor del dato adicional."
+                    }
+                  },
+                  "required": ["Name", "Value"]
+                }
+              },
+              "ExpiryDate": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 8,
+                "pattern": "^[0-9]{1,8}$",
+                "description": "Fecha de vencimiento."
+              },
+              "FullName": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 60,
+                "pattern": "^[a-zA-Z\\ ]{1,60}$",
+                "description": "Nombre completo del cliente."
+              },
+              "InquiryReference": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20,
+                "pattern": "^[a-zA-Z0-9]{1,20}$",
+                "description": "ID de consulta."
+              },
+              "CampaignIdentifier": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100,
+                "pattern": "^[a-zA-Z0-9 ]{1,100}$",
+                "description": "Glosa de campana."
+              },
+              "ServiceList": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "ServiceType": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 20,
+                      "pattern": "^[a-zA-Z0-9]{1,20}$",
+                      "description": "ID de servicio (suministro)."
+                    }
+                  },
+                  "required": ["ServiceType"]
+                }
+              },
+              "BalanceAmount": {
+                "type": "number",
+                "description": "Monto del saldo destino."
+              },
+              "DiscountAmount": {
+                "type": "number",
+                "description": "Monto descuento del destino."
+              },
+              "FineAmount": {
+                "type": "number",
+                "description": "Monto multa del destino."
+              },
+              "DueAmount": {
+                "type": "number",
+                "description": "Monto vencido destino."
+              },
+              "InterestAmount": {
+                "type": "number",
+                "description": "Monto interes destino."
+              },
+              "AdjustmentAmount": {
+                "type": "number",
+                "description": "Monto reajuste destino."
+              },
+              "Amount": {
+                "type": "number",
+                "description": "Monto total de la deuda."
+              },
+              "PersonIdentification": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 30,
+                "pattern": "^[a-zA-Z0-9_-]{1,30}$",
+                "description": "Numero de documento."
+              },
+              "PersonIdentificationType": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 3,
+                "pattern": "^[a-zA-Z0-9]{1,3}$",
+                "description": "Tipo de documento."
+              }
+            },
+            "required": [
+              "ExpiryDate",
+              "InquiryReference",
+              "ServiceList",
+              "DueAmount",
+              "Amount",
+              "PersonIdentification",
+              "AdditionalInformationList"
+            ]
+          }
+        }
+      },
+      "required": [
+        "TransactionReference",
+        "TransactionDate",
+        "ChannelIdentification",
+        "PartyRoleReference",
+        "AgreementIdentification",
+        "CurrencyCode",
+        "NumberOfPayments",
+        "IndustryClassification",
+        "LoanAmount",
+        "Amount",
+        "PaymentInstrumentNumber",
+        "PaymentMethod",
+        "OperationType",
+        "DebtsList"
+      ]
+    }
+  },
+  "required": [
+    "UpdatePaymentExecutionProcedureReverseHub"
+  ]
+}

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<policies>
+  <policy policyType="UserDefined" policyName="PL_UserDefined" policyTemplate="UserDefined">
+    <Properties>{&quot;service&quot;:{&quot;destinations&quot;:[{&quot;destination&quot;:{&quot;name&quot;:&quot;SERV-PROP-CRED&quot;,&quot;URLDEST&quot;:&quot;https://jbosstransaccionaluat.dombif.peru:8443/WSReversaNotificacionPago/ReversaNotificacionPagoService&quot;,&quot;TIMEOUT&quot;:&quot;16&quot;,&quot;PROTOCOLO&quot;:&quot;TLSv1.2&quot;,&quot;METODO&quot;:&quot;POST&quot;},&quot;srv_info&quot;:{&quot;APP_NAME&quot;:&quot;APP069&quot;,&quot;TECHNICAL_SRV_NAME&quot;:&quot;BUS_PayExe_ProRev_Hub_Upda_S&quot;,&quot;TIMEOUT&quot;:&quot;25&quot;}}],&quot;C_SOAP_ACTION&quot;:&quot;&quot;}}</Properties>
+  </policy>
+</policies>

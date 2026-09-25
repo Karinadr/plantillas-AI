@@ -1,0 +1,112 @@
+BROKER SCHEMA ace.esb.payexe.prorev.hub.upda.s
+PATH ace.esb.core.common;
+
+
+CREATE COMPUTE MODULE SMF_PayExe_ProRev_Hub_Upda_PrepInvocacion
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE refEnv REFERENCE TO Environment;
+		DECLARE refIn REFERENCE TO InputRoot;
+		DECLARE refLocalEnv REFERENCE TO InputLocalEnvironment;
+		DECLARE refOutput REFERENCE TO OutputRoot;
+		DECLARE refOutLocal REFERENCE TO OutputLocalEnvironment;
+		SET refEnv.StatusResp.exception = FALSE;
+		CALL armaMensajeTo_HTTP_From_UpdatePaymentExecutionProcedureReverseHub(refEnv, refIn, refLocalEnv, refOutput, refOutLocal);
+
+		--Auditoria
+		CALL auditXmlContentAndPropagate(refEnv, refOutput, getCONST_BACKEND(), getCONST_REQUEST(), getSTATUS_INFO());
+	END;
+END MODULE;
+
+
+CREATE COMPUTE MODULE SMF_PayExe_ProRev_Hub_Upda_PrepRespSrv
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE refIn REFERENCE TO InputRoot;
+		DECLARE refOutput REFERENCE TO OutputRoot;
+		DECLARE refEnv REFERENCE TO Environment;
+		DECLARE refHeader REFERENCE TO refIn.HTTPResponseHeader;
+
+		DECLARE httpStatusCode INTEGER COALESCE(refHeader."X-Original-HTTP-Status-Code", 0);
+		DECLARE hasException BOOLEAN COALESCE(refEnv.StatusResp.exception, FALSE);
+		DECLARE backendOk BOOLEAN NOT hasException AND httpStatusCode = 200;
+		DECLARE functionalError BOOLEAN isFunctionalBackendError(refIn, backendOk);
+		SET refEnv.Temp.Variable.IsErrorFuncional = functionalError;
+
+		IF backendOk AND NOT functionalError THEN
+			SET refOutput = refIn;
+			--Auditoria
+			CALL auditXmlContentAndPropagate(refEnv, refOutput, getCONST_BACKEND(), getCONST_RESPONSE(), getSTATUS_INFO());
+
+			CALL armaRptaUpdatePaymentExecutionProcedureReverseHub_OK(refEnv, refIn, refOutput);
+		ELSE
+			IF httpStatusCode > 0 THEN
+				CALL handleHttpServiceError(refEnv, refIn, functionalError, httpStatusCode);
+			END IF;
+			CALL armaRptaUpdatePaymentExecutionProcedureReverseHub_ERROR(refEnv, refIn, refOutput);
+		END IF;
+
+		CALL prepararRespuestaAuditoria(refEnv);
+		RETURN TRUE;
+	END;
+END MODULE;
+
+
+CREATE COMPUTE MODULE SMF_PayExe_ProRev_Hub_Upda_ControlarError
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE refIn REFERENCE TO InputRoot;
+		DECLARE refOutput REFERENCE TO OutputRoot;
+		DECLARE refEnv REFERENCE TO Environment;
+		CREATE FIELD refEnv.Variables;
+		SET refOutput = refIn;
+
+		IF refEnv.Temp.Variable.IsErrorValidCampo THEN
+			CALL crearResponseStatus(refEnv, getTIP_RSPTA_2(), getCOD_ERROR_202(), getMSJ_ERROR(getCOD_ERROR_202()), '01', obtenerMensajeError(InputExceptionList));
+		ELSE
+			CREATE FIELD refEnv.StatusRes;
+			CALL normalizeBackendXmlPayloadIfNeeded(refOutput);
+			CALL obtenerCodMsjErrorREST(InputExceptionList, refEnv.StatusRes, refOutput, refEnv.Variables);
+		END IF;
+
+		CALL manejoErroresGenericoV2(InputExceptionList, refEnv.Variables);
+
+		SET refEnv.StatusResp.exception = TRUE;
+	END;
+END MODULE;
+
+
+CREATE COMPUTE MODULE SMF_PayExe_ProRev_Hub_Upda_ControlarException
+    CREATE FUNCTION Main() RETURNS BOOLEAN
+    BEGIN
+        DECLARE refIn REFERENCE TO InputRoot;
+        DECLARE refOutput REFERENCE TO OutputRoot;
+        DECLARE refEnv REFERENCE TO Environment;
+        CREATE FIELD refEnv.Variables;
+        SET refOutput = refIn;
+
+        IF refEnv.Temp.Variable.IsErrorValidCampo THEN
+            CALL crearResponseStatus(refEnv, getTIP_RSPTA_2(), getCOD_ERROR_202(), getMSJ_ERROR(getCOD_ERROR_202()), '01', obtenerMensajeError(InputExceptionList));
+        ELSE
+            CREATE FIELD refEnv.StatusRes;
+            CALL obtenerCodMsjErrorREST(InputExceptionList, refEnv.StatusRes, refOutput, refEnv.Variables);
+        END IF;
+
+        CALL manejoErroresGenericoV2(InputExceptionList, refEnv.Variables);
+
+        --Auditoria
+        CALL prepararMensajeAuditoriaV2(refEnv, getCONST_MAIN(), getCONST_ERROR(), getSTATUS_ERROR());
+        PROPAGATE TO LABEL getLBL_AUDIT() DELETE NONE;
+        
+        RETURN TRUE;
+    END;
+END MODULE;
+
+
+CREATE COMPUTE MODULE SMF_PayExe_ProRev_Hub_Upda_CleanJsonResponse
+    CREATE FUNCTION Main() RETURNS BOOLEAN
+    BEGIN
+    	SET OutputRoot = InputRoot;
+        RETURN TRUE;
+    END;
+END MODULE;

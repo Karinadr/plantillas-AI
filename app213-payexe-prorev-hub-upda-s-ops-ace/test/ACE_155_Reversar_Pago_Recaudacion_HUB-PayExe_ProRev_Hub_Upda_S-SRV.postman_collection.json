@@ -1,0 +1,1083 @@
+{
+  "info": {
+    "_postman_id": "8b330ea4-aef4-4fa1-aabb-5f117c0c2411",
+    "name": "ACE 155 Reversar Pago Recaudacion HUB",
+    "description": "Usar credenciales de usuarios AD para cada ambiente. Canal ONPREM con Basic Auth (usuario AD/LDAP por ambiente) e importar certificados de cliente para el canal MTLS. Servicio BUS_S_PaymentExecution_ProcedureReverse_Hub_Update (PayExe_ProRev_Hub_Upda_S). Backend: HUB Recaudaciones (APP069) - SOAP WSReversaNotificacionPago.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "24380499"
+  },
+  "item": [
+    {
+      "name": "v1.0",
+      "item": [
+        {
+          "name": "MTLS",
+          "item": [
+            {
+              "name": "DEV",
+              "item": [
+                {
+                  "name": "Reversar Pago Recaudacion HUB",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Time-Stamp",
+                        "value": "{{timestamp}}",
+                        "description": "Fecha y hora de la petición del canal consumidor."
+                      },
+                      {
+                        "key": "Bif-Correlation-Id",
+                        "value": "{{correlationId}}",
+                        "description": "Identificador único de la transacción."
+                      },
+                      {
+                        "key": "Bif-Consumer-Id",
+                        "value": "{{consumerId}}",
+                        "description": "Target de la solicitud."
+                      },
+                      {
+                        "key": "Bif-Mdw-Id",
+                        "value": "{{mdwId}}",
+                        "description": "Origen de la solicitud."
+                      },
+                      {
+                        "key": "Host-Id",
+                        "value": "{{hostId}}",
+                        "description": "Identificador del host/canal consumidor."
+                      },
+                      {
+                        "key": "Branch-Code",
+                        "value": "{{branchCode}}",
+                        "description": "Código de agencia."
+                      },
+                      {
+                        "key": "Country-Code",
+                        "value": "{{countryCode}}",
+                        "description": "Código de país."
+                      },
+                      {
+                        "key": "User-Id",
+                        "value": "{{userId}}",
+                        "description": "Usuario del canal consumidor."
+                      },
+                      {
+                        "key": "Device-Id",
+                        "value": "{{deviceId}}",
+                        "description": "Identificador del dispositivo."
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{    \n  \"UpdatePaymentExecutionProcedureReverseHub\": {\n  \"TransactionReference\": \"20467534026\",\n  \"TransactionDate\": \"20467534026\",\n  \"ChannelIdentification\": \"BR\",\n  \"PartyRoleReference\": \"BANBIF\",\n  \"AgreementIdentification\": \"398\",\n  \"CurrencyCode\": \"SOL\",\n  \"NumberOfPayments\": \"1\",\n  \"IndustryClassification\": \"0\",\n  \"LoanAmount\": 42.1,\n  \"Amount\": 0,\n  \"LimitAmount\": 0,\n  \"PaymentInstrumentNumber\": \"123123\",\n  \"PaymentMethod\": \"2\",\n  \"OperationType\": \"C\",\n  \"DebtsList\": [\n    {\n      \"AdditionalInformationList\": [\n        {\n          \"Name\": \"CODEBRANCH\",\n          \"Value\": \"100\"\n        }\n      ],\n      \"ExpiryDate\": \"20180302\",\n      \"FullName\": \"car\",\n      \"InquiryReference\": \"24562\",\n      \"CampaignIdentifier\": \"1\",\n      \"ServiceList\": [\n        {\n          \"ServiceType\": \"SERVICIO1\"\n        }\n      ],\n      \"BalanceAmount\": 1,\n      \"DiscountAmount\": 0,\n      \"FineAmount\": 0,\n      \"DueAmount\": 40.67,\n      \"InterestAmount\": 0,\n      \"AdjustmentAmount\": 0,\n      \"Amount\": 3.4,\n      \"PersonIdentification\": \"121046968\",\n      \"PersonIdentificationType\": \"BOL\"\n    }\n  ]\n}}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "https://update-reverse-payment-collections-hub.apps.ocphipdes.dombif.peru/v1.0/mtls/s/paymentexecution/procedurereverse/hub/update",
+                      "protocol": "https",
+                      "host": [
+                        "update-reverse-payment-collections-hub",
+                        "apps",
+                        "ocphipdes",
+                        "dombif",
+                        "peru"
+                      ],
+                      "path": [
+                        "v1.0",
+                        "mtls",
+                        "s",
+                        "paymentexecution",
+                        "procedurereverse",
+                        "hub",
+                        "update"
+                      ]
+                    },
+                    "description": "Reversa de pago de recaudaciones en HUB."
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Healthcheck",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Time-Stamp",
+                        "value": "{{timestamp}}",
+                        "description": "Fecha y hora de la petición del canal consumidor."
+                      },
+                      {
+                        "key": "Bif-Correlation-Id",
+                        "value": "{{correlationId}}",
+                        "description": "Identificador único de la transacción."
+                      },
+                      {
+                        "key": "Bif-Consumer-Id",
+                        "value": "{{consumerId}}",
+                        "description": "Target de la solicitud."
+                      },
+                      {
+                        "key": "Bif-Mdw-Id",
+                        "value": "{{mdwId}}",
+                        "description": "Origen de la solicitud."
+                      }
+                    ],
+                    "url": {
+                      "raw": "https://update-reverse-payment-collections-hub.apps.ocphipdes.dombif.peru/v1.0/mtls/s/paymentexecution/procedurereverse/hub/update/health",
+                      "protocol": "https",
+                      "host": [
+                        "update-reverse-payment-collections-hub",
+                        "apps",
+                        "ocphipdes",
+                        "dombif",
+                        "peru"
+                      ],
+                      "path": [
+                        "v1.0",
+                        "mtls",
+                        "s",
+                        "paymentexecution",
+                        "procedurereverse",
+                        "hub",
+                        "update",
+                        "health"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "QAS",
+              "item": [
+                {
+                  "name": "Reversar Pago Recaudacion HUB",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Time-Stamp",
+                        "value": "{{timestamp}}",
+                        "description": "Fecha y hora de la petición del canal consumidor."
+                      },
+                      {
+                        "key": "Bif-Correlation-Id",
+                        "value": "{{correlationId}}",
+                        "description": "Identificador único de la transacción."
+                      },
+                      {
+                        "key": "Bif-Consumer-Id",
+                        "value": "{{consumerId}}",
+                        "description": "Target de la solicitud."
+                      },
+                      {
+                        "key": "Bif-Mdw-Id",
+                        "value": "{{mdwId}}",
+                        "description": "Origen de la solicitud."
+                      },
+                      {
+                        "key": "Host-Id",
+                        "value": "{{hostId}}",
+                        "description": "Identificador del host/canal consumidor."
+                      },
+                      {
+                        "key": "Branch-Code",
+                        "value": "{{branchCode}}",
+                        "description": "Código de agencia."
+                      },
+                      {
+                        "key": "Country-Code",
+                        "value": "{{countryCode}}",
+                        "description": "Código de país."
+                      },
+                      {
+                        "key": "User-Id",
+                        "value": "{{userId}}",
+                        "description": "Usuario del canal consumidor."
+                      },
+                      {
+                        "key": "Device-Id",
+                        "value": "{{deviceId}}",
+                        "description": "Identificador del dispositivo."
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{    \n  \"UpdatePaymentExecutionProcedureReverseHub\": {\n  \"TransactionReference\": \"20467534026\",\n  \"TransactionDate\": \"20467534026\",\n  \"ChannelIdentification\": \"BR\",\n  \"PartyRoleReference\": \"BANBIF\",\n  \"AgreementIdentification\": \"398\",\n  \"CurrencyCode\": \"SOL\",\n  \"NumberOfPayments\": \"1\",\n  \"IndustryClassification\": \"0\",\n  \"LoanAmount\": 42.1,\n  \"Amount\": 0,\n  \"LimitAmount\": 0,\n  \"PaymentInstrumentNumber\": \"123123\",\n  \"PaymentMethod\": \"2\",\n  \"OperationType\": \"C\",\n  \"DebtsList\": [\n    {\n      \"AdditionalInformationList\": [\n        {\n          \"Name\": \"CODEBRANCH\",\n          \"Value\": \"100\"\n        }\n      ],\n      \"ExpiryDate\": \"20180302\",\n      \"FullName\": \"car\",\n      \"InquiryReference\": \"24562\",\n      \"CampaignIdentifier\": \"1\",\n      \"ServiceList\": [\n        {\n          \"ServiceType\": \"SERVICIO1\"\n        }\n      ],\n      \"BalanceAmount\": 1,\n      \"DiscountAmount\": 0,\n      \"FineAmount\": 0,\n      \"DueAmount\": 40.67,\n      \"InterestAmount\": 0,\n      \"AdjustmentAmount\": 0,\n      \"Amount\": 3.4,\n      \"PersonIdentification\": \"121046968\",\n      \"PersonIdentificationType\": \"BOL\"\n    }\n  ]\n}}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "https://update-reverse-payment-collections-hub.apps.ocphipuat.dombif.peru/v1.0/mtls/s/paymentexecution/procedurereverse/hub/update",
+                      "protocol": "https",
+                      "host": [
+                        "update-reverse-payment-collections-hub",
+                        "apps",
+                        "ocphipuat",
+                        "dombif",
+                        "peru"
+                      ],
+                      "path": [
+                        "v1.0",
+                        "mtls",
+                        "s",
+                        "paymentexecution",
+                        "procedurereverse",
+                        "hub",
+                        "update"
+                      ]
+                    },
+                    "description": "Reversa de pago de recaudaciones en HUB."
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Healthcheck",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Time-Stamp",
+                        "value": "{{timestamp}}",
+                        "description": "Fecha y hora de la petición del canal consumidor."
+                      },
+                      {
+                        "key": "Bif-Correlation-Id",
+                        "value": "{{correlationId}}",
+                        "description": "Identificador único de la transacción."
+                      },
+                      {
+                        "key": "Bif-Consumer-Id",
+                        "value": "{{consumerId}}",
+                        "description": "Target de la solicitud."
+                      },
+                      {
+                        "key": "Bif-Mdw-Id",
+                        "value": "{{mdwId}}",
+                        "description": "Origen de la solicitud."
+                      }
+                    ],
+                    "url": {
+                      "raw": "https://update-reverse-payment-collections-hub.apps.ocphipuat.dombif.peru/v1.0/mtls/s/paymentexecution/procedurereverse/hub/update/health",
+                      "protocol": "https",
+                      "host": [
+                        "update-reverse-payment-collections-hub",
+                        "apps",
+                        "ocphipuat",
+                        "dombif",
+                        "peru"
+                      ],
+                      "path": [
+                        "v1.0",
+                        "mtls",
+                        "s",
+                        "paymentexecution",
+                        "procedurereverse",
+                        "hub",
+                        "update",
+                        "health"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "PRD",
+              "item": [
+                {
+                  "name": "Reversar Pago Recaudacion HUB",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": ""
+                      },
+                      {
+                        "key": "Time-Stamp",
+                        "value": "",
+                        "description": "Fecha y hora de la petición del canal consumidor."
+                      },
+                      {
+                        "key": "Bif-Correlation-Id",
+                        "value": "",
+                        "description": "Identificador único de la transacción."
+                      },
+                      {
+                        "key": "Bif-Consumer-Id",
+                        "value": "",
+                        "description": "Target de la solicitud."
+                      },
+                      {
+                        "key": "Bif-Mdw-Id",
+                        "value": "",
+                        "description": "Origen de la solicitud."
+                      },
+                      {
+                        "key": "Host-Id",
+                        "value": "",
+                        "description": "Identificador del host/canal consumidor."
+                      },
+                      {
+                        "key": "Branch-Code",
+                        "value": "",
+                        "description": "Código de agencia."
+                      },
+                      {
+                        "key": "Country-Code",
+                        "value": "",
+                        "description": "Código de país."
+                      },
+                      {
+                        "key": "User-Id",
+                        "value": "",
+                        "description": "Usuario del canal consumidor."
+                      },
+                      {
+                        "key": "Device-Id",
+                        "value": "",
+                        "description": "Identificador del dispositivo."
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"UpdatePaymentExecutionProcedureReverseHub\": {\n    \"TransactionReference\": null,\n    \"TransactionDate\": null,\n    \"ChannelIdentification\": null,\n    \"PartyRoleReference\": null,\n    \"AgreementIdentification\": null,\n    \"CurrencyCode\": null,\n    \"NumberOfPayments\": null,\n    \"IndustryClassification\": null,\n    \"LoanAmount\": null,\n    \"Amount\": null,\n    \"LimitAmount\": null,\n    \"PaymentInstrumentNumber\": null,\n    \"PaymentMethod\": null,\n    \"OperationType\": null,\n    \"DebtsList\": null\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "https://update-reverse-payment-collections-hub.apps.ocphip.dombif.peru/v1.0/mtls/s/paymentexecution/procedurereverse/hub/update",
+                      "protocol": "https",
+                      "host": [
+                        "update-reverse-payment-collections-hub",
+                        "apps",
+                        "ocphip",
+                        "dombif",
+                        "peru"
+                      ],
+                      "path": [
+                        "v1.0",
+                        "mtls",
+                        "s",
+                        "paymentexecution",
+                        "procedurereverse",
+                        "hub",
+                        "update"
+                      ]
+                    },
+                    "description": "Reversa de pago de recaudaciones en HUB."
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Healthcheck",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": ""
+                      },
+                      {
+                        "key": "Time-Stamp",
+                        "value": "",
+                        "description": "Fecha y hora de la petición del canal consumidor."
+                      },
+                      {
+                        "key": "Bif-Correlation-Id",
+                        "value": "",
+                        "description": "Identificador único de la transacción."
+                      },
+                      {
+                        "key": "Bif-Consumer-Id",
+                        "value": "",
+                        "description": "Target de la solicitud."
+                      },
+                      {
+                        "key": "Bif-Mdw-Id",
+                        "value": "",
+                        "description": "Origen de la solicitud."
+                      }
+                    ],
+                    "url": {
+                      "raw": "https://update-reverse-payment-collections-hub.apps.ocphip.dombif.peru/v1.0/mtls/s/paymentexecution/procedurereverse/hub/update/health",
+                      "protocol": "https",
+                      "host": [
+                        "update-reverse-payment-collections-hub",
+                        "apps",
+                        "ocphip",
+                        "dombif",
+                        "peru"
+                      ],
+                      "path": [
+                        "v1.0",
+                        "mtls",
+                        "s",
+                        "paymentexecution",
+                        "procedurereverse",
+                        "hub",
+                        "update",
+                        "health"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            }
+          ],
+          "description": "Importar certificados MTLS de cliente para cada ambiente."
+        },
+        {
+          "name": "ONPREM",
+          "item": [
+            {
+              "name": "DEV",
+              "item": [
+                {
+                  "name": "Reversar Pago Recaudacion HUB",
+                  "request": {
+                    "auth": {
+                      "type": "basic",
+                      "basic": [
+                        {
+                          "key": "username",
+                          "value": "{{ldapUser}}",
+                          "type": "string"
+                        },
+                        {
+                          "key": "password",
+                          "value": "{{ldapPassword}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Time-Stamp",
+                        "value": "{{timestamp}}",
+                        "description": "Fecha y hora de la petición del canal consumidor."
+                      },
+                      {
+                        "key": "Bif-Correlation-Id",
+                        "value": "{{correlationId}}",
+                        "description": "Identificador único de la transacción."
+                      },
+                      {
+                        "key": "Bif-Consumer-Id",
+                        "value": "{{consumerId}}",
+                        "description": "Target de la solicitud."
+                      },
+                      {
+                        "key": "Bif-Mdw-Id",
+                        "value": "{{mdwId}}",
+                        "description": "Origen de la solicitud."
+                      },
+                      {
+                        "key": "Host-Id",
+                        "value": "{{hostId}}",
+                        "description": "Identificador del host/canal consumidor."
+                      },
+                      {
+                        "key": "Branch-Code",
+                        "value": "{{branchCode}}",
+                        "description": "Código de agencia."
+                      },
+                      {
+                        "key": "Country-Code",
+                        "value": "{{countryCode}}",
+                        "description": "Código de país."
+                      },
+                      {
+                        "key": "User-Id",
+                        "value": "{{userId}}",
+                        "description": "Usuario del canal consumidor."
+                      },
+                      {
+                        "key": "Device-Id",
+                        "value": "{{deviceId}}",
+                        "description": "Identificador del dispositivo."
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{    \n  \"UpdatePaymentExecutionProcedureReverseHub\": {\n  \"TransactionReference\": \"20467534026\",\n  \"TransactionDate\": \"20467534026\",\n  \"ChannelIdentification\": \"BR\",\n  \"PartyRoleReference\": \"BANBIF\",\n  \"AgreementIdentification\": \"398\",\n  \"CurrencyCode\": \"SOL\",\n  \"NumberOfPayments\": \"1\",\n  \"IndustryClassification\": \"0\",\n  \"LoanAmount\": 42.1,\n  \"Amount\": 0,\n  \"LimitAmount\": 0,\n  \"PaymentInstrumentNumber\": \"123123\",\n  \"PaymentMethod\": \"2\",\n  \"OperationType\": \"C\",\n  \"DebtsList\": [\n    {\n      \"AdditionalInformationList\": [\n        {\n          \"Name\": \"CODEBRANCH\",\n          \"Value\": \"100\"\n        }\n      ],\n      \"ExpiryDate\": \"20180302\",\n      \"FullName\": \"car\",\n      \"InquiryReference\": \"24562\",\n      \"CampaignIdentifier\": \"1\",\n      \"ServiceList\": [\n        {\n          \"ServiceType\": \"SERVICIO1\"\n        }\n      ],\n      \"BalanceAmount\": 1,\n      \"DiscountAmount\": 0,\n      \"FineAmount\": 0,\n      \"DueAmount\": 40.67,\n      \"InterestAmount\": 0,\n      \"AdjustmentAmount\": 0,\n      \"Amount\": 3.4,\n      \"PersonIdentification\": \"121046968\",\n      \"PersonIdentificationType\": \"BOL\"\n    }\n  ]\n}}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "https://update-reverse-payment-collections-hub.apps.onprem.ocphipdes.dombif.peru/v1.0/onprem/s/paymentexecution/procedurereverse/hub/update",
+                      "protocol": "https",
+                      "host": [
+                        "update-reverse-payment-collections-hub",
+                        "apps",
+                        "onprem",
+                        "ocphipdes",
+                        "dombif",
+                        "peru"
+                      ],
+                      "path": [
+                        "v1.0",
+                        "onprem",
+                        "s",
+                        "paymentexecution",
+                        "procedurereverse",
+                        "hub",
+                        "update"
+                      ]
+                    },
+                    "description": "Reversa de pago de recaudaciones en HUB."
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Healthcheck",
+                  "request": {
+                    "auth": {
+                      "type": "basic",
+                      "basic": [
+                        {
+                          "key": "username",
+                          "value": "{{ldapUser}}",
+                          "type": "string"
+                        },
+                        {
+                          "key": "password",
+                          "value": "{{ldapPassword}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Time-Stamp",
+                        "value": "{{timestamp}}",
+                        "description": "Fecha y hora de la petición del canal consumidor."
+                      },
+                      {
+                        "key": "Bif-Correlation-Id",
+                        "value": "{{correlationId}}",
+                        "description": "Identificador único de la transacción."
+                      },
+                      {
+                        "key": "Bif-Consumer-Id",
+                        "value": "{{consumerId}}",
+                        "description": "Target de la solicitud."
+                      },
+                      {
+                        "key": "Bif-Mdw-Id",
+                        "value": "{{mdwId}}",
+                        "description": "Origen de la solicitud."
+                      }
+                    ],
+                    "url": {
+                      "raw": "https://update-reverse-payment-collections-hub.apps.onprem.ocphipdes.dombif.peru/v1.0/onprem/s/paymentexecution/procedurereverse/hub/update/health",
+                      "protocol": "https",
+                      "host": [
+                        "update-reverse-payment-collections-hub",
+                        "apps",
+                        "onprem",
+                        "ocphipdes",
+                        "dombif",
+                        "peru"
+                      ],
+                      "path": [
+                        "v1.0",
+                        "onprem",
+                        "s",
+                        "paymentexecution",
+                        "procedurereverse",
+                        "hub",
+                        "update",
+                        "health"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "QAS",
+              "item": [
+                {
+                  "name": "Reversar Pago Recaudacion HUB",
+                  "request": {
+                    "auth": {
+                      "type": "basic",
+                      "basic": [
+                        {
+                          "key": "username",
+                          "value": "{{ldapUser}}",
+                          "type": "string"
+                        },
+                        {
+                          "key": "password",
+                          "value": "{{ldapPassword}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Time-Stamp",
+                        "value": "{{timestamp}}",
+                        "description": "Fecha y hora de la petición del canal consumidor."
+                      },
+                      {
+                        "key": "Bif-Correlation-Id",
+                        "value": "{{correlationId}}",
+                        "description": "Identificador único de la transacción."
+                      },
+                      {
+                        "key": "Bif-Consumer-Id",
+                        "value": "{{consumerId}}",
+                        "description": "Target de la solicitud."
+                      },
+                      {
+                        "key": "Bif-Mdw-Id",
+                        "value": "{{mdwId}}",
+                        "description": "Origen de la solicitud."
+                      },
+                      {
+                        "key": "Host-Id",
+                        "value": "{{hostId}}",
+                        "description": "Identificador del host/canal consumidor."
+                      },
+                      {
+                        "key": "Branch-Code",
+                        "value": "{{branchCode}}",
+                        "description": "Código de agencia."
+                      },
+                      {
+                        "key": "Country-Code",
+                        "value": "{{countryCode}}",
+                        "description": "Código de país."
+                      },
+                      {
+                        "key": "User-Id",
+                        "value": "{{userId}}",
+                        "description": "Usuario del canal consumidor."
+                      },
+                      {
+                        "key": "Device-Id",
+                        "value": "{{deviceId}}",
+                        "description": "Identificador del dispositivo."
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{    \n  \"UpdatePaymentExecutionProcedureReverseHub\": {\n  \"TransactionReference\": \"20467534026\",\n  \"TransactionDate\": \"20467534026\",\n  \"ChannelIdentification\": \"BR\",\n  \"PartyRoleReference\": \"BANBIF\",\n  \"AgreementIdentification\": \"398\",\n  \"CurrencyCode\": \"SOL\",\n  \"NumberOfPayments\": \"1\",\n  \"IndustryClassification\": \"0\",\n  \"LoanAmount\": 42.1,\n  \"Amount\": 0,\n  \"LimitAmount\": 0,\n  \"PaymentInstrumentNumber\": \"123123\",\n  \"PaymentMethod\": \"2\",\n  \"OperationType\": \"C\",\n  \"DebtsList\": [\n    {\n      \"AdditionalInformationList\": [\n        {\n          \"Name\": \"CODEBRANCH\",\n          \"Value\": \"100\"\n        }\n      ],\n      \"ExpiryDate\": \"20180302\",\n      \"FullName\": \"car\",\n      \"InquiryReference\": \"24562\",\n      \"CampaignIdentifier\": \"1\",\n      \"ServiceList\": [\n        {\n          \"ServiceType\": \"SERVICIO1\"\n        }\n      ],\n      \"BalanceAmount\": 1,\n      \"DiscountAmount\": 0,\n      \"FineAmount\": 0,\n      \"DueAmount\": 40.67,\n      \"InterestAmount\": 0,\n      \"AdjustmentAmount\": 0,\n      \"Amount\": 3.4,\n      \"PersonIdentification\": \"121046968\",\n      \"PersonIdentificationType\": \"BOL\"\n    }\n  ]\n}}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "https://update-reverse-payment-collections-hub.apps.onprem.ocphipuat.dombif.peru/v1.0/onprem/s/paymentexecution/procedurereverse/hub/update",
+                      "protocol": "https",
+                      "host": [
+                        "update-reverse-payment-collections-hub",
+                        "apps",
+                        "onprem",
+                        "ocphipuat",
+                        "dombif",
+                        "peru"
+                      ],
+                      "path": [
+                        "v1.0",
+                        "onprem",
+                        "s",
+                        "paymentexecution",
+                        "procedurereverse",
+                        "hub",
+                        "update"
+                      ]
+                    },
+                    "description": "Reversa de pago de recaudaciones en HUB."
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Healthcheck",
+                  "request": {
+                    "auth": {
+                      "type": "basic",
+                      "basic": [
+                        {
+                          "key": "username",
+                          "value": "{{ldapUser}}",
+                          "type": "string"
+                        },
+                        {
+                          "key": "password",
+                          "value": "{{ldapPassword}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Time-Stamp",
+                        "value": "{{timestamp}}",
+                        "description": "Fecha y hora de la petición del canal consumidor."
+                      },
+                      {
+                        "key": "Bif-Correlation-Id",
+                        "value": "{{correlationId}}",
+                        "description": "Identificador único de la transacción."
+                      },
+                      {
+                        "key": "Bif-Consumer-Id",
+                        "value": "{{consumerId}}",
+                        "description": "Target de la solicitud."
+                      },
+                      {
+                        "key": "Bif-Mdw-Id",
+                        "value": "{{mdwId}}",
+                        "description": "Origen de la solicitud."
+                      }
+                    ],
+                    "url": {
+                      "raw": "https://update-reverse-payment-collections-hub.apps.onprem.ocphipuat.dombif.peru/v1.0/onprem/s/paymentexecution/procedurereverse/hub/update/health",
+                      "protocol": "https",
+                      "host": [
+                        "update-reverse-payment-collections-hub",
+                        "apps",
+                        "onprem",
+                        "ocphipuat",
+                        "dombif",
+                        "peru"
+                      ],
+                      "path": [
+                        "v1.0",
+                        "onprem",
+                        "s",
+                        "paymentexecution",
+                        "procedurereverse",
+                        "hub",
+                        "update",
+                        "health"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "PRD",
+              "item": [
+                {
+                  "name": "Reversar Pago Recaudacion HUB",
+                  "request": {
+                    "auth": {
+                      "type": "basic",
+                      "basic": [
+                        {
+                          "key": "username",
+                          "value": "{{ldapUser}}",
+                          "type": "string"
+                        },
+                        {
+                          "key": "password",
+                          "value": "{{ldapPassword}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": ""
+                      },
+                      {
+                        "key": "Time-Stamp",
+                        "value": "",
+                        "description": "Fecha y hora de la petición del canal consumidor."
+                      },
+                      {
+                        "key": "Bif-Correlation-Id",
+                        "value": "",
+                        "description": "Identificador único de la transacción."
+                      },
+                      {
+                        "key": "Bif-Consumer-Id",
+                        "value": "",
+                        "description": "Target de la solicitud."
+                      },
+                      {
+                        "key": "Bif-Mdw-Id",
+                        "value": "",
+                        "description": "Origen de la solicitud."
+                      },
+                      {
+                        "key": "Host-Id",
+                        "value": "",
+                        "description": "Identificador del host/canal consumidor."
+                      },
+                      {
+                        "key": "Branch-Code",
+                        "value": "",
+                        "description": "Código de agencia."
+                      },
+                      {
+                        "key": "Country-Code",
+                        "value": "",
+                        "description": "Código de país."
+                      },
+                      {
+                        "key": "User-Id",
+                        "value": "",
+                        "description": "Usuario del canal consumidor."
+                      },
+                      {
+                        "key": "Device-Id",
+                        "value": "",
+                        "description": "Identificador del dispositivo."
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"UpdatePaymentExecutionProcedureReverseHub\": {\n    \"TransactionReference\": null,\n    \"TransactionDate\": null,\n    \"ChannelIdentification\": null,\n    \"PartyRoleReference\": null,\n    \"AgreementIdentification\": null,\n    \"CurrencyCode\": null,\n    \"NumberOfPayments\": null,\n    \"IndustryClassification\": null,\n    \"LoanAmount\": null,\n    \"Amount\": null,\n    \"LimitAmount\": null,\n    \"PaymentInstrumentNumber\": null,\n    \"PaymentMethod\": null,\n    \"OperationType\": null,\n    \"DebtsList\": null\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "https://update-reverse-payment-collections-hub.apps.onprem.ocphip.dombif.peru/v1.0/onprem/s/paymentexecution/procedurereverse/hub/update",
+                      "protocol": "https",
+                      "host": [
+                        "update-reverse-payment-collections-hub",
+                        "apps",
+                        "onprem",
+                        "ocphip",
+                        "dombif",
+                        "peru"
+                      ],
+                      "path": [
+                        "v1.0",
+                        "onprem",
+                        "s",
+                        "paymentexecution",
+                        "procedurereverse",
+                        "hub",
+                        "update"
+                      ]
+                    },
+                    "description": "Reversa de pago de recaudaciones en HUB."
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Healthcheck",
+                  "request": {
+                    "auth": {
+                      "type": "basic",
+                      "basic": [
+                        {
+                          "key": "username",
+                          "value": "{{ldapUser}}",
+                          "type": "string"
+                        },
+                        {
+                          "key": "password",
+                          "value": "{{ldapPassword}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": ""
+                      },
+                      {
+                        "key": "Time-Stamp",
+                        "value": "",
+                        "description": "Fecha y hora de la petición del canal consumidor."
+                      },
+                      {
+                        "key": "Bif-Correlation-Id",
+                        "value": "",
+                        "description": "Identificador único de la transacción."
+                      },
+                      {
+                        "key": "Bif-Consumer-Id",
+                        "value": "",
+                        "description": "Target de la solicitud."
+                      },
+                      {
+                        "key": "Bif-Mdw-Id",
+                        "value": "",
+                        "description": "Origen de la solicitud."
+                      }
+                    ],
+                    "url": {
+                      "raw": "https://update-reverse-payment-collections-hub.apps.onprem.ocphip.dombif.peru/v1.0/onprem/s/paymentexecution/procedurereverse/hub/update/health",
+                      "protocol": "https",
+                      "host": [
+                        "update-reverse-payment-collections-hub",
+                        "apps",
+                        "onprem",
+                        "ocphip",
+                        "dombif",
+                        "peru"
+                      ],
+                      "path": [
+                        "v1.0",
+                        "onprem",
+                        "s",
+                        "paymentexecution",
+                        "procedurereverse",
+                        "hub",
+                        "update",
+                        "health"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            }
+          ],
+          "description": "Autenticación con credenciales LDAP/AD. Usar usuario y contraseña del directorio activo."
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.variables.set('timestamp', new Date().toISOString());"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "ldapUser",
+      "value": "tu_usuario_ad",
+      "type": "string"
+    },
+    {
+      "key": "ldapPassword",
+      "value": "tu_password",
+      "type": "string"
+    },
+    {
+      "key": "timestamp",
+      "value": "2026-07-20T10:30:00.000Z",
+      "type": "string"
+    },
+    {
+      "key": "correlationId",
+      "value": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+      "type": "string"
+    },
+    {
+      "key": "consumerId",
+      "value": "APP213",
+      "type": "string"
+    },
+    {
+      "key": "mdwId",
+      "value": "APP204",
+      "type": "string"
+    },
+    {
+      "key": "hostId",
+      "value": "0001234",
+      "type": "string"
+    },
+    {
+      "key": "branchCode",
+      "value": "00012",
+      "type": "string"
+    },
+    {
+      "key": "countryCode",
+      "value": "PERUU",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "USRTEST01",
+      "type": "string"
+    },
+    {
+      "key": "deviceId",
+      "value": "POSTMAN-DEV-01",
+      "type": "string"
+    }
+  ]
+}

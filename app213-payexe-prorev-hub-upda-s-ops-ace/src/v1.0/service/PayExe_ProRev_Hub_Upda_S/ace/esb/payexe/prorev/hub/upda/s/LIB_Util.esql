@@ -1,0 +1,190 @@
+BROKER SCHEMA ace.esb.payexe.prorev.hub.upda.s
+PATH ace.esb.core.common;
+
+
+CREATE PROCEDURE convertXMLNSCaJSONToAudit(INOUT refOutput REFERENCE)
+BEGIN
+	IF EXISTS(refOutput.XMLNSC.[]) THEN
+		DECLARE xmlString CHARACTER CAST(ASBITSTREAM(refOutput.XMLNSC) AS CHARACTER CCSID 1208);
+
+		CREATE LASTCHILD OF refOutput DOMAIN getDOMINIO_JSON();
+		CREATE LASTCHILD OF refOutput.JSON NAME getDATA();
+		SET refOutput.JSON.Data.xmlPayload = xmlString;
+	ELSEIF EXISTS(refOutput.XMLNS.[]) THEN
+		DECLARE xmlString2 CHARACTER CAST(ASBITSTREAM(refOutput.XMLNS) AS CHARACTER CCSID 1208);
+
+		CREATE LASTCHILD OF refOutput DOMAIN getDOMINIO_JSON();
+		CREATE LASTCHILD OF refOutput.JSON NAME getDATA();
+		SET refOutput.JSON.Data.xmlPayload = xmlString2;
+	END IF;
+END;
+
+
+CREATE PROCEDURE maskXmlPayloadElementValues(INOUT refOutput REFERENCE)
+BEGIN
+	IF EXISTS(refOutput.JSON.Data.xmlPayload[]) THEN
+		CALL maskXmlPayloadElement(refOutput, 'cod_recaudador');
+		CALL maskXmlPayloadElement(refOutput, 'cod_convenio');
+	END IF;
+END;
+
+CREATE PROCEDURE maskXmlPayloadElement(
+	INOUT refOutput REFERENCE,
+	IN elementName CHARACTER)
+BEGIN
+	DECLARE openTag CHARACTER '<' || elementName || '>';
+	DECLARE closeTag CHARACTER '</' || elementName || '>';
+	DECLARE xmlPayload CHARACTER CAST(refOutput.JSON.Data.xmlPayload AS CHARACTER);
+	DECLARE startPos INTEGER POSITION(openTag IN xmlPayload);
+	DECLARE endPos INTEGER POSITION(closeTag IN xmlPayload);
+	DECLARE valueStart INTEGER startPos + LENGTH(openTag);
+	IF startPos > 0 AND endPos > valueStart THEN
+		SET refOutput.JSON.Data.xmlPayload =
+			SUBSTRING(xmlPayload FROM 1 FOR valueStart - 1) ||
+			'***' ||
+			SUBSTRING(xmlPayload FROM endPos);
+	END IF;
+END;
+
+
+CREATE FUNCTION isFunctionalBackendError(
+	IN refIn REFERENCE,
+	IN isOkResponse BOOLEAN
+) RETURNS BOOLEAN
+BEGIN
+	DECLARE resultCode CHARACTER getCARACTER_VACIO();
+	DECLARE hasReturn BOOLEAN FALSE;
+
+	IF EXISTS(refIn.XMLNSC.*:Envelope.*:Body.*:reversaNotificacionPagoResponse.return.[]) THEN
+		SET resultCode = TRIM(COALESCE(CAST(refIn.XMLNSC.*:Envelope.*:Body.*:reversaNotificacionPagoResponse.return.cod_resultado AS CHARACTER), getCARACTER_VACIO()));
+		SET hasReturn = TRUE;
+	ELSEIF EXISTS(refIn.XMLNS.*:Envelope.*:Body.*:reversaNotificacionPagoResponse.return.[]) THEN
+		SET resultCode = TRIM(COALESCE(CAST(refIn.XMLNS.*:Envelope.*:Body.*:reversaNotificacionPagoResponse.return.cod_resultado AS CHARACTER), getCARACTER_VACIO()));
+		SET hasReturn = TRUE;
+	END IF;
+
+	RETURN isOkResponse
+		AND hasReturn
+		AND resultCode <> 'ESM00';
+END;
+
+
+CREATE PROCEDURE normalizeBackendXmlPayloadIfNeeded(INOUT refIn REFERENCE)
+BEGIN
+	DECLARE contentType CHARACTER LOWER(
+		COALESCE(
+			refIn.HTTPResponseHeader."Content-Type",
+			refIn.HTTPResponseHeader."content-type",
+			getCARACTER_VACIO()
+		)
+	);
+
+	IF EXISTS(refIn.BLOB.BLOB[]) AND NOT EXISTS(refIn.XMLNSC.[]) AND NOT EXISTS(refIn.XMLNS.[]) AND POSITION('xml' IN contentType) > 0 THEN
+		CREATE LASTCHILD OF refIn DOMAIN 'XMLNSC' PARSE(refIn.BLOB.BLOB CCSID 1208);
+		DELETE FIELD refIn.BLOB;
+	END IF;
+END;
+
+
+CREATE PROCEDURE handleHttpServiceError(
+	IN refEnv REFERENCE,
+	IN refIn REFERENCE,
+	IN isFunctional BOOLEAN,
+	IN httpStatusCode INTEGER
+)
+BEGIN
+	DECLARE refDestMain REFERENCE TO refEnv.Policy.service.destinations.Item[refEnv.Srv.Destino];
+	DECLARE refInfo REFERENCE TO refDestMain.srv_info;
+	DECLARE refSrvErrors REFERENCE TO refEnv.Temp.SrvErrors;
+
+	DECLARE statusCode CHARACTER getCARACTER_VACIO();
+	DECLARE statusError CHARACTER getCARACTER_VACIO();
+	DECLARE errorMessage CHARACTER getCARACTER_VACIO();
+	DECLARE detailMsg CHARACTER getCARACTER_VACIO();
+
+	CALL resolveHttpServiceErrorData(
+		refEnv, refIn, isFunctional,
+		statusCode, statusError, errorMessage, detailMsg);
+
+	DELETE FIELD refIn.JSON.Data;
+	CREATE FIELD refIn.JSON.Data;
+
+	CALL NormalizeExternalServiceErrorData(
+		statusCode, errorMessage, statusError,
+		COALESCE(refInfo.TECHNICAL_SRV_NAME, getCARACTER_VACIO()),
+		refIn.JSON.Data);
+
+	CALL AppendToServiceErrors(refIn, refSrvErrors, refInfo);
+
+	DECLARE lastIdx INTEGER CARDINALITY(refSrvErrors.*[]);
+	SET refSrvErrors.Item[lastIdx].status = httpStatusCode;
+
+	IF isFunctional THEN
+		SET refSrvErrors.Item[lastIdx].messageDetail = detailMsg;
+	END IF;
+END;
+
+
+CREATE PROCEDURE resolveHttpServiceErrorData(
+	IN refEnv REFERENCE,
+	IN refIn REFERENCE,
+	IN isFunctional BOOLEAN,
+	OUT statusCode CHARACTER,
+	OUT statusError CHARACTER,
+	OUT errorMessage CHARACTER,
+	OUT detailMsg CHARACTER
+)
+BEGIN
+	DECLARE resultCode CHARACTER getCARACTER_VACIO();
+	DECLARE resultMessage CHARACTER getCARACTER_VACIO();
+
+	IF EXISTS(refIn.XMLNSC.*:Envelope.*:Body.*:reversaNotificacionPagoResponse.return.[]) THEN
+		SET resultCode = TRIM(COALESCE(CAST(refIn.XMLNSC.*:Envelope.*:Body.*:reversaNotificacionPagoResponse.return.cod_resultado AS CHARACTER), getCARACTER_VACIO()));
+		SET resultMessage = TRIM(COALESCE(CAST(refIn.XMLNSC.*:Envelope.*:Body.*:reversaNotificacionPagoResponse.return.msg_resultado AS CHARACTER), getCARACTER_VACIO()));
+	ELSEIF EXISTS(refIn.XMLNS.*:Envelope.*:Body.*:reversaNotificacionPagoResponse.return.[]) THEN
+		SET resultCode = TRIM(COALESCE(CAST(refIn.XMLNS.*:Envelope.*:Body.*:reversaNotificacionPagoResponse.return.cod_resultado AS CHARACTER), getCARACTER_VACIO()));
+		SET resultMessage = TRIM(COALESCE(CAST(refIn.XMLNS.*:Envelope.*:Body.*:reversaNotificacionPagoResponse.return.msg_resultado AS CHARACTER), getCARACTER_VACIO()));
+	END IF;
+
+	SET statusCode = CASE
+		WHEN isFunctional THEN '01'
+		ELSE '02'
+	END;
+	SET statusError = CASE
+		WHEN isFunctional THEN 'WARN'
+		ELSE 'ERROR'
+	END;
+
+	IF isFunctional THEN
+		SET errorMessage = concatMessageParts(resultCode, resultMessage, ' - ');
+		SET detailMsg = resultMessage;
+	ELSE
+		SET errorMessage = COALESCE(
+			CAST(refEnv.Variables.org.Error.Message AS CHARACTER),
+			CAST(refEnv.StatusRes.status.busResponseMessage AS CHARACTER),
+			getMSJ_ERROR_GENERAL());
+	END IF;
+END;
+
+
+CREATE FUNCTION concatMessageParts(
+	IN leftText CHARACTER,
+	IN rightText CHARACTER,
+	IN separator CHARACTER
+)
+RETURNS CHARACTER
+BEGIN
+	DECLARE leftValue CHARACTER COALESCE(leftText, getCARACTER_VACIO());
+	DECLARE rightValue CHARACTER COALESCE(rightText, getCARACTER_VACIO());
+	DECLARE result CHARACTER getCARACTER_VACIO();
+
+	IF leftValue = getCARACTER_VACIO() THEN
+		SET result = rightValue;
+	ELSEIF rightValue = getCARACTER_VACIO() THEN
+		SET result = leftValue;
+	ELSE
+		SET result = leftValue || separator || rightValue;
+	END IF;
+
+	RETURN result;
+END;

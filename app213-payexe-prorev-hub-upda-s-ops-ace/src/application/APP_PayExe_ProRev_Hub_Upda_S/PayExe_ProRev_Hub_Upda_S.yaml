@@ -1,0 +1,357 @@
+openapi: 3.0.0
+info:
+  title: Update-Payment-Execution-Procedure-Reverse-Hub
+  version: 1.0.0
+  description: Servicio BUS que permite realizar una reversa de pago en HUB
+servers:
+  - url: /v1.0/s/paymentexecution/procedurereverse/hub/update
+paths:
+  /:
+    post:
+      summary: Update Payment Execution Procedure Reverse Hub
+      description: Servicio BUS que permite realizar una reversa de pago en HUB
+      operationId: UpdatePaymentExecutionProcedureReverseHub
+      parameters:
+        - $ref: '#/components/parameters/Bif-Mdw-Id'
+        - $ref: '#/components/parameters/Bif-Correlation-Id'
+        - $ref: '#/components/parameters/Bif-Consumer-Id'
+        - $ref: '#/components/parameters/Time-Stamp'
+        - $ref: '#/components/parameters/Host-Id'
+        - $ref: '#/components/parameters/Branch-Code'
+        - $ref: '#/components/parameters/Country-Code'
+        - $ref: '#/components/parameters/User-Id'
+        - $ref: '#/components/parameters/Device-Id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Payload'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /health:
+    summary: Valida que el estado del servicio este operativo
+    get:
+      operationId: HealthCheck
+      responses:
+        '200':
+          description: success
+components:
+  parameters:
+    Bif-Mdw-Id:
+      name: Bif-Mdw-Id
+      in: header
+      schema:
+        type: string
+        maxLength: 36
+      description: Identificador del middleware.
+      example: BIFMDW001
+    Bif-Correlation-Id:
+      name: Bif-Correlation-Id
+      in: header
+      schema:
+        type: string
+        maxLength: 36
+      description: Identificador de correlacion del middleware.
+      example: 31a738b2-2e0f-49b9-9f1f-a6cfea8c506a
+    Bif-Consumer-Id:
+      name: Bif-Consumer-Id
+      in: header
+      schema:
+        type: string
+        maxLength: 6
+      description: Identificador del consumidor en el middleware.
+      example: APP213
+    Time-Stamp:
+      name: Time-Stamp
+      in: header
+      schema:
+        type: string
+        maxLength: 18
+      description: |
+        Fecha y hora de la peticion que envia el canal consumidor.
+        Formato: yyyyMMdd'T'HHmmssSSS
+      example: 20240112 093902977
+    Host-Id:
+      name: Host-Id
+      in: header
+      schema:
+        type: string
+        maxLength: 6
+      description: |
+        Nombre del host al que se le envia la solicitud.
+      example: 15.12.10.10
+    Branch-Code:
+      name: Branch-Code
+      in: header
+      schema:
+        type: string
+        maxLength: 6
+      description: |
+        Codigo de la sucursal de donde se realiza la transaccion.
+      example: SISIDRO129
+    Country-Code:
+      name: Country-Code
+      in: header
+      schema:
+        type: string
+        maxLength: 6
+      description: |
+        Codigo del pais.
+      example: PERU
+    User-Id:
+      name: User-Id
+      in: header
+      schema:
+        type: string
+        maxLength: 6
+      description: |
+        Identificador del usuario que realizo la transaccion.
+      example: USRDEV
+    Device-Id:
+      name: Device-Id
+      in: header
+      schema:
+        type: string
+        maxLength: 6
+      description: |
+        Identificador del dispositivo de donde se realizo la transaccion.
+      example: 1457
+  schemas:
+    Payload:
+      type: object
+      properties:
+        UpdatePaymentExecutionProcedureReverseHub:
+          $ref: '#/components/schemas/UpdatePaymentExecutionProcedureReverseHubRequest'
+      required:
+        - UpdatePaymentExecutionProcedureReverseHub
+    UpdatePaymentExecutionProcedureReverseHubRequest:
+      type: object
+      properties:
+        TransactionReference:
+          type: string
+          maxLength: 20
+          description: Referencia de la transaccion.
+          example: '12345678901234567890'
+        TransactionDate:
+          type: string
+          maxLength: 20
+          description: Fecha de la transaccion.
+          example: '20240112'
+        ChannelIdentification:
+          type: string
+          maxLength: 2
+          description: Identificacion del canal.
+          example: '01'
+        PartyRoleReference:
+          type: string
+          maxLength: 20
+          description: Referencia del rol de la parte.
+          example: '12345678901234567890'
+        AgreementIdentification:
+          type: string
+          maxLength: 4
+          description: Identificacion del convenio.
+          example: '1234'
+        CurrencyCode:
+          type: string
+          maxLength: 3
+          description: Codigo de la moneda.
+          example: PEN
+        NumberOfPayments:
+          type: string
+          maxLength: 5
+          description: Numero de pagos.
+          example: '1'
+        IndustryClassification:
+          type: string
+          maxLength: 1
+          description: Clasificacion de la industria.
+          example: '1'
+        LoanAmount:
+          type: string
+          description: Monto del prestamo.
+          example: '1000.00'
+        Amount:
+          type: array
+          items:
+            type: string
+          description: Lista de montos.
+          example:
+            - '1000.00'
+        PaymentInstrumentNumber:
+          type: string
+          maxLength: 20
+          description: Numero del instrumento de pago.
+          example: '12345678901234567890'
+        PaymentMethod:
+          type: string
+          maxLength: 20
+          description: Metodo de pago.
+          example: EFECTIVO
+        OperationType:
+          type: string
+          maxLength: 30
+          description: Tipo de operacion.
+          example: REVERSA
+        DebtsList:
+          type: array
+          items:
+            $ref: '#/components/schemas/DebtItem'
+          description: Lista de deudas.
+    DebtItem:
+      type: object
+      properties:
+        AdditionalInformationList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NameValue'
+          description: Lista de informacion adicional.
+        ExpiryDate:
+          type: string
+          maxLength: 8
+          description: Fecha de expiracion.
+          example: '20241231'
+        FullName:
+          type: string
+          maxLength: 60
+          description: Nombre completo.
+          example: Juan Perez
+        InquiryReference:
+          type: string
+          maxLength: 20
+          description: Referencia de consulta.
+          example: '12345678901234567890'
+        CampaignIdentifier:
+          type: string
+          maxLength: 100
+          description: Identificador de campana.
+          example: CAMPANA001
+        ServiceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceType'
+          description: Lista de servicios.
+        BalanceAmount:
+          type: string
+          description: Monto del saldo.
+          example: '500.00'
+        DiscountAmount:
+          type: string
+          description: Monto del descuento.
+          example: '0.00'
+        FineAmount:
+          type: string
+          description: Monto de la multa.
+          example: '0.00'
+        DueAmount:
+          type: string
+          description: Monto vencido.
+          example: '100.00'
+        InterestAmount:
+          type: string
+          description: Monto del interes.
+          example: '10.00'
+        AdjustmentAmount:
+          type: string
+          description: Monto del ajuste.
+          example: '0.00'
+        Amount:
+          type: string
+          description: Monto total.
+          example: '610.00'
+        PersonIdentification:
+          type: string
+          maxLength: 30
+          description: Numero de documento de la persona.
+          example: '10254890053'
+        PersonIdentificationType:
+          type: string
+          maxLength: 3
+          description: Tipo de documento de la persona.
+          example: 'DNI'
+      required:
+        - PersonIdentification
+        - PersonIdentificationType
+    NameValue:
+      type: object
+      properties:
+        Name:
+          type: string
+          description: Nombre del atributo.
+          example: ATTRIBUTE_NAME
+        Value:
+          type: string
+          description: Valor del atributo.
+          example: ATTRIBUTE_VALUE
+    ServiceType:
+      type: object
+      properties:
+        ServiceCode:
+          type: string
+          description: Codigo del servicio.
+          example: M005R
+        ServiceDescription:
+          type: string
+          description: Descripcion del servicio.
+          example: Servicio de recaudacion
+    Response:
+      type: object
+      properties:
+        ResultCode:
+          type: string
+          description: Codigo del resultado.
+          example: '00'
+        ResultMessage:
+          type: string
+          description: Mensaje del resultado.
+          example: Transaccion exitosa
+        TransactionReference:
+          type: string
+          description: Referencia de la transaccion.
+          example: '12345678901234567890'
+        TotalNumberOfRecords:
+          type: string
+          description: Total de registros.
+          example: '1'
+    Error:
+      type: object
+      properties:
+        type:
+          type: string
+          description: URI del tipo de error (RFC 7807).
+          example: 'about:blank'
+        title:
+          type: string
+          description: Titulo del error.
+          example: Error en la transaccion
+        status:
+          type: integer
+          description: Codigo de estado HTTP del error.
+          example: 400
+        detail:
+          type: string
+          description: Detalle del error.
+          example: El campo Bif-Mdw-Id es requerido.
+        instance:
+          type: string
+          description: URI que identifica la ocurrencia specifica del error.
+          example: '/paymentexecution/procedurereverse/hub/update/12345'
+        errorCode:
+          type: string
+          description: Codigo de error de la aplicacion.
+          example: 'E001'
+        errorMessage:
+          type: string
+          description: Mensaje de error de la aplicacion.
+          example: Campo requerido no enviado.

@@ -1,0 +1,74 @@
+BROKER SCHEMA ace.esb.payexe.prorev.hub.upda.s
+PATH ace.esb.core.common;
+
+CREATE COMPUTE MODULE MF_PayExe_ProRev_Hub_Upda_S_CheckIfReplied
+    CREATE FUNCTION Main() RETURNS BOOLEAN
+    BEGIN
+        SET OutputRoot = InputRoot;
+        SET OutputLocalEnvironment = InputLocalEnvironment;
+
+        IF Environment.Variables.ResponseSent IS TRUE THEN
+            RETURN FALSE; 
+        ELSE
+            SET Environment.Variables.ResponseSent = TRUE;
+            RETURN TRUE;
+        END IF;
+    END;
+END MODULE;
+
+CREATE COMPUTE MODULE MF_PayExe_ProRev_Hub_Upda_S_ApplySecurityHeaders
+
+    CREATE FUNCTION Main() RETURNS BOOLEAN
+    BEGIN
+        SET OutputRoot = InputRoot;
+
+        IF NOT EXISTS(OutputRoot.HTTPResponseHeader[]) THEN
+            CREATE LASTCHILD OF OutputRoot DOMAIN getHTTP_RES_H();
+        END IF;
+
+        DECLARE refHttpHeaders REFERENCE TO OutputRoot.HTTPResponseHeader;
+
+        DECLARE refReferrerPolicy REFERENCE TO refHttpHeaders."Referrer-Policy";
+        DECLARE refContentSecurityPolicy REFERENCE TO refHttpHeaders."Content-Security-Policy";
+        DECLARE refPermissionsPolicy REFERENCE TO refHttpHeaders."Permissions-Policy";
+        DECLARE refXContentTypeOptions REFERENCE TO refHttpHeaders."X-Content-Type-Options";
+        DECLARE refXXSSOptions REFERENCE TO refHttpHeaders."X-XSS-Protection";
+        DECLARE refStrictTranspoSecurity REFERENCE TO refHttpHeaders."Strict-Transport-Security";
+
+        IF NOT LASTMOVE(refReferrerPolicy)
+           OR IsEmptyOrInvalidHeader(CAST(refReferrerPolicy AS CHARACTER)) THEN
+            SET refHttpHeaders."Referrer-Policy" = 'no-referrer';
+        END IF;
+
+        IF NOT LASTMOVE(refContentSecurityPolicy)
+           OR IsEmptyOrInvalidHeader(CAST(refContentSecurityPolicy AS CHARACTER)) THEN
+            SET refHttpHeaders."Content-Security-Policy" =
+                'default-src ''self''; object-src ''none''; frame-ancestors ''none'';';
+        END IF;
+
+        IF NOT LASTMOVE(refPermissionsPolicy)
+           OR IsEmptyOrInvalidHeader(CAST(refPermissionsPolicy AS CHARACTER)) THEN
+            SET refHttpHeaders."Permissions-Policy" =
+                'geolocation=(), microphone=(), camera=()';
+        END IF;
+
+        IF NOT LASTMOVE(refXContentTypeOptions)
+           OR IsEmptyOrInvalidHeader(CAST(refXContentTypeOptions AS CHARACTER)) THEN
+            SET refHttpHeaders."X-Content-Type-Options" = 'nosniff';
+        END IF;
+
+        SET refHttpHeaders."X-XSS-Protection" = '0';
+        SET refHttpHeaders."Strict-Transport-Security" = 'max-age=31536000; includeSubDomains; preload';
+
+        RETURN TRUE;
+    END;
+
+
+    CREATE FUNCTION IsEmptyOrInvalidHeader(pValue CHARACTER) RETURNS BOOLEAN
+    BEGIN
+        DECLARE v CHARACTER UPPER(TRIM(COALESCE(pValue, '')));
+
+        RETURN v IN ('', 'NONE', 'NULL', 'UNDEFINED', 'N/A', '-');
+    END;
+
+END MODULE;
