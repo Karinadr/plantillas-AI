@@ -1,0 +1,237 @@
+openapi: 3.0.0
+info:
+  title: Term Deposit Facility Initiate BUS
+  version: 1.0.0
+  description: Creacion de depósito a plazo
+servers:
+  - url: /v1.0/s/termdeposit/facility/initiate
+paths:
+  /:
+    post:
+      summary: Initiate Term Deposit Facility
+      description: Servicio que permite realizar el extorno de depósito a plazo.
+      operationId: InitiateTermDepositFacility
+      parameters:
+        - $ref: '#/components/parameters/X-Origin-Id'
+        - $ref: '#/components/parameters/X-Target-Id'
+        - $ref: '#/components/parameters/X-Correlation-Id'
+        - $ref: '#/components/parameters/Time-Stamp'
+        - $ref: '#/components/parameters/Host-Id'
+        - $ref: '#/components/parameters/Branch-Code'
+        - $ref: '#/components/parameters/Country-Code'
+        - $ref: '#/components/parameters/User-Id'
+        - $ref: '#/components/parameters/Device-Id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InitiateTermDepositFacilityRequest'      
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InitiateTermDepositFacilityResponse'          
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /health:
+    summary: Valida que el estado del servicio este operativo
+    get:
+      operationId: HealthCheck
+      responses:
+        '200':
+          description: success
+components:
+  parameters:
+    Time-Stamp:
+      name: Time-Stamp
+      in: header
+      schema:
+        type: string
+        maxLength: 18
+      description: |
+        Fecha y hora de la peticiÃ³n que envia el canal consumidor.
+        Formato: yyyyMMdd'T'HHmmssSSS
+      example: 20240112 093902977
+    X-Correlation-Id:
+      name: X-Correlation-Id
+      in: header
+      schema:
+        type: string
+        maxLength: 36
+      description: >
+        Identificador Ãºnico de la transaccion desde donde se invoca el
+        servicio.
+      example: 31a738b2-2e0f-49b9-9f1f-a6cfea8c506a
+    X-Origin-Id:
+      name: X-Origin-Id
+      in: header
+      schema:
+        type: string
+        maxLength: 6
+      description: |
+        Encabezado que indica el origen de la solicitud de acceso.
+      example: APP213
+    X-Target-Id:
+      name: X-Target-Id
+      in: header
+      schema:
+        type: string
+        maxLength: 6
+      description: |
+        Encabezado que indica el target de la solicitud de acceso.
+      example: APP202
+    Host-Id:
+      name: Host-Id
+      in: header
+      schema:
+        type: string
+        maxLength: 6
+      description: |
+        Nombre del host al que se le envia la solicitud.
+      example: 15.12.10.10
+    Branch-Code:
+      name: Branch-Id
+      in: header
+      schema:
+        type: string
+        maxLength: 6
+      description: |
+        CÃ³digo de la sucursal de donde se realiza la transaccion.
+      example: SISIDRO129
+    Country-Code:
+      name: Country-Id
+      in: header
+      schema:
+        type: string
+        maxLength: 6
+      description: |
+        CÃ³digo del pais.
+      example: PERU
+    User-Id:
+      name: User-Id
+      in: header
+      schema:
+        type: string
+        maxLength: 6
+      description: |
+        Identificador del usuario que realizo la transacciÃ³n.
+      example: USRDEV
+    Device-Id:
+      name: Device-Id
+      in: header
+      schema:
+        type: string
+        maxLength: 6
+      description: |
+        Identificador del dispositivo de donde se realizÃ³ la transacciÃ³n.
+      example: 1457
+  schemas:
+    InitiateTermDepositFacilityRequest:
+      type: object
+      properties:
+        InitiateTermDepositFacility:
+          type: object
+          properties:
+            PersonIdentification:
+              type: string
+              description: Numero de documento.
+              example: '10254890053'
+            PersonIdentificationType:
+              type: string
+              description: Tipo de documento.
+              example: '8'
+            ServiceType:
+              type: string
+              description:  Codigo del servicio.
+              example: 'M005R'
+    InitiateTermDepositFacilityResponse:
+      type: object
+      properties:
+        InitiateTermDepositFacilityResponse:
+          type: object
+          properties:
+            OrganisationName:
+              type: string
+              description: Nombre de la entidad.
+              example: Autogenerado
+            EntityStatus:
+              type: string
+              description: Estado.
+              example: '1'
+            CustomerReference:
+              type: string
+              description: Codigo IBS.
+              example: '621'
+            Amount:
+              type: number
+              description: Monto maximo.
+              example: 100
+            OrganisationType:
+              type: string
+              description: Tipo de empresa.
+              example: 'R: GRUPO M: NO GRUPO'
+            FullLegalName:
+              type: string
+              description: Razon social.
+              example: Prueba
+            OrganisationIdentification:
+              type: string
+              description: Numero de documento.
+              example: AUX002516008
+            CumulativeAmount:
+              type: number
+              description: Monto maximo acumulado.
+              example: 999999999
+            ParentOrganisation:
+              type: array
+              items:
+                type: object
+                properties:
+                  FullLegalName:
+                    type: string
+                    description: Razon social.
+                    example: prueba
+                  CustomerReference:
+                    type: string
+                    description: Codigo IBS.
+                    example: '621'
+                  OrganisationIdentification:
+                    type: string
+                    description: Numero de documento.
+                    example: AUX002516008
+                  OrganisationName:
+                    type: string
+                    description: Nombre de la entidad.
+                    example: Autogenerado
+                  EntityStatus:
+                    type: string
+                    description: Estados.
+                    example: '1'
+                  BindingFlag:
+                    type: string
+                    description: Flag del vinculado.
+                    example: '12345'
+    Error:
+      type: object
+      properties:
+        InitiateTermDepositFacilityResponse:
+          type: object
+          properties:
+            StatusCode:
+              type: integer
+              description: Codigo de error.
+              example: -1
+            Message:
+              type: string
+              description: Mensaje del error.
+              example: El campo X-Consumer-Id es requerido.
+            Status:
+              type: string
+              description: CÃ³digo de estado HTTP del error.
+              example: ERROR

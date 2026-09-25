@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ComIbmCompute.msgnode="ComIbmCompute.msgnode" xmlns:ComIbmWSRequest.msgnode="ComIbmWSRequest.msgnode" xmlns:Validate.subflow="Validate.subflow" xmlns:ace_esb_core_ope_SMF_BUS_CORE_SRV_CTRLLENGTHCPY.subflow="ace/esb/core/ope/SMF_BUS_CORE_SRV_CTRLLENGTHCPY.subflow" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:eflow="http://www.ibm.com/wbi/2005/eflow" xmlns:utility="http://www.ibm.com/wbi/2005/eflow_utility" nsURI="UpdatePaymentExecutionProcedureReverseCore.subflow" nsPrefix="UpdatePaymentExecutionProcedureReverseCore.subflow">
+  <eClassifiers xmi:type="eflow:FCMComposite" name="FCMComposite_1" nodeLayoutStyle="SQUARE">
+    <eSuperTypes href="http://www.ibm.com/wbi/2005/eflow#//FCMBlock"/>
+    <translation xmi:type="utility:TranslatableString" key="UpdatePaymentExecutionProcedureReverseCore" bundleName="UpdatePaymentExecutionProcedureReverseCore" pluginId="PayExe_ProRev_Core_Upda_S"/>
+    <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/PayExe_ProRev_Core_Upda_S/icons/full/obj16/UpdatePaymentExecutionProcedureReverseCore.gif"/>
+    <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/PayExe_ProRev_Core_Upda_S/icons/full/obj30/UpdatePaymentExecutionProcedureReverseCore.gif"/>
+    <composition>
+      <nodes xmi:type="eflow:FCMSource" xmi:id="InTerminal.Input_1" location="53,95">
+        <translation xmi:type="utility:TranslatableString" key="Input" bundleName="UpdatePaymentExecutionProcedureReverseCore" pluginId="PayExe_ProRev_Core_Upda_S"/>
+      </nodes>
+      <nodes xmi:type="eflow:FCMSink" xmi:id="OutTerminal.Output_1" location="1131,96">
+        <translation xmi:type="utility:TranslatableString" key="Output" bundleName="UpdatePaymentExecutionProcedureReverseCore" pluginId="PayExe_ProRev_Core_Upda_S"/>
+      </nodes>
+      <nodes xmi:type="Validate.subflow:FCMComposite_1" xmi:id="FCMComposite_1_2" location="150,94" messageSet="request.schema.json">
+        <translation xmi:type="utility:ConstantString" string="Validate"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_3" location="406,95" computeExpression="esql://routine/ace.esb.payexe.prorev.core.upda.s#SMF_PayExe_ProRev_Core_Upda_PrepInvocacion.Main" computeMode="destinationAndMessage">
+        <translation xmi:type="utility:ConstantString" string="PrepInvocacion"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_5" location="681,-2" computeExpression="esql://routine/ace.esb.payexe.prorev.core.upda.s#SMF_PayExe_ProRev_Core_Upda_ControlarError.Main">
+        <translation xmi:type="utility:ConstantString" string="ControlarError"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_6" location="841,92" computeExpression="esql://routine/ace.esb.payexe.prorev.core.upda.s#SMF_PayExe_ProRev_Core_Upda_PrepRespSrv.Main">
+        <translation xmi:type="utility:ConstantString" string="PrepRespSrv"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_4" location="971,-9" computeExpression="esql://routine/ace.esb.payexe.prorev.core.upda.s#SMF_PayExe_ProRev_Core_Upda_ControlarException.Main">
+        <translation xmi:type="utility:ConstantString" string="ControlarException"/>
+      </nodes>
+      <nodes xmi:type="ComIbmWSRequest.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_7" location="591,96" URLSpecifier="http://localhost" timeoutForServer="15" followRedirection="true" httpVersion="1.1" protocol="TLS" messageDomainProperty="JSON">
+        <translation xmi:type="utility:ConstantString" string="ConectorCentralizado"/>
+      </nodes>
+      <nodes xmi:type="ace_esb_core_ope_SMF_BUS_CORE_SRV_CTRLLENGTHCPY.subflow:FCMComposite_1" xmi:id="FCMComposite_1_1" location="238,94" inputDirectory="C:\Users\Karina Diaz\IBM\ACET12\workspace\TEST_SERVER\run\PayExe_ProRev_Core_Upda_S" filenamePattern="RE0058RI.yaml" UDP_SCHEMA_RSP="RE0058RIRSP" UDP_SCHEMA_ERR="ELEERR" UDP_PCML="RE0058RI">
+        <translation xmi:type="utility:ConstantString" string="CTRLLENGTHCPY"/>
+      </nodes>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_5" targetNode="FCMComposite_1_6" sourceNode="FCMComposite_1_5" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_6" targetNode="OutTerminal.Output_1" sourceNode="FCMComposite_1_6" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_10" targetNode="FCMComposite_1_4" sourceNode="FCMComposite_1_6" sourceTerminalName="OutTerminal.failure" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_11" targetNode="OutTerminal.Output_1" sourceNode="FCMComposite_1_4" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_1" targetNode="FCMComposite_1_2" sourceNode="InTerminal.Input_1" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_2" targetNode="FCMComposite_1_1" sourceNode="FCMComposite_1_2" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_3" targetNode="FCMComposite_1_3" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_4" targetNode="FCMComposite_1_5" sourceNode="FCMComposite_1_3" sourceTerminalName="OutTerminal.failure" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_7" targetNode="FCMComposite_1_7" sourceNode="FCMComposite_1_3" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_8" targetNode="FCMComposite_1_5" sourceNode="FCMComposite_1_7" sourceTerminalName="OutTerminal.failure" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_9" targetNode="FCMComposite_1_5" sourceNode="FCMComposite_1_7" sourceTerminalName="OutTerminal.error" targetTerminalName="InTerminal.in">
+        <bendPoints>48,-41,-14,46</bendPoints>
+      </connections>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_12" targetNode="FCMComposite_1_6" sourceNode="FCMComposite_1_7" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+    </composition>
+    <propertyOrganizer/>
+    <stickyBoard/>
+  </eClassifiers>
+</ecore:EPackage>

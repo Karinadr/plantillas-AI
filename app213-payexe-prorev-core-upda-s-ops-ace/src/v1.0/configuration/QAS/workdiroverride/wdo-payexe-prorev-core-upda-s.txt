@@ -1,0 +1,71 @@
+#APLICACION
+#------------------------------------------------
+#Sobreescritura del Flujo principal
+MF_PayExe_ProRev_Core_Upda_S#additionalInstances = 10
+MF_PayExe_ProRev_Core_Upda_S#UDP_URL_APIREST = https://localhost:7843/v1.0
+MF_PayExe_ProRev_Core_Upda_S#CTRLAUTHAPP.securityProfileName = {PLP_PayExe_ProRev_Core_Upda_S}:PL_ActiveDirectory
+#Codigo de Servicio
+MF_PayExe_ProRev_Core_Upda_S#CTRLAUTHAPP.UDP_CODSERVICIO	= PayExe_ProRev_Core_Upda_S
+MF_PayExe_ProRev_Core_Upda_S#CTRLERROR.UDP_CODSERVICIO		= PayExe_ProRev_Core_Upda_S
+#Operacion del Servicio
+MF_PayExe_ProRev_Core_Upda_S#CTRLERROR.UDP_OPERACION_GET	= UpdatePaymentExecutionProcedureReverseCore
+#Opciones generales
+MF_PayExe_ProRev_Core_Upda_S#CTRLAUTHAPP.UDP_VERSION		= 1.0
+MF_PayExe_ProRev_Core_Upda_S#CTRLAUTHAPP.UDP_NOMSERVICIO	= BUS Reversar Pago IBS
+MF_PayExe_ProRev_Core_Upda_S#CTRLAUTHAPP.UDP_USE_CCAS400	= S
+MF_PayExe_ProRev_Core_Upda_S#CTRLERRORAPP.UDP_NOMSERVICIO	= BUS Reversar Pago IBS
+#Sobreescritura del path o URI del backend
+MF_PayExe_ProRev_Core_Upda_S#HTTP Request.httpVersion = 1.1
+MF_PayExe_ProRev_Core_Upda_S#HTTP Request.protocol = TLSv1.3
+MF_PayExe_ProRev_Core_Upda_S#HTTP Request.keyAlias = bm
+MF_PayExe_ProRev_Core_Upda_S#HTTP Request.timeoutForServer = 17
+MF_PayExe_ProRev_Core_Upda_S#HTTP Request.hostnameChecking = false
+MF_PayExe_ProRev_Core_Upda_S#HTTP Request.acceptCompressedResponses = true
+#Sobreescritura del path o URI de entrada por MTLS
+MF_PayExe_ProRev_Core_Upda_S#mTLS.URLSpecifier = /v1.0/mtls/s/paymentexecution/procedurereverse/core/update*
+MF_PayExe_ProRev_Core_Upda_S#mTLS.useHTTPS = yes
+MF_PayExe_ProRev_Core_Upda_S#mTLS.faultFormat = JSON
+MF_PayExe_ProRev_Core_Upda_S#mTLS.timeoutForClient = 18
+#Sobreescritura del path o URI de entrada por OnPrem
+MF_PayExe_ProRev_Core_Upda_S#Onprem.URLSpecifier = /v1.0/onprem/s/paymentexecution/procedurereverse/core/update*
+MF_PayExe_ProRev_Core_Upda_S#Onprem.faultFormat = JSON
+MF_PayExe_ProRev_Core_Upda_S#Onprem.useHTTPS = no
+MF_PayExe_ProRev_Core_Upda_S#Onprem.timeoutForClient = 18
+
+
+#API REST
+#------------------------------------------------
+#Sobreescritura de instancias del Flujo principal
+gen.PayExe_ProRev_Core_Upda_S#additionalInstances = 10
+gen.PayExe_ProRev_Core_Upda_S#HTTP Input.useHTTPS = yes
+gen.PayExe_ProRev_Core_Upda_S#HTTP Input.timeoutForClient = 16
+gen.PayExe_ProRev_Core_Upda_S#HTTP Input.faultFormat = JSON
+#Codigo de Servicio
+PayExe_ProRev_Core_Upda_SInputCatchHandler#CTRLERROR.UDP_CODSERVICIO     = PayExe_ProRev_Core_Upda_S
+PayExe_ProRev_Core_Upda_SInputFailureHandler#CTRLERROR.UDP_CODSERVICIO   = PayExe_ProRev_Core_Upda_S
+PayExe_ProRev_Core_Upda_SInputTimeoutHandler#CTRLERROR.UDP_CODSERVICIO   = PayExe_ProRev_Core_Upda_S
+gen.PayExe_ProRev_Core_Upda_S#CTRLERROR.UDP_CODSERVICIO                  = PayExe_ProRev_Core_Upda_S
+#Operacion del Servicio
+PayExe_ProRev_Core_Upda_SInputCatchHandler#CTRLERROR.UDP_OPERACION_GET		= UpdatePaymentExecutionProcedureReverseCore
+PayExe_ProRev_Core_Upda_SInputFailureHandler#CTRLERROR.UDP_OPERACION_GET	= UpdatePaymentExecutionProcedureReverseCore
+PayExe_ProRev_Core_Upda_SInputTimeoutHandler#CTRLERROR.UDP_OPERACION_GET	= UpdatePaymentExecutionProcedureReverseCore
+gen.PayExe_ProRev_Core_Upda_S#CTRLERROR.UDP_OPERACION_GET					= UpdatePaymentExecutionProcedureReverseCore
+gen.PayExe_ProRev_Core_Upda_S#CTRLINICIAL.UDP_OPERACION_GET				= UpdatePaymentExecutionProcedureReverseCore
+#Nombre del Servicio
+PayExe_ProRev_Core_Upda_SInputCatchHandler#CTRLERRORV2.UDP_NOMSERVICIO		= BUS Reversar Pago IBS
+PayExe_ProRev_Core_Upda_SInputFailureHandler#CTRLERRORV2.UDP_NOMSERVICIO	= BUS Reversar Pago IBS
+PayExe_ProRev_Core_Upda_SInputTimeoutHandler#CTRLERRORV2.UDP_NOMSERVICIO	= BUS Reversar Pago IBS
+gen.PayExe_ProRev_Core_Upda_S#CTRLERROR.UDP_NOMSERVICIO					= BUS Reversar Pago IBS
+gen.PayExe_ProRev_Core_Upda_S#CTRLINICIAL.UDP_NOMSERVICIO					= BUS Reversar Pago IBS
+#Opciones generales
+gen.PayExe_ProRev_Core_Upda_S#CTRLINICIAL.UDP_USE_CCAS400	= S
+gen.PayExe_ProRev_Core_Upda_S#CTRLINICIAL.UDP_VERSION		= 1.0
+UpdatePaymentExecutionProcedureReverseCore#Validate.validateMaster	= contentAndValue
+
+UpdatePaymentExecutionProcedureReverseCore#CTRLLENGTHCPY.inputDirectory = /home/aceuser/ace-server/run/153_PayExe_ProRev_Core_Upda_S
+UpdatePaymentExecutionProcedureReverseCore#CTRLLENGTHCPY.filenamePattern = RE0058RI.yaml
+UpdatePaymentExecutionProcedureReverseCore#CTRLLENGTHCPY.UDP_SCHEMA_RSP = RE0058RIRSP
+UpdatePaymentExecutionProcedureReverseCore#CTRLLENGTHCPY.UDP_SCHEMA_ERR = ELEERR
+UpdatePaymentExecutionProcedureReverseCore#CTRLLENGTHCPY.UDP_PCML = RE0058RI
+#Monitoring
+gen.PayExe_ProRev_Core_Upda_S#monitoringProfile = {PLP_PayExe_ProRev_Core_Upda_S}:Monitoring

@@ -1,0 +1,70 @@
+BROKER SCHEMA ace.esb.payexe.prorev.core.upda.s
+PATH ace.esb.core.common;
+
+
+CREATE FUNCTION getErrorCode(IN errorField REFERENCE) RETURNS CHARACTER
+BEGIN
+	DECLARE errNum CHARACTER COALESCE(CAST(errorField AS CHARACTER), '');
+	DECLARE trimmed CHARACTER TRIM(errNum);
+
+	IF trimmed = '' THEN
+		RETURN '00';
+	END IF;
+
+	RETURN trimmed;
+END;
+
+
+CREATE PROCEDURE copyHttpHeadersFromInput(IN refIn REFERENCE, IN refOut REFERENCE)
+BEGIN
+	IF EXISTS(refIn.HTTPRequestHeader.[]) THEN
+		IF NOT EXISTS(refOut.HTTPRequestHeader.[]) THEN
+			CREATE LASTCHILD OF refOut DOMAIN getHTTP_REQ_H();
+		END IF;
+		SET refOut.HTTPRequestHeader = refIn.HTTPRequestHeader;
+	END IF;
+
+	IF EXISTS(refIn.HTTPResponseHeader.[]) THEN
+		IF NOT EXISTS(refOut.HTTPResponseHeader.[]) THEN
+			CREATE LASTCHILD OF refOut DOMAIN getHTTP_RES_H();
+		END IF;
+		SET refOut.HTTPResponseHeader = refIn.HTTPResponseHeader;
+	END IF;
+END;
+
+
+CREATE FUNCTION isLoanRecordWithData(IN refLoan REFERENCE) RETURNS BOOLEAN
+BEGIN
+	IF asString(refLoan.OCODCLI) <> ''
+		OR asString(refLoan.ONROCTA) <> ''
+		OR asString(refLoan.OPRODUC) <> '' THEN
+		RETURN TRUE;
+	END IF;
+
+	RETURN FALSE;
+END;
+
+
+CREATE FUNCTION asString(IN refValue REFERENCE) RETURNS CHARACTER
+BEGIN
+	RETURN TRIM(CAST(refValue AS CHARACTER));
+END;
+
+
+CREATE FUNCTION asInteger(IN refValue REFERENCE) RETURNS INTEGER
+BEGIN
+	RETURN CAST(asString(refValue) AS INTEGER);
+END;
+
+
+-- yyyyMMdd -> yyyy-MM-dd
+CREATE FUNCTION getDateValue(IN refValue REFERENCE) RETURNS CHARACTER
+BEGIN
+	DECLARE value CHARACTER asString(refValue);
+
+	IF LENGTH(value) = 8 THEN
+		RETURN SUBSTRING(value FROM 1 FOR 4) || '-' || SUBSTRING(value FROM 5 FOR 2) || '-' || SUBSTRING(value FROM 7 FOR 2);
+	END IF;
+
+	RETURN value;
+END;

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:restapiDescriptor xmlns="http://com.ibm.etools.mft.descriptor.base" xmlns:ns2="http://com.ibm.etools.mft.descriptor.restapi" definitionType="openapi_3" definitionFile="PayExe_ProRev_Core_Upda_S.yaml" implementation="gen/PayExe_ProRev_Core_Upda_S.msgflow" https="true" definitionWithExtRef="false" faultFormat="JSON">
+    <references>
+        <sharedLibraryReference>
+            <libraryName>LIB_SMF_UTIL</libraryName>
+        </sharedLibraryReference>
+        <sharedLibraryReference>
+            <libraryName>LIB_CORE_COMMON</libraryName>
+        </sharedLibraryReference>
+        <sharedLibraryReference>
+            <libraryName>LIB_CORE_CONTROL</libraryName>
+        </sharedLibraryReference>
+    </references>
+    <ns2:operations>
+        <ns2:operation name="HealthCheck" implementation="HealthCheck.subflow"/>
+        <ns2:operation name="UpdatePaymentExecutionProcedureReverseCore" implementation="UpdatePaymentExecutionProcedureReverseCore.subflow"/>
+    </ns2:operations>
+    <ns2:errorHandlers>
+        <ns2:errorHandler type="CATCH" implementation="PayExe_ProRev_Core_Upda_SInputCatchHandler.subflow"/>
+        <ns2:errorHandler type="FAILURE" implementation="PayExe_ProRev_Core_Upda_SInputFailureHandler.subflow"/>
+        <ns2:errorHandler type="TIMEOUT" implementation="PayExe_ProRev_Core_Upda_SInputTimeoutHandler.subflow"/>
+    </ns2:errorHandlers>
+</ns2:restapiDescriptor>

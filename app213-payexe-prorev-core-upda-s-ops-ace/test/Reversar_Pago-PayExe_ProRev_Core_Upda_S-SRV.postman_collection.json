@@ -1,0 +1,1088 @@
+{
+  "info": {
+    "_postman_id": "193b1800-b099-410b-bff6-98a6a25c8f1f",
+    "name": "ACE 153 Reversar Pago IBS",
+    "description": "Usar credenciales de usuarios AD para cada ambiente",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "29145743"
+  },
+  "item": [
+    {
+      "name": "v1.0",
+      "item": [
+        {
+          "name": "MTLS",
+          "item": [
+            {
+              "name": "DEV",
+              "item": [
+                {
+                  "name": "Reversar Pago IBS",
+                  "request": {
+                    "auth": {
+                      "type": "noauth"
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Bif-Consumer-Id",
+                        "value": "APP069",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Bif-Mdw-Id",
+                        "value": "APP069",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Bif-Correlation-Id",
+                        "value": "31a738b2-2e0f-49b9-9f1f-a6cfea8bbbbb",
+                        "description": "Identificador unico de la transaccion desde donde se invoca el servicio.\n"
+                      },
+                      {
+                        "key": "Time-Stamp",
+                        "value": "2008-03-26T09:23:40.983Z",
+                        "description": "Fecha y hora de la peticion que envia el canal consumidor.\nFormato: yyyyMMdd'T'HHmmssSSS\n"
+                      },
+                      {
+                        "key": "User-Id",
+                        "value": "ejemplo",
+                        "description": "Identificador del usuario que realizo la transaccion.\n",
+                        "disabled": true
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "ejemplo",
+                        "disabled": true
+                      },
+                      {
+                        "key": "Host-Id",
+                        "value": "ejemplo",
+                        "description": "Nombre del host al que se le envia la solicitud.\n",
+                        "disabled": true
+                      },
+                      {
+                        "key": "Branch-Code",
+                        "value": "ejemplo",
+                        "description": "Codigo de la sucursal de donde se realizo la transaccion.\n",
+                        "disabled": true
+                      },
+                      {
+                        "key": "Country-Code",
+                        "value": "ejemplo",
+                        "description": "Codigo del pais.\n",
+                        "disabled": true
+                      },
+                      {
+                        "key": "Device-Id",
+                        "value": "ejemplo",
+                        "type": "text",
+                        "disabled": true
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"UpdatePaymentExecutionProcedureReverseCore\": {\r\n    \"ServiceType\": \"CSH001\",\r\n    \"ChannelIdentification\": \"KN\",\r\n    \"PaymentMethod\": \"0\",\r\n    \"OrganisationType\": \"0\",\r\n    \"PartyRoleReference\": \"Banbif\",\r\n    \"TransactionReference\": \"20300219191459\",\r\n    \"TransactionDate\": \"20260805191432\",\r\n    \"MemberIdentification\": \"555\",\r\n    \"OrganisationIdentification\": \"20131367857\",\r\n    \"CollectionServiceConsumerReference\": \"27415\",\r\n    \"Currency\": \"SOL\",\r\n    \"AgreementIdentification\": \"3224\",\r\n    \"InquiryReference\": \"567513\",\r\n    \"PaymentInstrumentNumber\": \"0\",\r\n    \"BranchLocationReference\": \"100\",\r\n    \"TransactionIdentification\": \"1834\",\r\n    \"OperationCashier\": \"KASNET\",\r\n    \"NumberOfPage\": \"1\",\r\n    \"TotalNumberOfRecords\": \"1\",\r\n    \"PersonIdentification\": \"27415202605\",\r\n    \"ExpiryDate\": \"20260430\",\r\n    \"DueAmount\": 34.34,\r\n    \"LoanAmount\": 34.34,\r\n    \"Amount\": 34.34,\r\n    \"FullName\": \"u\",\r\n    \"NumberOfPayments\": \"1\",\r\n    \"IndustryClassification\": \"0\",\r\n    \"DestinationAccountNumber\": \"0\"\r\n  }\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "https://update-reverse-payment-collections-ibs.apps.ocphipdes.dombif.peru/v1.0/mtls/s/paymentexecution/procedurereverse/core/update",
+                      "protocol": "https",
+                      "host": [
+                        "update-reverse-payment-collections-ibs",
+                        "apps",
+                        "ocphipdes",
+                        "dombif",
+                        "peru"
+                      ],
+                      "path": [
+                        "v1.0",
+                        "mtls",
+                        "s",
+                        "paymentexecution",
+                        "procedurereverse",
+                        "core",
+                        "update"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Healthcheck",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Bif-Mdw-Id",
+                        "value": "APP069"
+                      },
+                      {
+                        "key": "Bif-Correlation-Id",
+                        "value": "31a738b2-2e0f-49b9-9f1f-a6cfea8bbbbb"
+                      },
+                      {
+                        "key": "Bif-Consumer-Id",
+                        "value": "APP069"
+                      },
+                      {
+                        "key": "Time-Stamp",
+                        "value": "2008-03-26T09:23:40.983Z"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "https://update-reverse-payment-collections-ibs.apps.ocphipdes.dombif.peru/v1.0/mtls/s/paymentexecution/procedurereverse/core/update/health",
+                      "protocol": "https",
+                      "host": [
+                        "update-reverse-payment-collections-ibs",
+                        "apps",
+                        "ocphipdes",
+                        "dombif",
+                        "peru"
+                      ],
+                      "path": [
+                        "v1.0",
+                        "mtls",
+                        "s",
+                        "paymentexecution",
+                        "procedurereverse",
+                        "core",
+                        "update",
+                        "health"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "success",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/health",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "health"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "QAS",
+              "item": [
+                {
+                  "name": "Healthcheck",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Bif-Mdw-Id",
+                        "value": "ejemplo"
+                      },
+                      {
+                        "key": "Bif-Correlation-Id",
+                        "value": "ejemplo"
+                      },
+                      {
+                        "key": "Bif-Consumer-Id",
+                        "value": "ejemplo"
+                      },
+                      {
+                        "key": "Time-Stamp",
+                        "value": "ejemplo"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "ejemplo"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "ejemplo"
+                      }
+                    ],
+                    "url": {
+                      "raw": "https://update-reverse-payment-collections-ibs.apps.ocphipuat.dombif.peru/v1.0/mtls/s/paymentexecution/procedurereverse/core/update/health",
+                      "protocol": "https",
+                      "host": [
+                        "update-reverse-payment-collections-ibs",
+                        "apps",
+                        "ocphipuat",
+                        "dombif",
+                        "peru"
+                      ],
+                      "path": [
+                        "v1.0",
+                        "mtls",
+                        "s",
+                        "paymentexecution",
+                        "procedurereverse",
+                        "core",
+                        "update",
+                        "health"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "success",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/health",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "health"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                },
+                {
+                  "name": "Reversar Pago IBS",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Bif-Consumer-Id",
+                        "value": "APP035",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Bif-Mdw-Id",
+                        "value": "APP035",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Bif-Correlation-Id",
+                        "value": "31a738b2-2e0f-49b9-9f1f-a6cfea8bbbbb",
+                        "description": "Identificador unico de la transaccion desde donde se invoca el servicio.\n"
+                      },
+                      {
+                        "key": "Time-Stamp",
+                        "value": "2008-03-26T09:23:40.983Z",
+                        "description": "Fecha y hora de la peticion que envia el canal consumidor.\nFormato: yyyyMMdd'T'HHmmssSSS\n"
+                      },
+                      {
+                        "key": "User-Id",
+                        "value": "ejemplo",
+                        "description": "Identificador del usuario que realizo la transaccion.\n"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "ejemplo"
+                      },
+                      {
+                        "key": "Host-Id",
+                        "value": "ejemplo",
+                        "description": "Nombre del host al que se le envia la solicitud.\n"
+                      },
+                      {
+                        "key": "Branch-Code",
+                        "value": "ejemplo",
+                        "description": "Codigo de la sucursal de donde se realizo la transaccion.\n"
+                      },
+                      {
+                        "key": "Country-Code",
+                        "value": "ejemplo",
+                        "description": "Codigo del pais.\n"
+                      },
+                      {
+                        "key": "Device-Id",
+                        "value": "ejemplo",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"UpdatePaymentExecutionProcedureReverseCore\": {\r\n    \"ServiceType\": \"CSH001\",\r\n    \"ChannelIdentification\": \"KN\",\r\n    \"PaymentMethod\": \"0\",\r\n    \"OrganisationType\": \"0\",\r\n    \"PartyRoleReference\": \"Banbif\",\r\n    \"TransactionReference\": \"20300219191459\",\r\n    \"TransactionDate\": \"20260805191432\",\r\n    \"MemberIdentification\": \"555\",\r\n    \"OrganisationIdentification\": \"20131367857\",\r\n    \"CollectionServiceConsumerReference\": \"27415\",\r\n    \"Currency\": \"SOL\",\r\n    \"AgreementIdentification\": \"3224\",\r\n    \"InquiryReference\": \"567513\",\r\n    \"PaymentInstrumentNumber\": \"0\",\r\n    \"BranchLocationReference\": \"100\",\r\n    \"TransactionIdentification\": \"1834\",\r\n    \"OperationCashier\": \"KASNET\",\r\n    \"NumberOfPage\": \"1\",\r\n    \"TotalNumberOfRecords\": \"1\",\r\n    \"PersonIdentification\": \"27415202605\",\r\n    \"ExpiryDate\": \"20260430\",\r\n    \"DueAmount\": 34.34,\r\n    \"LoanAmount\": 34.34,\r\n    \"Amount\": 34.34,\r\n    \"FullName\": \"u\",\r\n    \"NumberOfPayments\": \"1\",\r\n    \"IndustryClassification\": \"0\",\r\n    \"DestinationAccountNumber\": \"0\"\r\n  }\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "https://update-reverse-payment-collections-ibs.apps.ocphipuat.dombif.peru/v1.0/mtls/s/paymentexecution/procedurereverse/core/update",
+                      "protocol": "https",
+                      "host": [
+                        "update-reverse-payment-collections-ibs",
+                        "apps",
+                        "ocphipuat",
+                        "dombif",
+                        "peru"
+                      ],
+                      "path": [
+                        "v1.0",
+                        "mtls",
+                        "s",
+                        "paymentexecution",
+                        "procedurereverse",
+                        "core",
+                        "update"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "PRD",
+              "item": [
+                {
+                  "name": "Healthcheck",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Bif-Mdw-Id",
+                        "value": ""
+                      },
+                      {
+                        "key": "Bif-Correlation-Id",
+                        "value": ""
+                      },
+                      {
+                        "key": "Bif-Consumer-Id",
+                        "value": ""
+                      },
+                      {
+                        "key": "Time-Stamp",
+                        "value": ""
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": ""
+                      },
+                      {
+                        "key": "Accept",
+                        "value": ""
+                      }
+                    ],
+                    "url": {
+                      "raw": "https://update-reverse-payment-collections-ibs.apps.ocphip.dombif.peru/v1.0/mtls/s/paymentexecution/procedurereverse/core/update/health",
+                      "protocol": "https",
+                      "host": [
+                        "update-reverse-payment-collections-ibs",
+                        "apps",
+                        "ocphip",
+                        "dombif",
+                        "peru"
+                      ],
+                      "path": [
+                        "v1.0",
+                        "mtls",
+                        "s",
+                        "paymentexecution",
+                        "procedurereverse",
+                        "core",
+                        "update",
+                        "health"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "success",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/health",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "health"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                },
+                {
+                  "name": "Reversar Pago IBS",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": ""
+                      },
+                      {
+                        "key": "Bif-Consumer-Id",
+                        "value": "",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Bif-Mdw-Id",
+                        "value": "",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Bif-Correlation-Id",
+                        "value": "",
+                        "description": "Identificador unico de la transaccion desde donde se invoca el servicio.\n"
+                      },
+                      {
+                        "key": "Time-Stamp",
+                        "value": "",
+                        "description": "Fecha y hora de la peticion que envia el canal consumidor.\nFormato: yyyyMMdd'T'HHmmssSSS\n"
+                      },
+                      {
+                        "key": "User-Id",
+                        "value": "",
+                        "description": "Identificador del usuario que realizo la transaccion.\n"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": ""
+                      },
+                      {
+                        "key": "Host-Id",
+                        "value": "",
+                        "description": "Nombre del host al que se le envia la solicitud.\n"
+                      },
+                      {
+                        "key": "Branch-Code",
+                        "value": "",
+                        "description": "Codigo de la sucursal de donde se realizo la transaccion.\n"
+                      },
+                      {
+                        "key": "Country-Code",
+                        "value": "",
+                        "description": "Codigo del pais.\n"
+                      },
+                      {
+                        "key": "Device-Id",
+                        "value": "",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"UpdatePaymentExecutionProcedureReverseCore\": {\r\n    \"ServiceType\": null,\r\n    \"ChannelIdentification\": null,\r\n    \"PaymentMethod\": null,\r\n    \"OrganisationType\": null,\r\n    \"PartyRoleReference\": null,\r\n    \"TransactionReference\": null,\r\n    \"TransactionDate\": null,\r\n    \"MemberIdentification\": null,\r\n    \"OrganisationIdentification\": null,\r\n    \"CollectionServiceConsumerReference\": null,\r\n    \"Currency\": null,\r\n    \"AgreementIdentification\": null,\r\n    \"InquiryReference\": null,\r\n    \"PaymentInstrumentNumber\": null,\r\n    \"BranchLocationReference\": null,\r\n    \"TransactionIdentification\": null,\r\n    \"OperationCashier\": null,\r\n    \"NumberOfPage\": null,\r\n    \"TotalNumberOfRecords\": null,\r\n    \"PersonIdentification\": null,\r\n    \"ExpiryDate\": null,\r\n    \"DueAmount\": null,\r\n    \"LoanAmount\": null,\r\n    \"Amount\": null,\r\n    \"FullName\": null,\r\n    \"NumberOfPayments\": null,\r\n    \"IndustryClassification\": null,\r\n    \"DestinationAccountNumber\": null\r\n  }\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "https://update-reverse-payment-collections-ibs.apps.ocphip.dombif.peru/v1.0/mtls/s/paymentexecution/procedurereverse/core/update",
+                      "protocol": "https",
+                      "host": [
+                        "update-reverse-payment-collections-ibs",
+                        "apps",
+                        "ocphip",
+                        "dombif",
+                        "peru"
+                      ],
+                      "path": [
+                        "v1.0",
+                        "mtls",
+                        "s",
+                        "paymentexecution",
+                        "procedurereverse",
+                        "core",
+                        "update"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ONPREM",
+          "item": [
+            {
+              "name": "DEV",
+              "item": [
+                {
+                  "name": "Reversar Pago IBS",
+                  "request": {
+                    "auth": {
+                      "type": "noauth"
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Bif-Consumer-Id",
+                        "value": "APP069",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Bif-Mdw-Id",
+                        "value": "APP069",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Bif-Correlation-Id",
+                        "value": "31a738b2-2e0f-49b9-9f1f-a6cfea8bbbbb",
+                        "description": "Identificador unico de la transaccion desde donde se invoca el servicio.\n"
+                      },
+                      {
+                        "key": "Time-Stamp",
+                        "value": "2008-03-26T09:23:40.983Z",
+                        "description": "Fecha y hora de la peticion que envia el canal consumidor.\nFormato: yyyyMMdd'T'HHmmssSSS\n"
+                      },
+                      {
+                        "key": "User-Id",
+                        "value": "ejemplo",
+                        "description": "Identificador del usuario que realizo la transaccion.\n",
+                        "disabled": true
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "ejemplo",
+                        "disabled": true
+                      },
+                      {
+                        "key": "Host-Id",
+                        "value": "ejemplo",
+                        "description": "Nombre del host al que se le envia la solicitud.\n",
+                        "disabled": true
+                      },
+                      {
+                        "key": "Branch-Code",
+                        "value": "ejemplo",
+                        "description": "Codigo de la sucursal de donde se realizo la transaccion.\n",
+                        "disabled": true
+                      },
+                      {
+                        "key": "Country-Code",
+                        "value": "ejemplo",
+                        "description": "Codigo del pais.\n",
+                        "disabled": true
+                      },
+                      {
+                        "key": "Device-Id",
+                        "value": "ejemplo",
+                        "type": "text",
+                        "disabled": true
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"UpdatePaymentExecutionProcedureReverseCore\": {\r\n    \"ServiceType\": \"CSH001\",\r\n    \"ChannelIdentification\": \"KN\",\r\n    \"PaymentMethod\": \"0\",\r\n    \"OrganisationType\": \"0\",\r\n    \"PartyRoleReference\": \"Banbif\",\r\n    \"TransactionReference\": \"20300219191459\",\r\n    \"TransactionDate\": \"20260805191432\",\r\n    \"MemberIdentification\": \"555\",\r\n    \"OrganisationIdentification\": \"20131367857\",\r\n    \"CollectionServiceConsumerReference\": \"27415\",\r\n    \"Currency\": \"SOL\",\r\n    \"AgreementIdentification\": \"3224\",\r\n    \"InquiryReference\": \"567513\",\r\n    \"PaymentInstrumentNumber\": \"0\",\r\n    \"BranchLocationReference\": \"100\",\r\n    \"TransactionIdentification\": \"1834\",\r\n    \"OperationCashier\": \"KASNET\",\r\n    \"NumberOfPage\": \"1\",\r\n    \"TotalNumberOfRecords\": \"1\",\r\n    \"PersonIdentification\": \"27415202605\",\r\n    \"ExpiryDate\": \"20260430\",\r\n    \"DueAmount\": 34.34,\r\n    \"LoanAmount\": 34.34,\r\n    \"Amount\": 34.34,\r\n    \"FullName\": \"u\",\r\n    \"NumberOfPayments\": \"1\",\r\n    \"IndustryClassification\": \"0\",\r\n    \"DestinationAccountNumber\": \"0\"\r\n  }\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "https://update-reverse-payment-collections-ibs.apps.onprem.ocphipdes.dombif.peru/v1.0/onprem/s/paymentexecution/procedurereverse/core/update",
+                      "protocol": "https",
+                      "host": [
+                        "update-reverse-payment-collections-ibs",
+                        "apps",
+                        "onprem",
+                        "ocphipdes",
+                        "dombif",
+                        "peru"
+                      ],
+                      "path": [
+                        "v1.0",
+                        "onprem",
+                        "s",
+                        "paymentexecution",
+                        "procedurereverse",
+                        "core",
+                        "update"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Healthcheck",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Bif-Mdw-Id",
+                        "value": "APP069"
+                      },
+                      {
+                        "key": "Bif-Correlation-Id",
+                        "value": "31a738b2-2e0f-49b9-9f1f-a6cfea8bbbbb"
+                      },
+                      {
+                        "key": "Bif-Consumer-Id",
+                        "value": "APP069"
+                      },
+                      {
+                        "key": "Time-Stamp",
+                        "value": "2008-03-26T09:23:40.983Z"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "https://update-reverse-payment-collections-ibs.apps.onprem.ocphipdes.dombif.peru/v1.0/onprem/s/paymentexecution/procedurereverse/core/update/health",
+                      "protocol": "https",
+                      "host": [
+                        "update-reverse-payment-collections-ibs",
+                        "apps",
+                        "onprem",
+                        "ocphipdes",
+                        "dombif",
+                        "peru"
+                      ],
+                      "path": [
+                        "v1.0",
+                        "onprem",
+                        "s",
+                        "paymentexecution",
+                        "procedurereverse",
+                        "core",
+                        "update",
+                        "health"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "success",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/health",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "health"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "QAS",
+              "item": [
+                {
+                  "name": "Healthcheck",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Bif-Mdw-Id",
+                        "value": "ejemplo"
+                      },
+                      {
+                        "key": "Bif-Correlation-Id",
+                        "value": "ejemplo"
+                      },
+                      {
+                        "key": "Bif-Consumer-Id",
+                        "value": "ejemplo"
+                      },
+                      {
+                        "key": "Time-Stamp",
+                        "value": "ejemplo"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "ejemplo"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "ejemplo"
+                      }
+                    ],
+                    "url": {
+                      "raw": "https://update-reverse-payment-collections-ibs.apps.onprem.ocphipuat.dombif.peru/v1.0/onprem/s/paymentexecution/procedurereverse/core/update/health",
+                      "protocol": "https",
+                      "host": [
+                        "update-reverse-payment-collections-ibs",
+                        "apps",
+                        "onprem",
+                        "ocphipuat",
+                        "dombif",
+                        "peru"
+                      ],
+                      "path": [
+                        "v1.0",
+                        "onprem",
+                        "s",
+                        "paymentexecution",
+                        "procedurereverse",
+                        "core",
+                        "update",
+                        "health"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "success",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/health",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "health"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                },
+                {
+                  "name": "Reversar Pago IBS",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Bif-Consumer-Id",
+                        "value": "APP035",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Bif-Mdw-Id",
+                        "value": "APP035",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Bif-Correlation-Id",
+                        "value": "31a738b2-2e0f-49b9-9f1f-a6cfea8bbbbb",
+                        "description": "Identificador unico de la transaccion desde donde se invoca el servicio.\n"
+                      },
+                      {
+                        "key": "Time-Stamp",
+                        "value": "2008-03-26T09:23:40.983Z",
+                        "description": "Fecha y hora de la peticion que envia el canal consumidor.\nFormato: yyyyMMdd'T'HHmmssSSS\n"
+                      },
+                      {
+                        "key": "User-Id",
+                        "value": "ejemplo",
+                        "description": "Identificador del usuario que realizo la transaccion.\n"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "ejemplo"
+                      },
+                      {
+                        "key": "Host-Id",
+                        "value": "ejemplo",
+                        "description": "Nombre del host al que se le envia la solicitud.\n"
+                      },
+                      {
+                        "key": "Branch-Code",
+                        "value": "ejemplo",
+                        "description": "Codigo de la sucursal de donde se realizo la transaccion.\n"
+                      },
+                      {
+                        "key": "Country-Code",
+                        "value": "ejemplo",
+                        "description": "Codigo del pais.\n"
+                      },
+                      {
+                        "key": "Device-Id",
+                        "value": "ejemplo",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"UpdatePaymentExecutionProcedureReverseCore\": {\r\n    \"ServiceType\": \"CSH001\",\r\n    \"ChannelIdentification\": \"KN\",\r\n    \"PaymentMethod\": \"0\",\r\n    \"OrganisationType\": \"0\",\r\n    \"PartyRoleReference\": \"Banbif\",\r\n    \"TransactionReference\": \"20300219191459\",\r\n    \"TransactionDate\": \"20260805191432\",\r\n    \"MemberIdentification\": \"555\",\r\n    \"OrganisationIdentification\": \"20131367857\",\r\n    \"CollectionServiceConsumerReference\": \"27415\",\r\n    \"Currency\": \"SOL\",\r\n    \"AgreementIdentification\": \"3224\",\r\n    \"InquiryReference\": \"567513\",\r\n    \"PaymentInstrumentNumber\": \"0\",\r\n    \"BranchLocationReference\": \"100\",\r\n    \"TransactionIdentification\": \"1834\",\r\n    \"OperationCashier\": \"KASNET\",\r\n    \"NumberOfPage\": \"1\",\r\n    \"TotalNumberOfRecords\": \"1\",\r\n    \"PersonIdentification\": \"27415202605\",\r\n    \"ExpiryDate\": \"20260430\",\r\n    \"DueAmount\": 34.34,\r\n    \"LoanAmount\": 34.34,\r\n    \"Amount\": 34.34,\r\n    \"FullName\": \"u\",\r\n    \"NumberOfPayments\": \"1\",\r\n    \"IndustryClassification\": \"0\",\r\n    \"DestinationAccountNumber\": \"0\"\r\n  }\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "https://update-reverse-payment-collections-ibs.apps.onprem.ocphipuat.dombif.peru/v1.0/onprem/s/paymentexecution/procedurereverse/core/update",
+                      "protocol": "https",
+                      "host": [
+                        "update-reverse-payment-collections-ibs",
+                        "apps",
+                        "onprem",
+                        "ocphipuat",
+                        "dombif",
+                        "peru"
+                      ],
+                      "path": [
+                        "v1.0",
+                        "onprem",
+                        "s",
+                        "paymentexecution",
+                        "procedurereverse",
+                        "core",
+                        "update"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "PRD",
+              "item": [
+                {
+                  "name": "Healthcheck",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Bif-Mdw-Id",
+                        "value": ""
+                      },
+                      {
+                        "key": "Bif-Correlation-Id",
+                        "value": ""
+                      },
+                      {
+                        "key": "Bif-Consumer-Id",
+                        "value": ""
+                      },
+                      {
+                        "key": "Time-Stamp",
+                        "value": ""
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": ""
+                      },
+                      {
+                        "key": "Accept",
+                        "value": ""
+                      }
+                    ],
+                    "url": {
+                      "raw": "https://update-reverse-payment-collections-ibs.apps.onprem.ocphip.dombif.peru/v1.0/onprem/s/paymentexecution/procedurereverse/core/update/health",
+                      "protocol": "https",
+                      "host": [
+                        "update-reverse-payment-collections-ibs",
+                        "apps",
+                        "onprem",
+                        "ocphip",
+                        "dombif",
+                        "peru"
+                      ],
+                      "path": [
+                        "v1.0",
+                        "onprem",
+                        "s",
+                        "paymentexecution",
+                        "procedurereverse",
+                        "core",
+                        "update",
+                        "health"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "success",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/health",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "health"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                },
+                {
+                  "name": "Reversar Pago IBS",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": ""
+                      },
+                      {
+                        "key": "Bif-Consumer-Id",
+                        "value": "",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Bif-Mdw-Id",
+                        "value": "",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Bif-Correlation-Id",
+                        "value": "",
+                        "description": "Identificador unico de la transaccion desde donde se invoca el servicio.\n"
+                      },
+                      {
+                        "key": "Time-Stamp",
+                        "value": "",
+                        "description": "Fecha y hora de la peticion que envia el canal consumidor.\nFormato: yyyyMMdd'T'HHmmssSSS\n"
+                      },
+                      {
+                        "key": "User-Id",
+                        "value": "",
+                        "description": "Identificador del usuario que realizo la transaccion.\n"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": ""
+                      },
+                      {
+                        "key": "Host-Id",
+                        "value": "",
+                        "description": "Nombre del host al que se le envia la solicitud.\n"
+                      },
+                      {
+                        "key": "Branch-Code",
+                        "value": "",
+                        "description": "Codigo de la sucursal de donde se realizo la transaccion.\n"
+                      },
+                      {
+                        "key": "Country-Code",
+                        "value": "",
+                        "description": "Codigo del pais.\n"
+                      },
+                      {
+                        "key": "Device-Id",
+                        "value": "",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"UpdatePaymentExecutionProcedureReverseCore\": {\r\n    \"ServiceType\": null,\r\n    \"ChannelIdentification\": null,\r\n    \"PaymentMethod\": null,\r\n    \"OrganisationType\": null,\r\n    \"PartyRoleReference\": null,\r\n    \"TransactionReference\": null,\r\n    \"TransactionDate\": null,\r\n    \"MemberIdentification\": null,\r\n    \"OrganisationIdentification\": null,\r\n    \"CollectionServiceConsumerReference\": null,\r\n    \"Currency\": null,\r\n    \"AgreementIdentification\": null,\r\n    \"InquiryReference\": null,\r\n    \"PaymentInstrumentNumber\": null,\r\n    \"BranchLocationReference\": null,\r\n    \"TransactionIdentification\": null,\r\n    \"OperationCashier\": null,\r\n    \"NumberOfPage\": null,\r\n    \"TotalNumberOfRecords\": null,\r\n    \"PersonIdentification\": null,\r\n    \"ExpiryDate\": null,\r\n    \"DueAmount\": null,\r\n    \"LoanAmount\": null,\r\n    \"Amount\": null,\r\n    \"FullName\": null,\r\n    \"NumberOfPayments\": null,\r\n    \"IndustryClassification\": null,\r\n    \"DestinationAccountNumber\": null\r\n  }\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "https://update-reverse-payment-collections-ibs.apps.onprem.ocphip.dombif.peru/v1.0/onprem/s/paymentexecution/procedurereverse/core/update",
+                      "protocol": "https",
+                      "host": [
+                        "update-reverse-payment-collections-ibs",
+                        "apps",
+                        "onprem",
+                        "ocphip",
+                        "dombif",
+                        "peru"
+                      ],
+                      "path": [
+                        "v1.0",
+                        "onprem",
+                        "s",
+                        "paymentexecution",
+                        "procedurereverse",
+                        "core",
+                        "update"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

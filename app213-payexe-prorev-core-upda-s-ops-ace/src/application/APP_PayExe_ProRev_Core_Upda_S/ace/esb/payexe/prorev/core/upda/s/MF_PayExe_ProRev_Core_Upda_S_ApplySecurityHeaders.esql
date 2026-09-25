@@ -1,0 +1,55 @@
+BROKER SCHEMA ace.esb.payexe.prorev.core.upda.s
+PATH ace.esb.core.common;
+
+
+CREATE COMPUTE MODULE MF_PayExe_ProRev_Core_Upda_S_ApplySecurityHeaders
+
+    CREATE FUNCTION Main() RETURNS BOOLEAN
+    BEGIN
+        SET OutputRoot = InputRoot;
+
+        IF NOT EXISTS(OutputRoot.HTTPResponseHeader[]) THEN
+            CREATE LASTCHILD OF OutputRoot DOMAIN getHTTP_RES_H();
+        END IF;
+
+        DECLARE refHttpHeaders REFERENCE TO OutputRoot.HTTPResponseHeader;
+
+        DECLARE refReferrerPolicy REFERENCE TO refHttpHeaders."Referrer-Policy";
+        DECLARE refContentSecurityPolicy REFERENCE TO refHttpHeaders."Content-Security-Policy";
+        DECLARE refPermissionsPolicy REFERENCE TO refHttpHeaders."Permissions-Policy";
+        DECLARE refXContentTypeOptions REFERENCE TO refHttpHeaders."X-Content-Type-Options";
+
+        IF NOT LASTMOVE(refReferrerPolicy)
+           OR IsEmptyOrInvalidHeader(CAST(refReferrerPolicy AS CHARACTER)) THEN
+            SET refHttpHeaders."Referrer-Policy" = 'no-referrer';
+        END IF;
+
+        IF NOT LASTMOVE(refContentSecurityPolicy)
+           OR IsEmptyOrInvalidHeader(CAST(refContentSecurityPolicy AS CHARACTER)) THEN
+            SET refHttpHeaders."Content-Security-Policy" =
+                'default-src ''self''; object-src ''none''; frame-ancestors ''none'';';
+        END IF;
+
+        IF NOT LASTMOVE(refPermissionsPolicy)
+           OR IsEmptyOrInvalidHeader(CAST(refPermissionsPolicy AS CHARACTER)) THEN
+            SET refHttpHeaders."Permissions-Policy" =
+                'geolocation=(), microphone=(), camera=()';
+        END IF;
+
+        IF NOT LASTMOVE(refXContentTypeOptions)
+           OR IsEmptyOrInvalidHeader(CAST(refXContentTypeOptions AS CHARACTER)) THEN
+            SET refHttpHeaders."X-Content-Type-Options" = 'nosniff';
+        END IF;
+
+        RETURN TRUE;
+    END;
+
+
+    CREATE FUNCTION IsEmptyOrInvalidHeader(pValue CHARACTER) RETURNS BOOLEAN
+    BEGIN
+        DECLARE v CHARACTER UPPER(TRIM(COALESCE(pValue, '')));
+
+        RETURN v IN ('', 'NONE', 'NULL', 'UNDEFINED', 'N/A', '-');
+    END;
+
+END MODULE;

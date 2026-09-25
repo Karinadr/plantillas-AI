@@ -1,0 +1,230 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "UpdatePaymentExecutionProcedureReverseCore",
+  "type": "object",
+  "properties": {
+    "UpdatePaymentExecutionProcedureReverseCore": {
+      "type": "object",
+      "properties": {
+        "ServiceType": {
+          "type": "string",
+          "minLength": 6,
+          "maxLength": 6,
+          "pattern": "^[a-zA-Z0-9]+$",
+          "description": "Codigo unico de catalogo para invocar al servicio"
+        },
+        "ChannelIdentification": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2,
+          "pattern": "^[a-zA-Z0-9]+$",
+          "description": "CODIGO CANAL"
+        },
+        "PaymentMethod": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1,
+          "pattern": "^[a-zA-Z0-9]+$",
+          "description": "FORMA PAGO"
+        },
+        "OrganisationType": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2,
+          "pattern": "^[a-zA-Z0-9]+$",
+          "description": "TIPO RECAUDACION"
+        },
+        "PartyRoleReference": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20,
+          "pattern": "^[a-zA-Z0-9]+$",
+          "description": "RECAUDADOR"
+        },
+        "TransactionReference": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20,
+          "pattern": "^[0-9]+$",
+          "description": "IDENTIFICADOR TRANSACCION"
+        },
+        "TransactionDate": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20,
+          "pattern": "^[0-9]+$",         
+          "description": "FECHA HORA TRANSACCION"
+        },
+        "MemberIdentification": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20,
+          "pattern": "^[a-zA-Z0-9]+$",
+          "description": "USUARIO APROBADOR"
+        },
+        "OrganisationIdentification": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 15,
+          "pattern": "^[a-zA-Z0-9]+$",
+          "description": "NUMERO DOCUMENTO RECAUDADOR"
+        },
+        "CollectionServiceConsumerReference": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20,
+          "pattern": "^[a-zA-Z0-9]+$",
+          "description": "SUMINISTRO"
+        },
+        "Currency": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 3,
+          "pattern": "^[a-zA-Z]+$",
+          "description": "MONEDA CONVENIO"
+        },
+        "AgreementIdentification": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4,
+          "pattern": "^[a-zA-Z0-9]+$",
+          "description": "CODIGO CONVENIO"
+        },
+        "InquiryReference": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20,
+          "pattern": "^[a-zA-Z0-9]+$",
+          "description": "ID CONSULTA"
+        },
+        "PaymentInstrumentNumber": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20,
+          "pattern": "^[a-zA-Z0-9]+$",
+          "description": "NUMERO DE PAGO"
+        },
+        "BranchLocationReference": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4,
+          "pattern": "^[a-zA-Z0-9]+$",
+          "description": "OFICINA"
+        },
+        "TransactionIdentification": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4,
+          "pattern": "^[a-zA-Z0-9]+$",
+          "description": "CODIGO DE TRANSACCIÓN"
+        },
+        "OperationCashier": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 10,
+          "pattern": "^[a-zA-Z0-9]+$",
+          "description": "CAJERO OPERACION"
+        },
+        "NumberOfPage": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 6,
+          "pattern": "^[0-9]+$",
+          "description": "NRO PAGINA CONSULTAR"
+        },
+        "TotalNumberOfRecords": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 6,
+          "pattern": "^[0-9]+$",
+          "description": "CANT REGISTROS X PAGINAS"
+        },
+        "PersonIdentification": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 30,
+          "pattern": "^[a-zA-Z0-9]+$",
+          "description": "NRO RECIBO"
+        },
+        "ExpiryDate": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8,
+          "pattern": "^[0-9]+$",
+          "description": "FECHA VENCIMIENTO"
+        },
+        "DueAmount": {
+          "type": "number",
+          "description": "MONTO DEUDA"
+        },
+        "LoanAmount": {
+          "type": "number",
+          "description": "MONTO REDONDEO"
+        },
+        "Amount": {
+          "type": "number",
+          "description": "MONTO TOTAL DE LA DEUDA"
+        },
+        "FullName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60,
+          "pattern": "^[a-zA-Z ]+$",
+          "description": "NOMBRE COMPLETO CLIENTE"
+        },
+        "NumberOfPayments": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 5,
+          "pattern": "^[a-zA-Z0-9]+$",
+          "description": "CANTIDAD PAGOS"
+        },
+        "IndustryClassification": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1,
+          "pattern": "^[a-zA-Z0-9]+$",
+          "description": "AGRUPACION PAGOS"
+        },
+        "DestinationAccountNumber": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20,
+          "pattern": "^[a-zA-Z0-9]+$",
+          "description": "MEDIO PAGO NRO CTA-TDC"
+        }                                                                                                                                                     
+      },
+      "required": [
+        "ServiceType",
+        "ChannelIdentification",
+        "PaymentMethod",
+        "OrganisationType",
+        "PartyRoleReference",
+        "TransactionReference",
+        "TransactionDate",
+        "MemberIdentification",
+        "OrganisationIdentification",
+        "CollectionServiceConsumerReference",
+        "Currency",
+        "AgreementIdentification",
+        "InquiryReference",
+        "PaymentInstrumentNumber",
+        "BranchLocationReference",
+        "TransactionIdentification",
+        "OperationCashier",
+        "NumberOfPage",
+        "TotalNumberOfRecords",
+        "PersonIdentification",
+        "ExpiryDate",
+        "DueAmount",
+        "LoanAmount",
+        "Amount",
+        "NumberOfPayments",
+        "IndustryClassification"          
+      ]
+    }
+  },
+  "required": [
+    "UpdatePaymentExecutionProcedureReverseCore"
+  ]
+}

@@ -1,0 +1,363 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Servicio BUS que consumira el RPG RE0058RI para realizar reverso de pagos de recaudaciones en IBS",
+    "version": "1.0.0",
+    "description": "Servicio BUS que consumira el RPG RE0058RI para realizar reverso de pagos de recaudaciones en IBS"
+  },
+  "servers": [
+    {
+      "url": "/v1.0/s/paymentexecution/procedurereverse/core/update"
+    }
+  ],
+  "paths": {
+    "/": {
+      "post": {
+        "summary": "Servicio BUS que consumira el RPG RE0058RI para realizar reverso de pagos de recaudaciones en IBS",
+        "description": "Servicio BUS que consumira el RPG RE0058RI para realizar reverso de pagos de recaudaciones en IBS",
+        "operationId": "UpdatePaymentExecutionProcedureReverseCore",
+        "parameters": [
+           {
+            "$ref": "#/components/parameters/Content-Type"
+          },
+          {
+            "$ref": "#/components/parameters/Time-Stamp"
+          },
+          {
+            "$ref": "#/components/parameters/Bif-Correlation-Id"
+          },
+          {
+            "$ref": "#/components/parameters/Bif-Consumer-Id"
+          },
+          {
+            "$ref": "#/components/parameters/Bif-Mdw-Id"
+          },
+          {
+            "$ref": "#/components/parameters/Host-Id"
+          },
+          {
+            "$ref": "#/components/parameters/Branch-Code"
+          },
+          {
+            "$ref": "#/components/parameters/Country-Code"
+          },
+          {
+            "$ref": "#/components/parameters/User-Id"
+          },
+          {
+            "$ref": "#/components/parameters/Device-Id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePaymentExecutionProcedureReverseCoreRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Respuesta exitosa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdatePaymentExecutionProcedureReverseCoreResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "summary": "Valida que el programa RPG de IBS este operativo",
+      "get": {
+        "operationId": "HealthCheck",
+        "responses": {
+          "200": {
+            "description": "success"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "Content-Type": {
+        "name": "Content-Type",
+        "in": "header",
+        "required": true,
+        "description": "Tipo de contenido",
+        "schema": {
+          "type": "string",
+          "example": "application/json, application/xml"
+        }
+      },
+      "Time-Stamp": {
+        "name": "Time-Stamp",
+        "in": "header",
+        "required": true,
+        "description": "Fecha y hora de la peticion que envia el Consumidor",
+        "schema": {
+          "type": "string",
+          "example": "2025-04-01T01:30:05.660Z"
+        }
+      },
+      "Bif-Correlation-Id": {
+        "name": "Bif-Correlation-Id",
+        "in": "header",
+        "required": true,
+        "description": "Identificador unico de la transaccion generado por el Consumidor, basado en el UUID. Se uilizar en todas las capas durante la ejecucion de la transaccion.",
+        "schema": {
+          "type": "string",
+          "example": "e3421597-0757-4218-a314-c7e3ce6680e5"
+        }
+      },
+      "Bif-Consumer-Id": {
+        "name": "Bif-Consumer-Id",
+        "in": "header",
+        "required": true,
+        "description": "Identificador del Consumidor, obtenido del APM.",
+        "schema": {
+          "type": "string",
+          "example": "APP128"
+        }
+      },
+      "Bif-Mdw-Id": {
+        "name": "Bif-Mdw-Id",
+        "in": "header",
+        "required": true,
+        "description": "Identificador del consumidor por trama o capa.",
+        "schema": {
+          "type": "string",
+          "example": "APP128"
+        }
+      },
+      "Host-Id": {
+        "name": "Host-Id",
+        "in": "header",
+        "required": true,
+        "description": "Nombre del host al que se le envia la solicitud. IP del servidor que realizo la transaccion.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Branch-Code": {
+        "name": "Branch-Code",
+        "in": "header",
+        "required": false,
+        "description": "Codigo de la sucursal de donde se realizo la transaccion.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Country-Code": {
+        "name": "Country-Code",
+        "in": "header",
+        "required": false,
+        "description": "Codigo del pais.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "User-Id": {
+        "name": "User-Id",
+        "in": "header",
+        "required": false,
+        "description": "Identificador del usuario que realizo la transaccion. Se considera el codigo IBS.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Device-Id": {
+        "name": "Device-Id",
+        "in": "header",
+        "required": false,
+        "description": "Identificador del dispositivo de donde se realizo la transaccion. Se considera para auto asistidos ATM, APP Movil, APP BPI, etc",
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "schemas": {
+      "UpdatePaymentExecutionProcedureReverseCoreRequest": {
+        "type": "object",
+        "properties": {
+          "UpdatePaymentExecutionProcedureReverseCore": {
+            "type": "object",
+            "properties": {
+              "ServiceType": {
+                "type": "string",
+                "description": "Codigo unico de catalogo para invocar al servicio"
+              },
+              "ChannelIdentification": {
+                "type": "string",
+                "description": "Subproducto"
+              },
+              "PaymentMethod": {
+                "type": "string",
+                "description": "Monto Apertura"
+              },
+              "OrganisationType": {
+                "type": "string",
+                "description": "Tipo Renovación"
+              },
+              "PartyRoleReference": {
+                "type": "string",
+                "description": "Periodo Pago Intereses"
+              },
+              "TransactionReference": {
+                "type": "string",
+                "description": "Periodo Deposito  Plazo"
+              },
+              "TransactionDate": {
+                "type": "string",
+                "description": "Cuenta Origen"
+              },
+              "MemberIdentification": {
+                "type": "string",
+                "description": "Cuenta Pago Intereses"
+              },
+              "OrganisationIdentification": {
+                "type": "string",
+                "description": "Cod. Cliente"
+              },
+              "CollectionServiceConsumerReference": {
+                "type": "string",
+                "description": "Vendedor"
+              },
+              "Currency": {
+                "type": "string",
+                "description": "Usuario"
+              },
+              "AgreementIdentification": {
+                "type": "string",
+                "description": "Codigo unico de catalogo para invocar al servicio"
+              },
+              "InquiryReference": {
+                "type": "string",
+                "description": "Subproducto"
+              },
+              "PaymentInstrumentNumber": {
+                "type": "string",
+                "description": "Monto Apertura"
+              },
+              "BranchLocationReference": {
+                "type": "string",
+                "description": "Tipo Renovación"
+              },
+              "TransactionIdentification": {
+                "type": "string",
+                "description": "Periodo Pago Intereses"
+              },
+              "OperationCashier": {
+                "type": "string",
+                "description": "Periodo Deposito  Plazo"
+              },
+              "NumberOfPage": {
+                "type": "string",
+                "description": "Cuenta Origen"
+              },
+              "TotalNumberOfRecords": {
+                "type": "string",
+                "description": "Cuenta Pago Intereses"
+              },
+              "PersonIdentification": {
+                "type": "string",
+                "description": "Cod. Cliente"
+              },
+              "ExpiryDate": {
+                "type": "string",
+                "description": "Vendedor"
+              },
+              "DueAmount": {
+                "type": "number",
+                "description": "Usuario"
+              },
+              "LoanAmount": {
+                "type": "number",
+                "description": "Periodo Deposito  Plazo"
+              },
+              "Amount": {
+                "type": "number",
+                "description": "Cuenta Origen"
+              },
+              "FullName": {
+                "type": "string",
+                "description": "Cuenta Pago Intereses"
+              },
+              "NumberOfPayments": {
+                "type": "string",
+                "description": "Cod. Cliente"
+              },
+              "IndustryClassification": {
+                "type": "string",
+                "description": "Vendedor"
+              },
+              "DestinationAccountNumber": {
+                "type": "string",
+                "description": "Usuario"
+              }                              
+            }
+          }
+        }
+      },
+      "UpdatePaymentExecutionProcedureReverseCoreResponse": {
+        "type": "object",
+        "properties": {
+          "UpdatePaymentExecutionProcedureReverseCoreResponse": {
+            "type": "object",
+            "properties": {
+              "TermDepositNumber": {
+                "type": "string",
+                "description": "Nro. de Depósito Plazo"
+              },
+              "ExpiryDate": {
+                "type": "string",
+                "description": "Fecha Vencimiento  (aaaammdd)"
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "UpdatePaymentExecutionProcedureReverseCoreResponse": {
+            "type": "object",
+            "properties": {
+              "StatusCode": {
+                "type": "integer",
+                "description": "Codigo de error.",
+                "example": -1
+              },
+              "Message": {
+                "type": "string",
+                "description": "Mensaje del error.",
+                "example": "El campo X-Consumer-Id es requerido."
+              },
+              "Status": {
+                "type": "string",
+                "description": "Codigo de estado HTTP del error.",
+                "example": "ERROR"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
