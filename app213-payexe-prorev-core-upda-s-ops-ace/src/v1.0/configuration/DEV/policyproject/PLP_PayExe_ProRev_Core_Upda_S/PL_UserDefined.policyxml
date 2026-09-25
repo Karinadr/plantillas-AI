@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<policies>
-  <policy policyType="UserDefined" policyName="PL_UserDefined" policyTemplate="UserDefined">
-    <Properties>{&quot;service&quot;:{&quot;cod_servicio&quot;:&quot;CSH001&quot;,&quot;CT-001&quot;:&quot;R&quot;,&quot;CT-002&quot;:&quot;UserApi&quot;,&quot;CT-003&quot;:&quot;CL&quot;,&quot;CT-004&quot;:&quot;08&quot;,&quot;CT-027&quot;:&quot;E&quot;,&quot;destinations&quot;:[{&quot;destination&quot;:{&quot;name&quot;:&quot;health&quot;,&quot;URLDEST&quot;:&quot;https://svc-078-standard-centralized-connector-https-mtls.cp4i-ace.svc.cluster.local:7843/v1.0/u/centralizedconnector/health&quot;,&quot;TIMEOUT&quot;:&quot;16&quot;,&quot;PROTOCOLO&quot;:&quot;SSL&quot;,&quot;METODO&quot;:&quot;GET&quot;}},{&quot;destination&quot;:{&quot;name&quot;:&quot;main&quot;,&quot;URLDEST&quot;:&quot;https://svc-078-standard-centralized-connector-https-mtls.cp4i-ace.svc.cluster.local:7843/v1.0/u/centralizedconnector&quot;,&quot;TIMEOUT&quot;:&quot;16&quot;,&quot;PROTOCOLO&quot;:&quot;SSL&quot;,&quot;METODO&quot;:&quot;POST&quot;},&quot;srv_info&quot;:{&quot;TECHNICAL_SRV_NAME&quot;:&quot;CentralizedConnector&quot;,&quot;TIMEOUT&quot;:&quot;16&quot;,&quot;PROGRAM&quot;:&quot;IN2100RI&quot;,&quot;PCML&quot;:&quot;RE0058RI&quot;}}]}}</Properties>
-  </policy>
-</policies>
