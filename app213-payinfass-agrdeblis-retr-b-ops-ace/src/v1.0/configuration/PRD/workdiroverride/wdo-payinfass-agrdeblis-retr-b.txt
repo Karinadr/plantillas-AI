@@ -1,0 +1,65 @@
+#APLICACION
+#------------------------------------------------
+#Sobreescritura del Flujo principal
+MF_PayInfAss_AgrDebLis_Retr_B#additionalInstances = 10
+MF_PayInfAss_AgrDebLis_Retr_B#UDP_URL_APIREST = https://localhost:7843/v1.0
+MF_PayInfAss_AgrDebLis_Retr_B#CTRLAUTHAPP.securityProfileName = {PLP_PayInfAss_AgrDebLis_Retr_B}:PL_ActiveDirectory
+#Codigo de Servicio
+MF_PayInfAss_AgrDebLis_Retr_B#CTRLAUTHAPP.UDP_CODSERVICIO	= PayInfAss_AgrDebLis_Retr_B
+MF_PayInfAss_AgrDebLis_Retr_B#CTRLERROR.UDP_CODSERVICIO		= PayInfAss_AgrDebLis_Retr_B
+#Operacion del Servicio
+MF_PayInfAss_AgrDebLis_Retr_B#CTRLERROR.UDP_OPERACION_GET	= RetrievePaymentInformationAssociationAgreementDebtList
+#Opciones generales
+MF_PayInfAss_AgrDebLis_Retr_B#CTRLAUTHAPP.UDP_VERSION		= 1.0
+MF_PayInfAss_AgrDebLis_Retr_B#CTRLAUTHAPP.UDP_NOMSERVICIO	= Consultar Deuda Recaudacion Orquestador
+MF_PayInfAss_AgrDebLis_Retr_B#CTRLAUTHAPP.UDP_USE_CCAS400	= N
+#Sobreescritura del path o URI del backend
+MF_PayInfAss_AgrDebLis_Retr_B#HTTP Request.httpVersion = 1.1
+MF_PayInfAss_AgrDebLis_Retr_B#HTTP Request.protocol = TLSv1.3
+MF_PayInfAss_AgrDebLis_Retr_B#HTTP Request.timeoutForServer = 27
+MF_PayInfAss_AgrDebLis_Retr_B#HTTP Request.hostnameChecking = false
+MF_PayInfAss_AgrDebLis_Retr_B#HTTP Request.acceptCompressedResponses = true
+#Sobreescritura del path o URI de entrada por MTLS
+MF_PayInfAss_AgrDebLis_Retr_B#mTLS.URLSpecifier = /v1.0/mtls/b/paymentinformationassociation/agreementdebtlist/retrieve*
+MF_PayInfAss_AgrDebLis_Retr_B#mTLS.useHTTPS = yes
+MF_PayInfAss_AgrDebLis_Retr_B#mTLS.faultFormat = JSON
+MF_PayInfAss_AgrDebLis_Retr_B#mTLS.timeoutForClient = 28
+#Sobreescritura del path o URI de entrada por OnPrem
+MF_PayInfAss_AgrDebLis_Retr_B#Onprem.URLSpecifier = /v1.0/onprem/b/paymentinformationassociation/agreementdebtlist/retrieve*
+MF_PayInfAss_AgrDebLis_Retr_B#Onprem.faultFormat = JSON
+MF_PayInfAss_AgrDebLis_Retr_B#Onprem.useHTTPS = no
+MF_PayInfAss_AgrDebLis_Retr_B#Onprem.timeoutForClient = 28
+
+
+#API REST
+#------------------------------------------------
+#Sobreescritura de instancias del Flujo principal
+gen.PayInfAss_AgrDebLis_Retr_B#additionalInstances = 10
+gen.PayInfAss_AgrDebLis_Retr_B#HTTP Input.useHTTPS = yes
+gen.PayInfAss_AgrDebLis_Retr_B#HTTP Input.timeoutForClient = 26
+gen.PayInfAss_AgrDebLis_Retr_B#HTTP Input.faultFormat = JSON
+#Codigo de Servicio
+PayInfAss_AgrDebLis_Retr_BInputCatchHandler#CTRLERROR.UDP_CODSERVICIO     = PayInfAss_AgrDebLis_Retr_B
+PayInfAss_AgrDebLis_Retr_BInputFailureHandler#CTRLERROR.UDP_CODSERVICIO   = PayInfAss_AgrDebLis_Retr_B
+PayInfAss_AgrDebLis_Retr_BInputTimeoutHandler#CTRLERROR.UDP_CODSERVICIO   = PayInfAss_AgrDebLis_Retr_B
+gen.PayInfAss_AgrDebLis_Retr_B#CTRLERROR.UDP_CODSERVICIO                  = PayInfAss_AgrDebLis_Retr_B
+#Operacion del Servicio
+HealthCheck#HEALTH_CHECK_PayInfAss_AgrDebLis_Retr_B.UDP_OPERACION_GET			= RetrievePaymentInformationAssociationAgreementDebtList
+PayInfAss_AgrDebLis_Retr_BInputCatchHandler#CTRLERROR.UDP_OPERACION_GET		= RetrievePaymentInformationAssociationAgreementDebtList
+PayInfAss_AgrDebLis_Retr_BInputFailureHandler#CTRLERROR.UDP_OPERACION_GET	= RetrievePaymentInformationAssociationAgreementDebtList
+PayInfAss_AgrDebLis_Retr_BInputTimeoutHandler#CTRLERROR.UDP_OPERACION_GET	= RetrievePaymentInformationAssociationAgreementDebtList
+gen.PayInfAss_AgrDebLis_Retr_B#CTRLERROR.UDP_OPERACION_GET					= RetrievePaymentInformationAssociationAgreementDebtList
+gen.PayInfAss_AgrDebLis_Retr_B#CTRLINICIAL.UDP_OPERACION_GET				= RetrievePaymentInformationAssociationAgreementDebtList
+#Nombre del Servicio
+PayInfAss_AgrDebLis_Retr_BInputCatchHandler#CTRLERROR.UDP_NOMSERVICIO		= Consultar Deuda Recaudacion Orquestador
+PayInfAss_AgrDebLis_Retr_BInputFailureHandler#CTRLERROR.UDP_NOMSERVICIO		= Consultar Deuda Recaudacion Orquestador
+PayInfAss_AgrDebLis_Retr_BInputTimeoutHandler#CTRLERROR.UDP_NOMSERVICIO		= Consultar Deuda Recaudacion Orquestador
+gen.PayInfAss_AgrDebLis_Retr_B#CTRLERROR.UDP_NOMSERVICIO					= Consultar Deuda Recaudacion Orquestador
+gen.PayInfAss_AgrDebLis_Retr_B#CTRLINICIAL.UDP_NOMSERVICIO					= Consultar Deuda Recaudacion Orquestador
+#Opciones generales
+gen.PayInfAss_AgrDebLis_Retr_B#CTRLINICIAL.UDP_USE_CCAS400	= N
+gen.PayInfAss_AgrDebLis_Retr_B#CTRLINICIAL.UDP_VERSION		= 1.0
+Validate#Validate.validateMaster	= contentAndValue
+#Monitoring
+gen.PayInfAss_AgrDebLis_Retr_B#monitoringProfile = {PLP_PayInfAss_AgrDebLis_Retr_B}:Monitoring
+MF_PayInfAss_AgrDebLis_Retr_B#monitoringProfile = {PLP_PayInfAss_AgrDebLis_Retr_B}:Monitoring
