@@ -1,0 +1,8 @@
+apiVersion: appconnect.ibm.com/v1beta1
+kind: Configuration
+metadata:
+  name: ${RESOURCE_NAME}
+spec:
+  type: ${TYPE_NAME}
+  data: ${BASE64_CONTENT}
+

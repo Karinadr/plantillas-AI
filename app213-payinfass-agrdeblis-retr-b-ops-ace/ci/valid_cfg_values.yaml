@@ -1,0 +1,64 @@
+# ========================= Bus Inputs ==========================
+
+# ============ Mandatory ================
+service: "PayInfAss_AgrDebLis_Retr_B"
+version: "v1.0"
+
+# Pl_ActiveDirectory => ldap group
+ldap:
+  DEV: "PAYINFASS_AGRDEBLIS_RETR_GD"
+  QAS: "PAYINFASS_AGRDEBLIS_RETR_GQ"
+  PRD: "PAYINFASS_AGRDEBLIS_RETR_GP"
+
+# workdiroverride
+wdo:
+  default:
+    app:
+      additionalInstances: "10"
+      "mTLS.useHTTPS": "yes"
+      "Onprem.useHTTPS": "no"
+      "HTTP Request.timeoutForServer": "27"
+      "mTLS.timeoutForClient": "28"
+      "Onprem.timeoutForClient": "28"
+      "CTRLAUTH.UDP_USE_CCAS400": "N"
+      "mTLS.URLSpecifier" : "/v1.0/mtls/b/paymentinformationassociation/agreementdebtlist/retrieve*"
+      "Onprem.URLSpecifier" : "/v1.0/onprem/b/paymentinformationassociation/agreementdebtlist/retrieve*"
+      UDP_URL_APIREST: "https://localhost:7843/v1.0"
+      UDP_OPERACION_GET: "RetrievePaymentInformationAssociationAgreementDebtList"
+    rest:
+      additionalInstances: "10"
+      "HTTP Input.useHTTPS": "yes"
+      "HTTP Input.timeoutForClient": "26"
+      "CTRLINICIAL.UDP_USE_CCAS400": "N"
+      UDP_OPERACION_GET: "RetrievePaymentInformationAssociationAgreementDebtList"
+
+# ================ Optionals ======================= 
+# Pl_UserDefined => destination + decorator dest info 
+destinations:
+  - destination:
+      name: "CONSULTAR-TIPO-RECAUDACION-S"
+      URLDEST: "https://retrieve-check-debts-collections.apps.ocphipdes.dombif.peru/v1.0/mtls/s/partyreferencedatadirectory/entrychannellist/retrieve"
+      TIMEOUT: "25"
+      PROTOCOLO: "TLSv1.3"
+      METODO: "POST"
+    srv_info:
+      TECHNICAL_SRV_NAME: "BUS_ParRefDatDir_EntLis_Retr_S"
+      TIMEOUT: "25"
+  - destination:
+      name: "CONSULTAR-DEUDA-IBS-S"
+      URLDEST: "https://retrieve-check-debts-collections-ibs.apps.ocphipdes.dombif.peru/v1.0/mtls/s/paymentorderinitiation/orderinitiation/retrieve"
+      TIMEOUT: "25"
+      PROTOCOLO: "TLSv1.3"
+      METODO: "POST"
+    srv_info:
+      TECHNICAL_SRV_NAME: "BUS_PayOrdIni_OrdIni_Retr_S"
+      TIMEOUT: "25"
+  - destination:
+      name: "CONSULTAR-DEUDA-HUB-S"
+      URLDEST: "https://retrieve-check-debts-collections-hub.apps.ocphipdes.dombif.peru/v1.0/mtls/s/paymentorderinitiation/orderinitiationhub/retrieve"
+      TIMEOUT: "25"
+      PROTOCOLO: "TLSv1.3"
+      METODO: "POST"
+    srv_info:
+      TECHNICAL_SRV_NAME: "BUS_PayOrdIni_OrdIni_Retr_S"
+      TIMEOUT: "25"

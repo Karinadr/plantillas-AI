@@ -1,0 +1,504 @@
+BROKER SCHEMA ace.esb.payinfass.agrdeblis.retr.b
+PATH ace.esb.core.common;
+
+
+CREATE PROCEDURE armaMensajeTo_BackendTipoRec(IN refEnv REFERENCE, IN refIn REFERENCE, IN refOut REFERENCE, IN refOutLocal REFERENCE)
+BEGIN
+	SET refEnv.Srv.Destino = C_DESTINO_TIPO_REC;
+	SET refEnv.Variables.Backend.TargetId = getCODE_APP_BUS();
+	SET refEnv.Variables.Backend.OriginId = getCODE_APP_BUS();
+
+	CALL armaCuerpo_BackendTipoRec(refEnv, refIn, refOut, refOutLocal);
+END;
+
+
+CREATE PROCEDURE armaCuerpo_BackendTipoRec(IN refEnv REFERENCE, IN refIn REFERENCE, IN refOut REFERENCE, IN refOutLocal REFERENCE)
+BEGIN
+	DECLARE refService REFERENCE TO refEnv.Policy.service;
+    DECLARE refDestinoConfig REFERENCE TO refService.destinations.Item[refEnv.Srv.Destino].destination;
+
+    CALL prepararEntornoInvocacionREST_Destino(refEnv, refOut, refOutLocal, refDestinoConfig);
+	CALL prepararHeaderSystem(refOut, refEnv);
+	CALL cuerpo_BackendTipoRec(refEnv, refIn, refOut, refService);
+	CALL setConfAuditBackend(refEnv, refOut, refOutLocal, getCONST_REST());
+END;
+
+
+CREATE PROCEDURE cuerpo_BackendTipoRec(IN refEnv REFERENCE, IN refIn REFERENCE, IN refOut REFERENCE, IN refService REFERENCE)
+BEGIN
+	CREATE LASTCHILD OF refOut DOMAIN getDOMINIO_JSON();
+	CREATE FIELD refOut.JSON.Data.{C_OPER_RQ_TIPO_REC};
+	DECLARE refJsonOut REFERENCE TO refOut.JSON.Data.{C_OPER_RQ_TIPO_REC};
+	DECLARE refBodyIn REFERENCE TO refIn.JSON.Data.{C_OPERATION_RQ};
+
+	DECLARE refServerInfo REFERENCE TO refService.destinations.Item[refEnv.Srv.Destino].srv_info;
+
+	SET refJsonOut.ServiceType 				= refServerInfo.CODE_SRV;
+	SET refJsonOut.PersonIdentificationType = refServerInfo.PERSON_IDENTIFICATION_TYPE;
+	SET refJsonOut.PersonIdentification 	= refBodyIn.CustomerReference;
+	SET refJsonOut.ChannelIdentification 	= refBodyIn.ChannelIdentification;
+END;
+
+
+CREATE PROCEDURE armaMensajeTo_BackendIBS(IN refEnv REFERENCE, IN refIn REFERENCE, IN refOut REFERENCE, IN refOutLocal REFERENCE)
+BEGIN
+	SET refEnv.Srv.Destino = C_DESTINO_IBS;
+	SET refEnv.Variables.Backend.TargetId = getCODE_APP_BUS();
+	SET refEnv.Variables.Backend.OriginId = getCODE_APP_BUS();
+
+	CALL armaCuerpo_BackendIBS(refEnv, refIn, refOut, refOutLocal);
+END;
+
+
+CREATE PROCEDURE armaCuerpo_BackendIBS(IN refEnv REFERENCE, IN refIn REFERENCE, IN refOut REFERENCE, IN refOutLocal REFERENCE)
+BEGIN
+	DECLARE refService REFERENCE TO refEnv.Policy.service;
+    DECLARE refDestinoConfig REFERENCE TO refService.destinations.Item[refEnv.Srv.Destino].destination;
+
+    CALL prepararEntornoInvocacionREST_Destino(refEnv, refOut, refOutLocal, refDestinoConfig);
+	CALL prepararHeaderSystem(refOut, refEnv);
+	CALL cuerpo_BackendIBS(refEnv, refIn, refOut, refService);
+	CALL setConfAuditBackend(refEnv, refOut, refOutLocal, getCONST_REST());
+END;
+
+
+CREATE PROCEDURE cuerpo_BackendIBS(IN refEnv REFERENCE, IN refIn REFERENCE, IN refOut REFERENCE, IN refService REFERENCE)
+BEGIN
+	CREATE LASTCHILD OF refOut DOMAIN getDOMINIO_JSON();
+	CREATE FIELD refOut.JSON.Data.{C_OPER_RQ_IBS};
+	DECLARE refJsonOut REFERENCE TO refOut.JSON.Data.{C_OPER_RQ_IBS};
+	DECLARE refBodyIn REFERENCE TO refIn.JSON.Data.{C_OPERATION_RQ};
+	
+	DECLARE refServerInfo REFERENCE TO refService.destinations.Item[refEnv.Srv.Destino].srv_info;
+
+	SET refJsonOut.ServiceType 						  = refServerInfo.CODE_SRV;
+	SET refJsonOut.ChannelIdentification 			  = refBodyIn.ChannelIdentification;
+	SET refJsonOut.OrganisationType 			  	  = COALESCE(refBodyIn.OrganisationType, NULL);
+	SET refJsonOut.PartyRoleReference 				  = refBodyIn.PartyRoleReference;
+	SET refJsonOut.OriginTransactionIdentification 	  = refBodyIn.OriginTransactionIdentification;
+	SET refJsonOut.TransactionDate 					  = refBodyIn.TransactionDate;
+	SET refJsonOut.PartyDocument 					  = refServerInfo.PARTY_DOCUMENT;
+	SET refJsonOut.OrganisationIdentification         = refBodyIn.CustomerReference;
+	SET refJsonOut.CollectionServiceConsumerReference = refBodyIn.CollectionServiceConsumerReference;
+	SET refJsonOut.Currency						  	  = COALESCE(refBodyIn.Currency, NULL);
+	SET refJsonOut.AgreementIdentification 			  = refBodyIn.AgreementIdentification;
+	SET refJsonOut.InquiryReference				  	  = COALESCE(refBodyIn.InquiryReference, NULL);
+	SET refJsonOut.NumberOfPage 					  = refBodyIn.NumberOfPage;
+	SET refJsonOut.TotalNumberOfRecords 			  = refBodyIn.TotalNumberOfRecords;
+	
+END;
+
+
+CREATE PROCEDURE armaMensajeTo_BackendHUB(IN refEnv REFERENCE, IN refIn REFERENCE, IN refOut REFERENCE, IN refOutLocal REFERENCE)
+BEGIN
+	SET refEnv.Srv.Destino = C_DESTINO_HUB;
+	SET refEnv.Variables.Backend.TargetId = getCODE_APP_BUS();
+	SET refEnv.Variables.Backend.OriginId = getCODE_APP_BUS();
+
+	CALL armaCuerpo_BackendHUB(refEnv, refIn, refOut, refOutLocal);
+END;
+
+
+CREATE PROCEDURE armaCuerpo_BackendHUB(IN refEnv REFERENCE, IN refIn REFERENCE, IN refOut REFERENCE, IN refOutLocal REFERENCE)
+BEGIN
+	DECLARE refService REFERENCE TO refEnv.Policy.service;
+    DECLARE refDestinoConfig REFERENCE TO refService.destinations.Item[refEnv.Srv.Destino].destination;
+
+    CALL prepararEntornoInvocacionREST_Destino(refEnv, refOut, refOutLocal, refDestinoConfig);
+	CALL prepararHeaderSystem(refOut, refEnv);
+	CALL cuerpo_BackendHUB(refEnv, refIn, refOut, refService);
+	CALL setConfAuditBackend(refEnv, refOut, refOutLocal, getCONST_REST());
+END;
+
+
+CREATE PROCEDURE cuerpo_BackendHUB(IN refEnv REFERENCE, IN refIn REFERENCE, IN refOut REFERENCE, IN refService REFERENCE)
+BEGIN	
+	CREATE LASTCHILD OF refOut DOMAIN getDOMINIO_JSON();
+	CREATE FIELD refOut.JSON.Data.{C_OPER_RQ_HUB};
+	DECLARE refJsonOut REFERENCE TO refOut.JSON.Data.{C_OPER_RQ_HUB};
+	DECLARE refBodyIn REFERENCE TO refIn.JSON.Data.{C_OPERATION_RQ};
+
+	SET refJsonOut.ServiceType 						  = refBodyIn.AgreementIdentification;
+	SET refJsonOut.PartyRoleReference 				  = refBodyIn.PartyRoleReference;
+	SET refJsonOut.OriginTransactionIdentification    = refBodyIn.OriginTransactionIdentification;
+	SET refJsonOut.TransactionDate 					  = refBodyIn.TransactionDate;
+	SET refJsonOut.OrganisationIdentification 		  = refBodyIn.CustomerReference;
+	SET refJsonOut.ChannelIdentification 			  = refBodyIn.ChannelIdentification;
+	-- SET refJsonOut.CollectionServiceConsumerReference = refBodyIn.CollectionServiceConsumerReference;
+
+	CREATE LASTCHILD OF refJsonOut IDENTITY (JSON.Array)ServiceList;
+	DECLARE refServiceList REFERENCE TO refJsonOut.ServiceList;
+    SET refServiceList.Item[1].ServiceConsumerReference = refBodyIn.CollectionServiceConsumerReference;
+
+	CREATE LASTCHILD OF refJsonOut IDENTITY (JSON.Array)AdditionalInformation;
+	DECLARE refAddInfoDest REFERENCE TO refJsonOut.AdditionalInformation;
+	DECLARE ind INT 1;
+	DECLARE refAddInfoSrc REFERENCE TO refBodyIn.AdditionalInformation.Item[1];
+	WHILE LASTMOVE(refAddInfoSrc) DO
+		SET refAddInfoDest.Item[ind].Name = refAddInfoSrc.Name;
+		SET refAddInfoDest.Item[ind].Value = refAddInfoSrc.Value;
+		SET ind = ind + 1;
+		MOVE refAddInfoSrc NEXTSIBLING REPEAT TYPE NAME;
+	END WHILE;
+END;
+
+CREATE PROCEDURE armaRptaRetrieveAgreementDebtList_OK(IN refEnv REFERENCE, IN refIn REFERENCE, IN refOut REFERENCE)
+BEGIN
+    SET refOut.Properties = refIn.Properties;
+    SET refOut.Properties.MessageDomain = getDOMINIO_JSON();
+
+    DECLARE statusCode INTEGER 200;
+    SET refEnv.Variables.HTTPStatusCode = statusCode;
+    SET refEnv.Variables.HTTPMessage = C_OK;
+    SET refOut.HTTPReplyHeader."X-Original-HTTP-Status-Code" = refEnv.Variables.HTTPStatusCode;
+
+    CREATE LASTCHILD OF refOut DOMAIN getDOMINIO_JSON();
+    CREATE FIELD refOut.JSON.Data.RetrievePaymentInformationAssociationAgreementDebtListResponse;
+    DECLARE refOutResp REFERENCE TO refOut.JSON.Data.RetrievePaymentInformationAssociationAgreementDebtListResponse;
+
+    IF refEnv.Srv.Destino = C_DESTINO_IBS THEN
+        DECLARE refBk REFERENCE TO refIn.JSON.Data.RetrievePaymentOrderInitiationOrderInitiationResponse;
+
+        SET refOutResp.ResultCode = COALESCE(refBk.ResultCode, '');
+        SET refOutResp.ResultMessage = COALESCE(refBk.ResultMessage, '');
+        SET refOutResp.TotalNumberOfRecords = CAST(refBk.TotalNumberOfRecords AS INTEGER);
+        SET refOutResp.TransactionIdentification = refBk.TransactionIdentification;
+
+        CREATE LASTCHILD OF refOutResp IDENTITY (JSON.Array)HubServiceDebts;
+        DECLARE refDebtsOut REFERENCE TO refOutResp.HubServiceDebts;
+
+        DECLARE indD INTEGER 1;
+        DECLARE refItem REFERENCE TO refBk.IbsServiceDebts.Item[1];
+
+        WHILE LASTMOVE(refItem) DO
+            SET refDebtsOut.Item[indD].ExpiryDate = refItem.ExpiryDate;
+            SET refDebtsOut.Item[indD].PersonIdentification = refItem.FullName;
+            SET refDebtsOut.Item[indD].CampaignIdentifier = NULL;
+
+            SET refDebtsOut.Item[indD].Origin.BalanceAmount    = CAST(refItem.Origin.BalanceAmount    AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].Origin.DiscountAmount   = CAST(refItem.Origin.DiscountAmount   AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].Origin.FineAmount       = CAST(refItem.Origin.FineAmount       AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].Origin.DueAmount        = CAST(refItem.Origin.DueAmount        AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].Origin.InterestAmount   = CAST(refItem.Origin.InterestAmount   AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].Origin.AdjustmentAmount = CAST(refItem.Origin.AdjustmentAmount AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].Origin.Amount           = CAST(refItem.Origin.OriginAmount     AS DECIMAL(15,2));
+
+            SET refDebtsOut.Item[indD].Destination.BalanceAmount    = CAST(refItem.Destination.BalanceAmount  	AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].Destination.DiscountAmount   = CAST(refItem.Destination.DiscountAmount 	AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].Destination.FineAmount       = CAST(refItem.Destination.FineAmount     	AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].Destination.DueAmount        = CAST(refItem.Destination.DueAmount      	AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].Destination.InterestAmount   = CAST(refItem.Destination.InterestAmount 	AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].Destination.AdjustmentAmount = CAST(refItem.Destination.AdjustmentAmount AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].Destination.Amount           = CAST(refItem.Destination.Amount         	AS DECIMAL(15,2));
+
+            SET refDebtsOut.Item[indD].Amount      			= CAST(refItem.Amount      AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].CustomerFee 			= CAST(refItem.CustomerFee AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].PersonIdentification = refItem.PersonIdentification;
+            SET refDebtsOut.Item[indD].InquiryReference 	= COALESCE(refItem.InquiryReference, '');
+
+            SET refDebtsOut.Item[indD].AgreementIdentification = COALESCE(refItem.AgreementIdentification, '');
+
+            CREATE LASTCHILD OF refDebtsOut.Item[indD] IDENTITY (JSON.Array)ServiceList;
+            DECLARE indS INTEGER 1;
+            DECLARE refSvc REFERENCE TO refItem.ServiceType;
+            WHILE LASTMOVE(refSvc) DO
+                SET refDebtsOut.Item[indD].ServiceList.Item[indS].ServiceType = refSvc;
+                SET indS = indS + 1;
+                MOVE refSvc NEXTSIBLING REPEAT TYPE NAME;
+            END WHILE;
+
+            SET refDebtsOut.Item[indD].Currency = COALESCE(refItem.Currency, '');
+            SET refDebtsOut.Item[indD].InvoiceIssueDate = refItem.InvoiceIssueDate;
+            
+            CREATE LASTCHILD OF refDebtsOut.Item[indD] IDENTITY (JSON.Array)AdditionalInformation;
+            DECLARE indAi INTEGER 1;
+            DECLARE refAi REFERENCE TO refItem.AdditionalInformation.Item[1];
+            WHILE LASTMOVE(refAi) DO
+                SET refDebtsOut.Item[indD].AdditionalInformation.Item[indAi].Name  = refAi.Name;
+                SET refDebtsOut.Item[indD].AdditionalInformation.Item[indAi].Value = refAi.Value;
+                SET indAi = indAi + 1;
+                MOVE refAi NEXTSIBLING REPEAT TYPE NAME;
+            END WHILE;
+
+            SET indD = indD + 1;
+            MOVE refItem NEXTSIBLING REPEAT TYPE NAME;
+
+        END WHILE;
+
+    ELSE
+        DECLARE refBk REFERENCE TO refIn.JSON.Data.RetrievePaymentOrderInitiationOrderInitiationHubResponse;
+
+        SET refOutResp.ResultCode 				 = refBk.ResultCode;
+        SET refOutResp.ResultMessage 			 = refBk.ResultMessage;
+        SET refOutResp.TotalNumberOfRecords 	 = CAST(refBk.TotalNumberOfRecords AS INTEGER);
+        SET refOutResp.TransactionIdentification = refBk.TransactionIdentification;
+
+        CREATE LASTCHILD OF refOutResp IDENTITY (JSON.Array)HubServiceDebts;
+        DECLARE refDebtsOut REFERENCE TO refOutResp.HubServiceDebts;
+
+        DECLARE indD INTEGER 1;
+        DECLARE refItem REFERENCE TO refBk.HubServiceDebts.Item[1];
+
+        WHILE LASTMOVE(refItem) DO
+            SET refDebtsOut.Item[indD].ExpiryDate 			= refItem.ExpiryDate;
+            SET refDebtsOut.Item[indD].PersonIdentification = refItem.FullName;
+            SET refDebtsOut.Item[indD].CampaignIdentifier 	= refItem.CampaignIdentifier;
+
+            SET refDebtsOut.Item[indD].Origin.BalanceAmount    = CAST(refItem.Origin.BalanceAmount    AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].Origin.DiscountAmount   = CAST(refItem.Origin.DiscountAmount   AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].Origin.FineAmount       = CAST(refItem.Origin.FineAmount       AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].Origin.DueAmount        = CAST(refItem.Origin.DueAmount        AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].Origin.InterestAmount   = CAST(refItem.Origin.InterestAmount   AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].Origin.AdjustmentAmount = CAST(refItem.Origin.AdjustmentAmount AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].Origin.Amount           = CAST(refItem.Origin.Amount           AS DECIMAL(15,2));
+
+            SET refDebtsOut.Item[indD].Destination.BalanceAmount    = CAST(refItem.Destination.BalanceAmount    AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].Destination.DiscountAmount   = CAST(refItem.Destination.DiscountAmount   AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].Destination.FineAmount       = CAST(refItem.Destination.FineAmount       AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].Destination.DueAmount        = CAST(refItem.Destination.DueAmount        AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].Destination.InterestAmount   = CAST(refItem.Destination.InterestAmount   AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].Destination.AdjustmentAmount = CAST(refItem.Destination.AdjustmentAmount AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].Destination.Amount           = CAST(refItem.Destination.Amount           AS DECIMAL(15,2));
+
+            SET refDebtsOut.Item[indD].Amount      			   = CAST(refItem.Amount      AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].CustomerFee 			   = CAST(refItem.CustomerFee AS DECIMAL(15,2));
+            SET refDebtsOut.Item[indD].PersonIdentification    = refItem.PersonIdentification;
+            SET refDebtsOut.Item[indD].InquiryReference 	   = COALESCE(refItem.InquiryReference, '');
+            SET refDebtsOut.Item[indD].AgreementIdentification = COALESCE(refItem.AgreementIdentification, '');
+
+            CREATE LASTCHILD OF refDebtsOut.Item[indD] IDENTITY (JSON.Array)ServiceList;
+            DECLARE indS INTEGER 1;
+            DECLARE refSvc REFERENCE TO refItem.ServiceList.Item[1];
+            WHILE LASTMOVE(refSvc) DO
+                SET refDebtsOut.Item[indD].ServiceList.Item[indS].ServiceType = refSvc.ServiceType;
+                SET indS = indS + 1;
+                MOVE refSvc NEXTSIBLING REPEAT TYPE NAME;
+            END WHILE;
+
+            SET refDebtsOut.Item[indD].Currency 		= COALESCE(refItem.Currency, '');
+            SET refDebtsOut.Item[indD].InvoiceIssueDate = refItem.InvoiceIssueDate;
+
+            CREATE LASTCHILD OF refDebtsOut.Item[indD] IDENTITY (JSON.Array)AdditionalInformation;
+            DECLARE indAi INTEGER 1;
+            DECLARE refAi REFERENCE TO refItem.AdditionalInformation.Item[1];
+            WHILE LASTMOVE(refAi) DO
+                SET refDebtsOut.Item[indD].AdditionalInformation.Item[indAi].Name  = refAi.Name;
+                SET refDebtsOut.Item[indD].AdditionalInformation.Item[indAi].Value = refAi.Value;
+                SET indAi = indAi + 1;
+                MOVE refAi NEXTSIBLING REPEAT TYPE NAME;
+            END WHILE;
+
+            SET indD = indD + 1;
+            MOVE refItem NEXTSIBLING REPEAT TYPE NAME;
+
+        END WHILE;
+
+    END IF;
+
+    CALL prepararHeaderRespuestaBus_V2(refOut.HTTPResponseHeader, refEnv);
+
+END;
+
+CREATE PROCEDURE armaRptaRetrieveAgreementDebtList_ERROR(IN refEnv REFERENCE, IN refIn REFERENCE, IN refOut REFERENCE)
+BEGIN
+	IF refEnv.StatusResp.exception THEN
+		CREATE LASTCHILD OF refOut DOMAIN getDOMINIO_JSON();
+		CREATE FIELD refOut.JSON.Data;
+		DECLARE refJsonOutAudit REFERENCE TO refOut.JSON.Data;
+
+		SET refOut.HTTPResponseHeader = refEnv.RESP.HTTPResponseHeader;
+
+		IF EXISTS(refEnv.StatusRes.JSON[]) THEN
+			SET refJsonOutAudit = refEnv.StatusRes.JSON.Data;
+		ELSE
+			SET refJsonOutAudit.Error = refEnv.Variables.org.Error.Message;
+		END IF;
+
+		CALL prepararMensajeAuditoriaV2(refEnv, getCONST_BACKEND(), getCONST_ERROR(), getSTATUS_ERROR());
+		PROPAGATE TO LABEL getLBL_AUDIT() DELETE NONE;
+		DELETE FIELD refOut;
+	END IF;
+
+	CALL FormatServiceErrorsForEnvironment(refEnv, refEnv.Temp.SrvErrors);
+	CALL prepararBodyRespuestaErrorBus_HTTPV2(refEnv, refIn, refOut, C_OPERATION_RQ);
+END;
+
+
+CREATE PROCEDURE prepararHeaderSystem(IN refOut REFERENCE, IN refEnv REFERENCE)
+BEGIN
+	SET refOut.HTTPRequestHeader."Content-Type"             = refEnv.InputT1."Content-Type";
+	SET refOut.HTTPRequestHeader.Accept                     = refEnv.InputT1."Accept";
+	SET refOut.HTTPRequestHeader.{getCONST_CONSUMER_ID()}   = refEnv.InputT1.{getCONST_CONSUMER_ID()};
+	SET refOut.HTTPRequestHeader.{getCONST_MDW_ID()}        = refEnv.Variables.Backend.OriginId;
+	SET refOut.HTTPRequestHeader.{getCONST_CORRELATION_ID()} = refEnv.InputT1.{getCONST_CORRELATION_ID()};
+	SET refOut.HTTPRequestHeader."Time-Stamp"               = CAST(CURRENT_TIMESTAMP AS CHARACTER FORMAT getFORMATO_FECHAHORA_5());
+	SET refOut.HTTPRequestHeader."User-Id"                  = refEnv.InputT1."User-Id";
+	SET refOut.HTTPRequestHeader."Host-Id"                  = refEnv.InputT1."Host-Id";
+	SET refOut.HTTPRequestHeader."Branch-Code"              = refEnv.InputT1."Branch-Code";
+	SET refOut.HTTPRequestHeader."Country-Code"             = refEnv.InputT1."Country-Code";
+	SET refOut.HTTPRequestHeader."Device-Id"                = refEnv.InputT1."Device-Id";
+END;
+
+
+CREATE PROCEDURE prepareRespAudit(IN refEnv REFERENCE, IN refOut REFERENCE)
+BEGIN
+	IF refEnv.Temp.Variable.IsErrorValidCampo IS TRUE OR refEnv.StatusResp.exception IS TRUE THEN
+		CALL prepararMensajeAuditoriaV2(refEnv, getCONST_MAIN(), getCONST_ERROR(), getSTATUS_ERROR());
+		PROPAGATE TO LABEL getLBL_AUDIT() DELETE NONE;
+	ELSEIF refEnv.Temp.Variable.IsErrorFuncional IS TRUE THEN
+		CALL prepararMensajeAuditoriaV2(refEnv, getCONST_MAIN(), getCONST_ERROR(), getSTATUS_WARNING());
+		PROPAGATE TO LABEL getLBL_AUDIT() DELETE NONE;
+	ELSE
+		CALL prepararMensajeAuditoriaV2(refEnv, getCONST_MAIN(), getCONST_RESPONSE(), getSTATUS_INFO());
+		PROPAGATE TO LABEL getLBL_AUDIT() DELETE NONE;
+	END IF;
+END;
+
+
+CREATE PROCEDURE obtenerCodMsjErrorJSON(IN refExceptionList REFERENCE, IN refEnvStatusRes REFERENCE,IN reIn REFERENCE, IN refEnvVariables REFERENCE)
+BEGIN
+	CALL obtenerCodMsjError(refExceptionList, refEnvStatusRes);
+
+	IF reIn.HTTPResponseHeader."X-Original-HTTP-Status-Code" <> 200 THEN
+		SET refEnvStatusRes.status.responseType = getTIP_RSPTA_3();
+		SET refEnvStatusRes.status.busResponseCode = getCOD_ERROR_302();
+		SET refEnvStatusRes.status.busResponseMessage = getMSJ_ERROR(getCOD_ERROR_302());
+		SET refEnvStatusRes.status.srvResponseCode = reIn.HTTPResponseHeader."X-Original-HTTP-Status-Code";
+		SET refEnvStatusRes.status.srvResponseMessage = reIn.HTTPResponseHeader."X-Original-HTTP-Status-Line";
+		SET refEnvStatusRes.HTTPResponseHeader = reIn.HTTPResponseHeader;
+
+		IF FIELDTYPE(reIn.BLOB.BLOB) IS NOT NULL THEN
+			IF CONTAINS(UPPER(reIn.HTTPResponseHeader."Content-Type"), getDOMINIO_JSON()) OR CONTAINS(UPPER(reIn.HTTPResponseHeader."content-type"), getDOMINIO_JSON()) THEN
+				SET refEnvStatusRes.status.responseType = getTIP_RSPTA_4();
+				SET refEnvStatusRes.status.busResponseCode = getCOD_ERROR_401();
+				SET refEnvStatusRes.status.busResponseMessage = getMSJ_ERROR(getCOD_ERROR_401());
+				
+				CREATE FIELD refEnvStatusRes.OutputRoot;
+				DECLARE refOutput REFERENCE TO refEnvStatusRes.OutputRoot;
+				CREATE LASTCHILD OF refOutput DOMAIN getDOMINIO_JSON() PARSE (reIn.BLOB.BLOB CCSID reIn.Properties.CodedCharSetId);
+				SET refEnvStatusRes.JSON = refOutput.JSON;
+				DELETE FIELD refEnvStatusRes.OutputRoot;
+				
+				--Asigna valor a detalleError si cumple las validaciones que tiene el procedimiento
+				CALL AssignDetailError(refEnvStatusRes, reIn);
+			ELSE
+				SET refEnvStatusRes.detalleError = CAST(reIn.BLOB.BLOB AS CHARACTER CCSID reIn.Properties.CodedCharSetId);
+				SET refEnvStatusRes.status.responseType = getTIP_RSPTA_4();
+				SET refEnvStatusRes.status.busResponseCode = getCOD_ERROR_401();
+				SET refEnvStatusRes.status.busResponseMessage = getMSJ_ERROR(getCOD_ERROR_401());
+			END IF;
+		ELSE
+			SET refEnvStatusRes.detalleError = CAST(refEnvStatusRes.status.srvResponseCode AS CHARACTER) || C_GUION_SPACE || refEnvStatusRes.status.srvResponseMessage;
+		END IF;
+	ELSE
+		IF CONTAINS(UPPER(refEnvStatusRes.status.busResponseMessage), getTIMEOUT()) IS TRUE THEN
+			--Seteo de código y mensajes para timeout
+			SET refEnvStatusRes.status.responseType = getTIP_RSPTA_3();
+			SET refEnvStatusRes.status.busResponseCode = getCOD_ERROR_301();
+			SET refEnvStatusRes.status.busResponseMessage = getMSJ_ERROR(getCOD_ERROR_301());
+			SET refEnvStatusRes.status.srvResponseCode = 504;
+			
+		ELSEIF CONTAINS(UPPER(refEnvStatusRes.status.busResponseMessage), getSOCKET()) IS TRUE THEN
+			SET refEnvStatusRes.status.responseType = getTIP_RSPTA_3();
+			SET refEnvStatusRes.status.busResponseCode = getCOD_ERROR_302();
+			SET refEnvStatusRes.status.busResponseMessage = getMSJ_ERROR(getCOD_ERROR_302());
+			SET refEnvStatusRes.status.srvResponseCode = 500;
+		ELSE
+			SET refEnvStatusRes.status.responseType = getTIP_RSPTA_4();
+			SET refEnvStatusRes.status.busResponseCode = getCOD_ERROR_401();
+			SET refEnvStatusRes.status.busResponseMessage = getMSJ_ERROR(getCOD_ERROR_401());
+			SET refEnvStatusRes.status.srvResponseCode = 500;
+		END IF;
+		
+		CALL manejoErroresGenericoV2(refExceptionList, refEnvVariables);
+	END IF;
+END;
+
+--Asigna valor a detalleError si cumple las validaciones
+CREATE PROCEDURE AssignDetailError(IN refEnvStatusRes REFERENCE, IN reIn REFERENCE)
+BEGIN
+	DECLARE refData REFERENCE TO refEnvStatusRes.JSON.Data;
+	IF NOT EXISTS(refData.extensions.[<].Messages[]) THEN
+		--Validación del httpCode
+		IF IsEmptyEsp(refData.httpCode) THEN
+			SET refEnvStatusRes.detalleError = CAST(reIn.BLOB.BLOB AS CHARACTER CCSID reIn.Properties.CodedCharSetId);
+		ELSE
+			DECLARE fullMessage CHARACTER refData.httpCode;
+			IF IsNotEmptyEsp(refData.httpMessage) THEN
+			    SET fullMessage = fullMessage || C_GUION_SPACE || refData.httpMessage;
+			END IF;
+
+			IF IsNotEmptyEsp(refData.moreInformation) THEN
+			    SET fullMessage = fullMessage || C_GUION_SPACE || refData.moreInformation;
+			END IF;
+			
+			SET refEnvStatusRes.detalleError = fullMessage;
+		END IF;
+	END IF;
+END;
+
+CREATE PROCEDURE HandleHttpServiceError(
+  IN  refEnv        	REFERENCE,
+  IN  refIn          	REFERENCE,
+  IN  refCurrentSrvInfo	REFERENCE,
+  IN  refSrvErrors      REFERENCE,
+  IN  message           CHARACTER,
+  IN  isFunctional      BOOLEAN
+)
+BEGIN
+	DECLARE statusCode CHARACTER C_CODE_01;
+	
+	DECLARE statusError CHARACTER CASE
+    	WHEN isFunctional THEN C_COD_WARN
+    	ELSE C_COD_ERR
+	END;
+  
+--	DELETE FIELD refIn.JSON.Data;
+--	CREATE FIELD refIn.JSON.Data;	
+	
+	CALL NormalizeExternalServiceErrorDataL(
+		statusCode,
+    	message,
+    	statusError,
+    	COALESCE(refCurrentSrvInfo.APP_NAME, getCARACTER_VACIO()),
+    	refIn
+	);
+
+	CALL AppendToServiceErrorsL(refIn, refSrvErrors, refCurrentSrvInfo);
+END;
+
+-- normalize third-party responses that don’t follow RFC7807 structure.
+CREATE PROCEDURE NormalizeExternalServiceErrorDataL(
+    IN     chrErrorCode    CHARACTER,
+    IN     chrErrorMessage CHARACTER,
+    IN     chrErrorStatus  CHARACTER,
+    IN     chrSrvName      CHARACTER,
+    IN     refIn           REFERENCE
+)
+BEGIN
+	DECLARE refOut REFERENCE TO refIn.JSON.Data;
+    -- normarlize structure inside refOut
+    DECLARE refMsg REFERENCE TO refOut.extensions.{chrSrvName}.Messages;
+	DECLARE refRespuestaDinamica REFERENCE TO refIn.JSON.Data.extensions.[<];
+    -- populate message
+    SET refMsg.Item[1].StatusCode = COALESCE(refRespuestaDinamica.Messages.Item[1].StatusCode, chrErrorCode, getCOD_ERROR());
+    SET refMsg.Item[1].Message    = COALESCE(refRespuestaDinamica.Messages.Item[1].Message, chrErrorMessage, C_UNKNOWN_ERROR);
+    SET refMsg.Item[1].Status     = COALESCE(refRespuestaDinamica.Messages.Item[1].Status, chrErrorStatus, C_COD_ERR);
+END;
+
+--Asignación al array refErrors
+CREATE PROCEDURE AppendToServiceErrorsL (IN refIn REFERENCE, IN refErrors REFERENCE, IN refSrvInfo REFERENCE)
+BEGIN
+    DECLARE idx INTEGER CARDINALITY(refErrors.*[]) + 1;
+
+    DECLARE refPayload REFERENCE TO refIn.JSON.Data;
+    IF EXISTS(refPayload.JSON.Data.[]) THEN
+        SET refPayload = refPayload.JSON.Data; -- need to go down level
+    END IF;
+
+    SET refErrors.Item[idx] = refPayload;
+    --Asignando valor al campo Info en el array refErrors
+    SET refErrors.Item[idx].Info = refSrvInfo;
+    
+    DELETE FIELD refIn.JSON;
+END;
